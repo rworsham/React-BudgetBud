@@ -1,10 +1,13 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
-import Home from './components/Home'
-import Contact from './components/Contact'
-import Dashboard from './components/Dashboard'
-import Login from './components/Login'
-
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import Home from './components/Home';
+import Contact from './components/Contact';
+import Dashboard from './components/Dashboard';
+import Login from './components/Login';
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
 
 function App() {
   return (
@@ -21,15 +24,18 @@ function App() {
               <li>
                 <Link to="/contact">Contact</Link>
               </li>
+              <li>
+                <Link to="/dashboard">Dashboard</Link>
+              </li>
             </ul>
           </nav>
 
-          <Switch>
-            <Route path="/" exact component={Home} />
-            <Route path="/login" component={Login} />
-            <Route path="/contact" component={Contact} />
-            <Route path="/dashboard" component={Dashboard} />
-          </Switch>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+          </Routes>
         </div>
       </Router>
   );

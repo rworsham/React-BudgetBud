@@ -1,5 +1,12 @@
 import React from 'react';
 
-const Login = () => <h2>Login</h2>;
+function Login() {
+    return (
+        <div style={{ padding: '20px' }}>
+            <h1>login</h1>
+            <p>Welcome to login page</p>
+        </div>
+    );
+}
 
 export default Login;
