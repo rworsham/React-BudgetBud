@@ -1,6 +1,6 @@
 import React from 'react';
+import BasicMenu from "./BasicMenu";
 import { AppBar, Toolbar, Typography, Button, IconButton } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from 'react-router-dom';
 
 const Header = () => {
@@ -13,7 +13,7 @@ const Header = () => {
                     aria-label="menu"
                     sx={{ mr: 2 }}
                 >
-                    <MenuIcon />
+                    <BasicMenu />
                 </IconButton>
 
                 <Typography
