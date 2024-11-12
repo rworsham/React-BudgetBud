@@ -1,10 +1,15 @@
 import { useState } from 'react';
+import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
+import { TextField, Button, FormGroup, FormControl, Box } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
+    const theme = useTheme();
 
     const handleLogin = async () => {
         try {
@@ -15,8 +20,8 @@ const Login = () => {
 
             localStorage.setItem('access_token', response.data.access);
             localStorage.setItem('refresh_token', response.data.refresh);
-
             console.log('Logged in successfully!');
+            navigate('/dashboard');
         } catch (err) {
             setError('Login failed. Please check your credentials.');
         }
@@ -25,20 +30,40 @@ const Login = () => {
     return (
         <div>
             <h2>Login</h2>
-            <input
-                type="text"
-                placeholder="Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-            />
-            <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-            />
-            <button onClick={handleLogin}>Login</button>
-            {error && <p>{error}</p>}
+            <form onSubmit={handleLogin}>
+                <Box sx={{
+                    maxWidth: 400,
+                    margin: 'auto',
+                    padding: 2,
+                    backgroundColor: theme.palette.background.paper,
+                    borderRadius: 2,
+                    boxShadow: 3,
+                }}>
+                    <FormGroup sx={{ display: 'flex', flexDirection: 'column'}}>
+                        <FormControl>
+                            <TextField
+                                id="outlined-basic"
+                                label="Username"
+                                variant="outlined"
+                                placeholder={"Username"}
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                sx={{ marginBottom: 3 }}
+                            />
+                            <TextField
+                                id="outlined-basic"
+                                label="Password"
+                                variant="outlined"
+                                type={"password"}
+                                value={password} onChange={(e) => setPassword(e.target.value)}
+                                sx={{ marginBottom: 3 }}
+                            />
+                            <Button variant="contained" type="submit">Login</Button>
+                            {error && <p>{error}</p>}
+                        </FormControl>
+                    </FormGroup>
+                </Box>
+            </form>
         </div>
     );
 };
