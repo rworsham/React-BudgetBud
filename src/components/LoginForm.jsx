@@ -28,44 +28,59 @@ const Login = () => {
     };
 
     return (
-        <div>
-            <h2>Login</h2>
-            <form onSubmit={handleLogin}>
-                <Box sx={{
-                    maxWidth: 400,
-                    margin: 'auto',
-                    padding: 2,
-                    backgroundColor: theme.palette.background.paper,
-                    borderRadius: 2,
-                    boxShadow: 3,
-                }}>
-                    <FormGroup sx={{ display: 'flex', flexDirection: 'column'}}>
-                        <FormControl>
-                            <TextField
-                                id="outlined-basic"
-                                label="Username"
-                                variant="outlined"
-                                placeholder={"Username"}
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                                sx={{ marginBottom: 3 }}
-                            />
-                            <TextField
-                                id="outlined-basic"
-                                label="Password"
-                                variant="outlined"
-                                type={"password"}
-                                value={password} onChange={(e) => setPassword(e.target.value)}
-                                sx={{ marginBottom: 3 }}
-                            />
-                            <Button variant="contained" type="submit">Login</Button>
-                            {error && <p>{error}</p>}
-                        </FormControl>
-                    </FormGroup>
-                </Box>
-            </form>
-        </div>
-    );
-};
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    overflow: 'hidden',
+                    height: '80vh',
+                }}
+            >
+                <form onSubmit={handleLogin}>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            margin: 'auto',
+                            width: '50vh',
+                            height: '50vh',
+                            flexShrink: 0,
+                            padding: 2,
+                            backgroundColor: theme.palette.background.paper,
+                            borderRadius: 2,
+                            boxShadow: 3,
+                        }}
+                    >
+                        <FormGroup sx={{ display: 'flex', flexDirection: 'column' }}>
+                            <FormControl>
+                                <TextField
+                                    id="outlined-basic"
+                                    label="Username"
+                                    variant="outlined"
+                                    placeholder="Username"
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
+                                    sx={{ marginBottom: 3 , width: '40vh' }}
+                                />
+                                <TextField
+                                    id="outlined-basic"
+                                    label="Password"
+                                    variant="outlined"
+                                    type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    sx={{ marginBottom: 3 , width: '40vh'}}
+                                />
+                                <Button variant="contained" type="submit">Login</Button>
+                                {error && <p>{error}</p>}
+                            </FormControl>
+                        </FormGroup>
+                    </Box>
+                </form>
+            </div>
+        );
+    }
 
 export default Login;
