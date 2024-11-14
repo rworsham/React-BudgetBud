@@ -1,10 +1,10 @@
 import React from 'react';
+import FeatureCards from "./FeatureCards";
 
 function Home() {
     return (
         <div style={{ padding: '20px' }}>
-            <h1>Home</h1>
-            <p>Welcome to the home page</p>
+            <FeatureCards />
         </div>
     );
 }
