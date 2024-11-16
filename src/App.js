@@ -5,6 +5,7 @@ import Home from './components/Home';
 import Contact from './components/Contact';
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
+import Logout from './components/Logout';
 import Header from './components/Header';
 import { CssBaseline, Box } from '@mui/material';
 import '@fontsource/roboto/300.css';
@@ -53,6 +54,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/logout" element={<Logout />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/dashboard" element={<Dashboard />} />
             </Routes>
