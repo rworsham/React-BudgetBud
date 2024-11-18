@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import { TextField, Button, FormGroup, FormControl, Box } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
@@ -11,15 +12,17 @@ const Login = () => {
     const navigate = useNavigate();
     const theme = useTheme();
 
-    const handleLogin = async () => {
+    const handleLogin = async (event) => {
+        event.preventDefault();
+
         try {
             const response = await axios.post('http://localhost:8000/api/token/', {
                 username,
                 password,
             });
 
-            localStorage.setItem('access_token', response.data.access);
-            localStorage.setItem('refresh_token', response.data.refresh);
+            Cookies.set('access_token', response.data.access, { expires: 7, secure: true, sameSite: 'None' });
+            Cookies.set('refresh_token', response.data.access, { expires: 7, secure: true, sameSite: 'None' });
             console.log('Logged in successfully!');
             navigate('/dashboard');
         } catch (err) {
