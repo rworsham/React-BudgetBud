@@ -8,7 +8,7 @@ const Logout = () => {
     useEffect(() => {
         Cookies.remove('access_token');
         Cookies.remove('refresh_token');
-        navigate('/home');
+        navigate('/');
     }, [navigate]);
 
     return null;

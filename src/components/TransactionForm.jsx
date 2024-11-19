@@ -28,8 +28,8 @@ const TransactionForm = () => {
         const fetchChoices = async () => {
             try {
                 const [Categories, Budgets] = await Promise.all([
-                    axios.get('http://localhost:8000/api/categories/'),
-                    axios.get('http://localhost:8000/api/budget/'),
+                    axios.get('https://localhost:8000/api/categories/'),
+                    axios.get('https://localhost:8000/api/budget/'),
                 ]);
 
                 setCategories(Categories.data);
@@ -67,7 +67,7 @@ const TransactionForm = () => {
         setError('');
 
         try {
-            const response = await axios.post('http://localhost:8000/api/transactions/', {
+            const response = await axios.post('https://localhost:8000/api/transactions/', {
                 date,
                 amount,
                 transaction_type: transactionType,
