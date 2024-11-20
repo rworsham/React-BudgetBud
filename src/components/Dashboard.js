@@ -1,11 +1,12 @@
 import React from 'react';
 import BudgetOverview from './BudgetOverview';
-import TransactionForm  from "./TransactionForm";
+import AddButton from "./AddButton";
+
 function Dashboard() {
     return (
         <div style={{ padding: '20px' }}>
             <BudgetOverview />
-            <TransactionForm />
+            <AddButton />
         </div>
     );
 }

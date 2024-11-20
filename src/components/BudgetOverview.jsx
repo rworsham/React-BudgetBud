@@ -28,7 +28,7 @@ const BudgetOverview = () => {
                 </Button>
             </Box>
 
-            <Box sx={{ display: "flex", justifyContent: "center", height: "60vh", alignItems: "center" }}>
+            <Box sx={{ display: "flex", justifyContent: "center", height: "55vh", alignItems: "center" }}>
                 {currentReport === "report1" ? (
                     <Typography variant="h5" textAlign="center">
                         This is Report 1
