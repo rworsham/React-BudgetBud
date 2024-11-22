@@ -7,6 +7,8 @@ import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import TransactionForm  from "./TransactionForm";
+import CategoryForm from "./CategoryForm";
+import BudgetForm from "./BudgetForm";
 
 const actions = [
     { icon: <ReceiptLongIcon />, name: 'Transaction' },
@@ -59,7 +61,7 @@ export default function BasicSpeedDial() {
             <Dialog open={open && modalType === 'Budget'} onClose={handleClose}>
                 <DialogTitle>Budget Modal</DialogTitle>
                 <DialogContent>
-                    <p>Content related to the Budget action goes here.</p>
+                    <BudgetForm />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">Close</Button>
@@ -69,7 +71,7 @@ export default function BasicSpeedDial() {
             <Dialog open={open && modalType === 'Category'} onClose={handleClose}>
                 <DialogTitle>Category Modal</DialogTitle>
                 <DialogContent>
-                    <p>Content related to the Category action goes here.</p>
+                    <CategoryForm />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">Close</Button>
