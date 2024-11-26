@@ -1,17 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Home from './components/Home';
 import Contact from './components/Contact';
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
 import Logout from './components/Logout';
 import Header from './components/Header';
+import CategoryForm from './components/CategoryForm';
 import { CssBaseline, Box } from '@mui/material';
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
+import axios from 'axios';
 
 const theme = createTheme({
   palette: {
@@ -32,19 +30,76 @@ const theme = createTheme({
   },
   typography: {
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-    h1: {
-      fontWeight: 700,
-      fontSize: '2.2rem',
-      color: '#333',
-    },
-    h2: {
-      fontWeight: 600,
-      color: '#333',
-    },
   },
 });
 
 function App() {
+  const [authTokens, setAuthTokens] = useState(null);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const loginUser = async (username, password) => {
+    try {
+      const response = await axios.post('https://localhost:8000/api/token/', {
+        username,
+        password,
+      });
+      setAuthTokens(response.data);
+      getUserDetails(response.data.access);
+    } catch (err) {
+      console.error('Error during login:', err);
+    }
+  };
+
+  const refreshToken = useCallback(async () => {
+    if (!authTokens) return;
+    try {
+      const response = await axios.post('https://localhost:8000/api/token/refresh/', {
+        refresh: authTokens.refresh,
+      });
+      setAuthTokens(response.data);
+      getUserDetails(response.data.access);
+    } catch (err) {
+      console.error('Error refreshing token:', err);
+    }
+  }, [authTokens]);
+
+  const getUserDetails = async (accessToken) => {
+    try {
+      const response = await axios.get('https://localhost:8000/api/users/', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      setUser(response.data);
+      setLoading(false);
+    } catch (err) {
+      console.error('Error fetching user data:', err);
+    }
+  };
+
+  useEffect(() => {
+    if (authTokens) {
+      const expirationTime = JSON.parse(atob(authTokens.access.split('.')[1])).exp * 1000;
+      const currentTime = Date.now();
+      if (expirationTime < currentTime) {
+        refreshToken();
+      } else {
+        getUserDetails(authTokens.access);
+      }
+    } else {
+      setLoading(false);
+    }
+  }, [authTokens, refreshToken]);
+
+  const PrivateRoute = ({ children }) => {
+    return authTokens ? children : <Navigate to="/login" />;
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
       <ThemeProvider theme={theme}>
         <CssBaseline />
@@ -53,10 +108,11 @@ function App() {
             <Header />
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/logout" element={<Logout />} />
+              <Route path="/login" element={<Login loginUser={loginUser} />} />
+              <Route path="/logout" element={<Logout setAuthTokens={setAuthTokens} />} />
               <Route path="/contact" element={<Contact />} />
-              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/dashboard" element={<PrivateRoute><Dashboard user={user} /></PrivateRoute>} />
+              <Route path="/category-form" element={<CategoryForm authTokens={authTokens} />} />
             </Routes>
           </Box>
         </Router>

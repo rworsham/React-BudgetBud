@@ -3,9 +3,7 @@ import axios from 'axios';
 import { TextField, Button, FormGroup, FormControl, Box, Typography} from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
-axios.defaults.withCredentials = true;
-
-const CategoryForm = () => {
+const CategoryForm = ({ authTokens }) => {
     const [newCategory, setNewCategory] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -17,7 +15,11 @@ const CategoryForm = () => {
         const fetchCategories = async () => {
             try {
                 setIsLoading(true);
-                const response = await axios.get('https://localhost:8000/api/categories/');
+                const response = await axios.get('https://localhost:8000/api/categories/', {
+                    headers: {
+                        Authorization: `Bearer ${authTokens.access}`,
+                    },
+                });
                 setExistingCategory(response.data);
                 setIsLoading(false);
             } catch (err) {
@@ -27,8 +29,10 @@ const CategoryForm = () => {
             }
         };
 
-        fetchCategories();
-    }, []);
+        if (authTokens) {
+            fetchCategories();
+        }
+    }, [authTokens]);
 
     const validateForm = () => {
         if (!newCategory) {
@@ -54,12 +58,18 @@ const CategoryForm = () => {
         setError('');
 
         try {
-            const response = await axios.post('https://localhost:8000/api/categories/', {
-                newCategory
-            });
+            const response = await axios.post(
+                'https://localhost:8000/api/categories/',
+                { name: newCategory },
+                {
+                    headers: {
+                        Authorization: `Bearer ${authTokens.access}`,
+                    },
+                }
+            );
 
-            console.log('New Category created;', response.data);
-            
+            console.log('New Category created:', response.data);
+
         } catch (err) {
             setError('Failed to create new category. Please try again');
         } finally {
@@ -87,7 +97,6 @@ const CategoryForm = () => {
                     <FormGroup sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
                         <FormControl sx={{ marginBottom: 2 }}>
                             <TextField
-                                type="Description"
                                 label="New Category"
                                 variant="outlined"
                                 value={newCategory}
