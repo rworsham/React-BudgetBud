@@ -13,12 +13,18 @@ const CategoryForm = ({ authTokens }) => {
 
     useEffect(() => {
         const fetchCategories = async () => {
+            if (!authTokens || !authTokens.access) {
+                setError('No authorization token found');
+                return;
+            }
+
+            const headers = {
+                Authorization: `Bearer ${authTokens.access}`,
+            };
             try {
                 setIsLoading(true);
                 const response = await axios.get('https://localhost:8000/api/categories/', {
-                    headers: {
-                        Authorization: `Bearer ${authTokens.access}`,
-                    },
+                    headers
                 });
                 setExistingCategory(response.data);
                 setIsLoading(false);

@@ -7,7 +7,6 @@ import Dashboard from './components/Dashboard';
 import Login from './components/Login';
 import Logout from './components/Logout';
 import Header from './components/Header';
-import CategoryForm from './components/CategoryForm';
 import { CssBaseline, Box } from '@mui/material';
 import axios from 'axios';
 
@@ -66,7 +65,7 @@ function App() {
 
   const getUserDetails = async (accessToken) => {
     try {
-      const response = await axios.get('https://localhost:8000/api/users/', {
+      const response = await axios.get('https://localhost:8000/api/user/', {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -111,8 +110,7 @@ function App() {
               <Route path="/login" element={<Login loginUser={loginUser} />} />
               <Route path="/logout" element={<Logout setAuthTokens={setAuthTokens} />} />
               <Route path="/contact" element={<Contact />} />
-              <Route path="/dashboard" element={<PrivateRoute><Dashboard user={user} /></PrivateRoute>} />
-              <Route path="/category-form" element={<CategoryForm authTokens={authTokens} />} />
+              <Route path="/dashboard" element={<PrivateRoute><Dashboard user={user} authTokens={authTokens} /></PrivateRoute>} />
             </Routes>
           </Box>
         </Router>

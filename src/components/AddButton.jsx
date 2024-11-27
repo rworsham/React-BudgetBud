@@ -17,7 +17,7 @@ const actions = [
     { icon: <PersonAddIcon />, name: 'Family' },
 ];
 
-export default function BasicSpeedDial() {
+export default function BasicSpeedDial({ authTokens }) {
     const [open, setOpen] = useState(false);
     const [modalType, setModalType] = useState('');
 
@@ -51,7 +51,7 @@ export default function BasicSpeedDial() {
             <Dialog open={open && modalType === 'Transaction'} onClose={handleClose}>
                 <DialogTitle>New Transaction</DialogTitle>
                 <DialogContent>
-                    <TransactionForm />
+                    <TransactionForm authTokens={authTokens}/>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">Close</Button>
@@ -61,7 +61,7 @@ export default function BasicSpeedDial() {
             <Dialog open={open && modalType === 'Budget'} onClose={handleClose}>
                 <DialogTitle>Budget Modal</DialogTitle>
                 <DialogContent>
-                    <BudgetForm />
+                    <BudgetForm authTokens={authTokens}/>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">Close</Button>
@@ -71,7 +71,7 @@ export default function BasicSpeedDial() {
             <Dialog open={open && modalType === 'Category'} onClose={handleClose}>
                 <DialogTitle>Category Modal</DialogTitle>
                 <DialogContent>
-                    <CategoryForm />
+                    <CategoryForm authTokens={authTokens}/>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">Close</Button>

@@ -3,9 +3,8 @@ import axios from 'axios';
 import { TextField, Button, FormGroup, FormControl, Box, Typography} from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
-axios.defaults.withCredentials = true;
 
-const BudgetForm = () => {
+const BudgetForm = ({ authTokens }) => {
     const [newBudget, setNewBudget] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -15,9 +14,18 @@ const BudgetForm = () => {
 
     useEffect(() => {
         const fetchCategories = async () => {
+            if (!authTokens || !authTokens.access) {
+                setError('No authorization token found');
+                return;
+            }
+
+            const headers = {
+                Authorization: `Bearer ${authTokens.access}`,
+            };
+
             try {
                 setIsLoading(true);
-                const response = await axios.get('https://localhost:8000/api/budget/');
+                const response = await axios.get('https://localhost:8000/api/budget/', { headers });
                 setExistingBudget(response.data);
                 setIsLoading(false);
             } catch (err) {
@@ -28,7 +36,7 @@ const BudgetForm = () => {
         };
 
         fetchCategories();
-    }, []);
+    }, [authTokens]);
 
     const validateForm = () => {
         if (!newBudget) {

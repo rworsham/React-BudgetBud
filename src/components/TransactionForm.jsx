@@ -4,9 +4,8 @@ import axios from 'axios';
 import { TextField, Button, FormGroup, FormControl, MenuItem, Select, InputLabel, Box, Typography, Checkbox, FormControlLabel } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
-axios.defaults.withCredentials = true;
 
-const TransactionForm = () => {
+const TransactionForm = ({ authTokens }) => {
     const [date, setDate] = useState('');
     const [amount, setAmount] = useState('');
     const [transactionType, setTransactionType] = useState('income');
@@ -24,12 +23,22 @@ const TransactionForm = () => {
     const navigate = useNavigate();
     const theme = useTheme();
 
+
+
     useEffect(() => {
         const fetchChoices = async () => {
+            if (!authTokens || !authTokens.access) {
+                setError('No authorization token found');
+                return;
+            }
+
+            const headers = {
+                Authorization: `Bearer ${authTokens.access}`,
+            };
             try {
                 const [Categories, Budgets] = await Promise.all([
-                    axios.get('https://localhost:8000/api/categories/'),
-                    axios.get('https://localhost:8000/api/budget/'),
+                    axios.get('https://localhost:8000/api/categories/', { headers }),
+                    axios.get('https://localhost:8000/api/budget/', { headers }),
                 ]);
 
                 setCategories(Categories.data);
@@ -44,7 +53,7 @@ const TransactionForm = () => {
         };
 
         fetchChoices();
-    }, []);
+    }, [authTokens]);
 
     const validateForm = () => {
         if (!date || !amount || !category || !budget) {
@@ -77,6 +86,10 @@ const TransactionForm = () => {
                 is_recurring: isRecurring,
                 recurring_type: recurringType,
                 next_occurrence: nextOccurrence,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${authTokens.access}`,
+                },
             });
 
             console.log('Transaction created:', response.data);
