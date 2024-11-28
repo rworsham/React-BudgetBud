@@ -44,7 +44,7 @@ function App() {
         password,
       });
       setAuthTokens(response.data);
-      getUserDetails(response.data.access);
+      await getUserDetails(response.data.access);
     } catch (err) {
       console.error('Error during login:', err);
     }
@@ -57,7 +57,7 @@ function App() {
         refresh: authTokens.refresh,
       });
       setAuthTokens(response.data);
-      getUserDetails(response.data.access);
+      await getUserDetails(response.data.access);
     } catch (err) {
       console.error('Error refreshing token:', err);
     }

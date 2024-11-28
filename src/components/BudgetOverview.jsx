@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Container, Button, Typography, Box } from "@mui/material";
+import TransactionPieChart from "./TransactionPieChart";
 
-const BudgetOverview = () => {
+const BudgetOverview = ({ authTokens }) => {
     const [currentReport, setCurrentReport] = useState("report1");
 
     const handleReportToggle = (report) => {
@@ -17,7 +18,7 @@ const BudgetOverview = () => {
                     onClick={() => handleReportToggle("report1")}
                     sx={{ marginRight: 2 }}
                 >
-                    Report 1
+                    <TransactionPieChart authTokens={authTokens}/>
                 </Button>
                 <Button
                     variant={currentReport === "report2" ? "contained" : "outlined"}
