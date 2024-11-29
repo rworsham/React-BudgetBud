@@ -20,7 +20,7 @@ export default function TransactionPieChart({ authTokens }) {
             };
             try {
                 const [Transactions, Budgets] = await Promise.all([
-                    axios.get('https://localhost:8000/api/transactions/all/', { headers }),
+                    axios.get('https://localhost:8000/api/transactions/', { headers }),
                     axios.get('https://localhost:8000/api/budget/', { headers }),
                 ]);
 

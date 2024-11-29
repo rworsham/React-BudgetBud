@@ -18,7 +18,7 @@ const BudgetOverview = ({ authTokens }) => {
                     onClick={() => handleReportToggle("report1")}
                     sx={{ marginRight: 2 }}
                 >
-                    <TransactionPieChart authTokens={authTokens}/>
+                    Transaction Overview
                 </Button>
                 <Button
                     variant={currentReport === "report2" ? "contained" : "outlined"}
@@ -31,9 +31,7 @@ const BudgetOverview = ({ authTokens }) => {
 
             <Box sx={{ display: "flex", justifyContent: "center", height: "55vh", alignItems: "center" }}>
                 {currentReport === "report1" ? (
-                    <Typography variant="h5" textAlign="center">
-                        This is Report 1
-                    </Typography>
+                    <TransactionPieChart authTokens={authTokens}/>
                 ) : (
                     <Typography variant="h5" textAlign="center">
                         This is Report 2
