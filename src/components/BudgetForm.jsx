@@ -6,6 +6,7 @@ import { useTheme } from '@mui/material/styles';
 
 const BudgetForm = ({ authTokens }) => {
     const [newBudget, setNewBudget] = useState('');
+    const [amount, setAmount] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [existingBudget, setExistingBudget] = useState([]);
@@ -62,18 +63,25 @@ const BudgetForm = ({ authTokens }) => {
         setError('');
 
         try {
-            const response = await axios.post('https://localhost:8000/api/budget/', {
-                newBudget
-            });
+            const response = await axios.post(
+                'https://localhost:8000/api/budget/',
+                { name: newBudget, total_amount: amount },
+                {
+                    headers: {
+                        Authorization: `Bearer ${authTokens.access}`,
+                    },
+                }
+            );
 
-            console.log('New Budget created;', response.data);
+            console.log('New Category created:', response.data);
 
         } catch (err) {
-            setError('Failed to create new Budget. Please try again');
+            setError('Failed to create new category. Please try again');
         } finally {
             setIsLoading(false);
         }
     };
+
 
     return (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
@@ -100,6 +108,18 @@ const BudgetForm = ({ authTokens }) => {
                                 variant="outlined"
                                 value={newBudget}
                                 onChange={(e) => setNewBudget(e.target.value)}
+                                fullWidth
+                                required
+                            />
+                        </FormControl>
+
+                        <FormControl sx={{ marginBottom: 2 }}>
+                            <TextField
+                                type="number"
+                                label="Amount"
+                                variant="outlined"
+                                value={amount}
+                                onChange={(e) => setAmount(e.target.value)}
                                 fullWidth
                                 required
                             />
