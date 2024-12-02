@@ -2,11 +2,11 @@ import React from 'react';
 import BudgetOverview from './BudgetOverview';
 import AddButton from "./AddButton";
 
-function Dashboard({ authTokens }) {
+function Dashboard() {
     return (
         <div style={{ padding: '20px' }}>
-            <BudgetOverview authTokens={authTokens} />
-            <AddButton authTokens={authTokens} />
+            <BudgetOverview />
+            <AddButton />
         </div>
     );
 }

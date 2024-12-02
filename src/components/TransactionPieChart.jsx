@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, {useState, useEffect, useContext} from "react";
 import { PieChart, Pie } from "recharts";
+import { AuthContext , api } from "../context/AuthContext";
 
-export default function TransactionPieChart({ authTokens }) {
+export default function TransactionPieChart() {
+    const { authTokens } = useContext(AuthContext);
     const [transactions, setTransactions] = useState([]);
     const [budgets, setBudgets] = useState([]);
     const [error, setError] = useState('');
@@ -15,13 +16,10 @@ export default function TransactionPieChart({ authTokens }) {
                 return;
             }
 
-            const headers = {
-                Authorization: `Bearer ${authTokens.access}`,
-            };
             try {
                 const [Transactions, Budgets] = await Promise.all([
-                    axios.get('https://localhost:8000/api/transactions/', { headers }),
-                    axios.get('https://localhost:8000/api/budget/', { headers }),
+                    api.get('/transactions/'),
+                    api.get('/budget/')
                 ]);
 
                 setTransactions(Transactions.data);
@@ -29,6 +27,7 @@ export default function TransactionPieChart({ authTokens }) {
 
                 setIsLoading(false);
             } catch (err) {
+
                 console.error('Error fetching data:', err);
                 setError('Failed to fetch data');
                 setIsLoading(false);

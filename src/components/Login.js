@@ -1,10 +1,10 @@
 import React from 'react';
-import LoginForm from './LoginForm';
+import LoginForm from '../forms/LoginForm';
 
-function Login({ loginUser }) {
+function Login() {
     return (
         <div style={{ padding: '20px' }}>
-            <LoginForm loginUser={loginUser} />
+            <LoginForm />
         </div>
     );
 }

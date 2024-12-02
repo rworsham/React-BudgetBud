@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Container, Button, Typography, Box } from "@mui/material";
 import TransactionPieChart from "./TransactionPieChart";
 
-const BudgetOverview = ({ authTokens }) => {
+const BudgetOverview = () => {
     const [currentReport, setCurrentReport] = useState("report1");
 
     const handleReportToggle = (report) => {
@@ -31,7 +31,7 @@ const BudgetOverview = ({ authTokens }) => {
 
             <Box sx={{ display: "flex", justifyContent: "center", height: "55vh", alignItems: "center" }}>
                 {currentReport === "report1" ? (
-                    <TransactionPieChart authTokens={authTokens}/>
+                    <TransactionPieChart />
                 ) : (
                     <Typography variant="h5" textAlign="center">
                         This is Report 2

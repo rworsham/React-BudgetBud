@@ -1,14 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { TextField, Button, FormGroup, FormControl, MenuItem, Select, InputLabel, Box, Typography, Checkbox, FormControlLabel } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import { AuthContext , api } from '../context/AuthContext';
 
-
-const TransactionForm = ({ authTokens }) => {
+const TransactionForm = () => {
+    const { authTokens } = useContext(AuthContext);
     const [date, setDate] = useState('');
     const [amount, setAmount] = useState('');
-    const [transactionType, setTransactionType] = useState('income');
+    const [transactionType, setTransactionType] = useState('expense');
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState('');
     const [budget, setBudget] = useState('');
@@ -23,8 +23,6 @@ const TransactionForm = ({ authTokens }) => {
     const navigate = useNavigate();
     const theme = useTheme();
 
-
-
     useEffect(() => {
         const fetchChoices = async () => {
             if (!authTokens || !authTokens.access) {
@@ -32,13 +30,10 @@ const TransactionForm = ({ authTokens }) => {
                 return;
             }
 
-            const headers = {
-                Authorization: `Bearer ${authTokens.access}`,
-            };
             try {
                 const [Categories, Budgets] = await Promise.all([
-                    axios.get('https://localhost:8000/api/categories/', { headers }),
-                    axios.get('https://localhost:8000/api/budget/', { headers }),
+                    api.get('/categories/'),
+                    api.get('/budget/'),
                 ]);
 
                 setCategories(Categories.data);
@@ -76,7 +71,7 @@ const TransactionForm = ({ authTokens }) => {
         setError('');
 
         try {
-            const response = await axios.post('https://localhost:8000/api/transactions/', {
+            const response = await api.post('/transactions/', {
                 date,
                 amount,
                 transaction_type: transactionType,

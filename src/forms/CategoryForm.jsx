@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import {useState, useEffect, useContext} from 'react';
 import { TextField, Button, FormGroup, FormControl, Box, Typography} from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import {AuthContext, api} from "../context/AuthContext";
 
-const CategoryForm = ({ authTokens }) => {
+const CategoryForm = () => {
+    const { authTokens } = useContext(AuthContext);
     const [newCategory, setNewCategory] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -23,7 +24,7 @@ const CategoryForm = ({ authTokens }) => {
             };
             try {
                 setIsLoading(true);
-                const response = await axios.get('https://localhost:8000/api/categories/', {
+                const response = await api.get('/categories/', {
                     headers
                 });
                 setExistingCategory(response.data);
@@ -64,8 +65,8 @@ const CategoryForm = ({ authTokens }) => {
         setError('');
 
         try {
-            const response = await axios.post(
-                'https://localhost:8000/api/categories/',
+            const response = await api.post(
+                '/categories/',
                 { name: newCategory },
                 {
                     headers: {

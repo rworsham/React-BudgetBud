@@ -6,9 +6,9 @@ import CategoryIcon from '@mui/icons-material/Category';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import TransactionForm  from "./TransactionForm";
-import CategoryForm from "./CategoryForm";
-import BudgetForm from "./BudgetForm";
+import TransactionForm  from "../forms/TransactionForm";
+import CategoryForm from "../forms/CategoryForm";
+import BudgetForm from "../forms/BudgetForm";
 
 const actions = [
     { icon: <ReceiptLongIcon />, name: 'Transaction' },
@@ -17,7 +17,7 @@ const actions = [
     { icon: <PersonAddIcon />, name: 'Family' },
 ];
 
-export default function BasicSpeedDial({ authTokens }) {
+export default function BasicSpeedDial() {
     const [open, setOpen] = useState(false);
     const [modalType, setModalType] = useState('');
 
@@ -51,7 +51,7 @@ export default function BasicSpeedDial({ authTokens }) {
             <Dialog open={open && modalType === 'Transaction'} onClose={handleClose}>
                 <DialogTitle>New Transaction</DialogTitle>
                 <DialogContent>
-                    <TransactionForm authTokens={authTokens}/>
+                    <TransactionForm />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">Close</Button>
@@ -61,7 +61,7 @@ export default function BasicSpeedDial({ authTokens }) {
             <Dialog open={open && modalType === 'Budget'} onClose={handleClose}>
                 <DialogTitle>Budget Modal</DialogTitle>
                 <DialogContent>
-                    <BudgetForm authTokens={authTokens}/>
+                    <BudgetForm />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">Close</Button>
@@ -71,7 +71,7 @@ export default function BasicSpeedDial({ authTokens }) {
             <Dialog open={open && modalType === 'Category'} onClose={handleClose}>
                 <DialogTitle>Category Modal</DialogTitle>
                 <DialogContent>
-                    <CategoryForm authTokens={authTokens}/>
+                    <CategoryForm />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">Close</Button>

@@ -1,16 +1,27 @@
-import React from 'react';
-import {AppBar, Box, Toolbar, Typography, Button, IconButton, MenuItem, Menu} from '@mui/material';
-import {Link} from 'react-router-dom';
+import React, { useContext } from 'react';
+import { AppBar, Box, Toolbar, Typography, Button, IconButton, MenuItem, Menu } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
+import { AuthContext } from '../context/AuthContext';
 
 export default function Header() {
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const { authTokens, logout } = useContext(AuthContext);
+    const navigate = useNavigate();
+
     const open = Boolean(anchorEl);
+
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
+
     const handleClose = () => {
         setAnchorEl(null);
+    };
+
+    const handleLogout = () => {
+        logout();
+        navigate('/login');
     };
 
     return (
@@ -38,13 +49,25 @@ export default function Header() {
                     >
                         <MenuItem onClick={handleClose}>Profile</MenuItem>
                         <MenuItem onClick={handleClose}>My account</MenuItem>
-                        <MenuItem onClick={handleClose} component={Link} to="/logout">Logout</MenuItem>
+                        {authTokens && (
+                            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                        )}
                     </Menu>
                     <Typography variant="h6" sx={{ flexGrow: 1, textDecoration: 'none', color: 'inherit' }} component={Link} to="/">
                         Budget Bud
                     </Typography>
-                    <Button color="inherit" component={Link} to="/login">Login</Button>
-                    <Button color="inherit" component={Link} to="/contact">Contact</Button>
+                    {!authTokens ? (
+                        <Button color="inherit" component={Link} to="/login">
+                            Login
+                        </Button>
+                    ) : (
+                        <Button color="inherit" onClick={handleLogout}>
+                            Logout
+                        </Button>
+                    )}
+                    <Button color="inherit" component={Link} to="/contact">
+                        Contact
+                    </Button>
                 </Toolbar>
             </AppBar>
         </Box>

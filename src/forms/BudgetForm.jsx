@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import {useState, useEffect, useContext} from 'react';
 import { TextField, Button, FormGroup, FormControl, Box, Typography} from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import {AuthContext, api} from "../context/AuthContext";
 
 
-const BudgetForm = ({ authTokens }) => {
+const BudgetForm = () => {
+    const { authTokens } = useContext(AuthContext);
     const [newBudget, setNewBudget] = useState('');
     const [amount, setAmount] = useState('');
     const [error, setError] = useState('');
@@ -20,13 +21,9 @@ const BudgetForm = ({ authTokens }) => {
                 return;
             }
 
-            const headers = {
-                Authorization: `Bearer ${authTokens.access}`,
-            };
-
             try {
                 setIsLoading(true);
-                const response = await axios.get('https://localhost:8000/api/budget/', { headers });
+                const response = await api.get('/budget/');
                 setExistingBudget(response.data);
                 setIsLoading(false);
             } catch (err) {
@@ -63,14 +60,9 @@ const BudgetForm = ({ authTokens }) => {
         setError('');
 
         try {
-            const response = await axios.post(
-                'https://localhost:8000/api/budget/',
-                { name: newBudget, total_amount: amount },
-                {
-                    headers: {
-                        Authorization: `Bearer ${authTokens.access}`,
-                    },
-                }
+            const response = await api.post(
+                '/budget/',
+                { name: newBudget, total_amount: amount }
             );
 
             console.log('New Category created:', response.data);
