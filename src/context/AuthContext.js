@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useState, useEffect, useRef, useCallback } from 'react';
 import axios from 'axios';
 
 export const AuthContext = createContext();
@@ -10,11 +10,11 @@ export const api = axios.create({
 let refreshing = false;
 let refreshSubscribers = [];
 
-const setupAxiosInterceptors = (authTokens, refreshToken) => {
+const setupAxiosInterceptors = (authTokensRef, refreshToken) => {
     api.interceptors.request.use(
         async (config) => {
-            if (authTokens) {
-                const expirationTime = JSON.parse(atob(authTokens.access.split('.')[1])).exp * 1000;
+            if (authTokensRef.current) {
+                const expirationTime = JSON.parse(atob(authTokensRef.current.access.split('.')[1])).exp * 1000;
                 const currentTime = Date.now();
                 if (expirationTime < currentTime) {
                     if (!refreshing) {
@@ -24,12 +24,12 @@ const setupAxiosInterceptors = (authTokens, refreshToken) => {
 
                     return new Promise((resolve) => {
                         refreshSubscribers.push(() => {
-                            config.headers['Authorization'] = `Bearer ${authTokens.access}`;
+                            config.headers['Authorization'] = `Bearer ${authTokensRef.current.access}`;
                             resolve(config);
                         });
                     });
                 }
-                config.headers['Authorization'] = `Bearer ${authTokens.access}`;
+                config.headers['Authorization'] = `Bearer ${authTokensRef.current.access}`;
             }
             return config;
         },
@@ -45,7 +45,7 @@ const setupAxiosInterceptors = (authTokens, refreshToken) => {
                     await refreshToken();
                 }
 
-                const newAccessToken = authTokens.access;
+                const newAccessToken = authTokensRef.current.access;
                 error.config.headers['Authorization'] = `Bearer ${newAccessToken}`;
 
                 return api(error.config);
@@ -60,10 +60,14 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    const authTokensRef = useRef(authTokens);
+    const refreshingRef = useRef(false);
+
     const loginUser = async (username, password) => {
         try {
             const response = await axios.post('https://localhost:8000/api/token/', { username, password });
             setAuthTokens(response.data);
+            authTokensRef.current = response.data;
             await getUserDetails(response.data.access);
         } catch (err) {
             console.error('Error during login:', err);
@@ -71,22 +75,45 @@ export const AuthProvider = ({ children }) => {
     };
 
     const refreshToken = useCallback(async () => {
-        if (!authTokens) return;
+        const refresh = authTokensRef.current?.refresh;
+        console.log('refresh token found step 1', refresh);
+
+        if (!refresh) {
+            console.log('No refresh token found, skipping refresh.');
+            return;
+        }
+
+        if (refreshingRef.current) {
+            console.log('Already refreshing, skipping this call.');
+            return;
+        }
+
+        refreshingRef.current = true;
 
         try {
-            const response = await axios.post('https://localhost:8000/api/token/refresh/', {
-                refresh: authTokens.refresh,
+            console.log('attempting refresh api call', refresh);
+            const response = await axios.post('https://localhost:8000/api/token/refresh/', { refresh });
+            console.log('refresh token call complete?', response.data);
+
+            setAuthTokens({
+                access: response.data.access,
+                refresh: authTokensRef.current.refresh
             });
-            setAuthTokens(response.data);
+            authTokensRef.current = {
+                access: response.data.access,
+                refresh: authTokensRef.current.refresh
+            };
+
             await getUserDetails(response.data.access);
+
             refreshSubscribers.forEach((callback) => callback());
             refreshSubscribers = [];
         } catch (err) {
             console.error('Error refreshing token:', err);
         } finally {
-            refreshing = false;
+            refreshingRef.current = false;
         }
-    }, [authTokens]);
+    }, []);
 
     const getUserDetails = async (accessToken) => {
         try {
@@ -118,7 +145,7 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         if (authTokens) {
-            setupAxiosInterceptors(authTokens, refreshToken);
+            setupAxiosInterceptors(authTokensRef, refreshToken);
         }
     }, [authTokens, refreshToken]);
 
