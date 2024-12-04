@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from "react";
-import { PieChart, Pie } from "recharts";
+import { PieChart, Pie, ResponsiveContainer } from "recharts";
 import { AuthContext , api } from "../context/AuthContext";
 
 export default function TransactionPieChart() {
@@ -45,26 +45,41 @@ export default function TransactionPieChart() {
         return <div>{error}</div>;
     }
 
+    const transactionsArray = transactions.map(transaction => ({
+        name: transaction.description,
+        value: Number(transaction.amount),
+    }));
+
+    const budgetsArray = budgets.map(budget => ({
+        name: budget.name,
+        value: Number(budget.total_amount),
+    }));
+    console.log(transactionsArray);
+    console.log(budgetsArray);
+
     return (
-        <PieChart width={400} height={400}>
-            <Pie
-                data={transactions}
-                dataKey="value"
-                cx={200}
-                cy={200}
-                outerRadius={60}
-                fill="#8884d8"
-            />
-            <Pie
-                data={budgets}
-                dataKey="value"
-                cx={200}
-                cy={200}
-                innerRadius={70}
-                outerRadius={90}
-                fill="#82ca9d"
-                label
-            />
-        </PieChart>
+        <ResponsiveContainer width="100%" height="100%">
+            <PieChart width="100%" height="100%">
+                <Pie
+                    data={transactionsArray}
+                    dataKey="value"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius="45%"
+                    fill="#8884d8"
+                    label
+                />
+                <Pie
+                    data={budgetsArray}
+                    dataKey="value"
+                    cx="50%"
+                    cy="50%"
+                    innerRadius="55%"
+                    outerRadius="70%"
+                    fill="#82ca9d"
+                    label
+                />
+            </PieChart>
+        </ResponsiveContainer>
     );
 }

@@ -29,7 +29,7 @@ const BudgetOverview = () => {
                 </Button>
             </Box>
 
-            <Box sx={{ display: "flex", justifyContent: "center", height: "55vh", alignItems: "center" }}>
+            <Box sx={{ display: "flex", justifyContent: "center", height: "85vh", alignItems: "center" }}>
                 {currentReport === "report1" ? (
                     <TransactionPieChart />
                 ) : (

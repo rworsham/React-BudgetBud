@@ -14,7 +14,7 @@ const TransactionForm = () => {
     const [budget, setBudget] = useState('');
     const [isRecurring, setIsRecurring] = useState(false);
     const [recurringType, setRecurringType] = useState('');
-    const [nextOccurrence, setNextOccurrence] = useState('');
+    const [nextOccurrence, setNextOccurrence] = useState('1111-11-11');
     const [categories, setCategories] = useState([]);
     const [budgets, setBudgets] = useState([]);
     const [error, setError] = useState('');
@@ -90,6 +90,7 @@ const TransactionForm = () => {
             console.log('Transaction created:', response.data);
             navigate('/dashboard');
         } catch (err) {
+            console.log('Api error')
             setError('Failed to create transaction. Please try again.');
         } finally {
             setIsLoading(false);
@@ -180,7 +181,6 @@ const TransactionForm = () => {
                             </Select>
                         </FormControl>
 
-                        {/* Budget */}
                         <FormControl sx={{ marginBottom: 2 }}>
                             <InputLabel>Budget</InputLabel>
                             <Select
