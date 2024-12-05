@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Container, Button, Typography, Box } from "@mui/material";
 import TransactionPieChart from "./TransactionPieChart";
+import TransactionView from "./TransactionView";
 
 const BudgetOverview = () => {
     const [currentReport, setCurrentReport] = useState("report1");
@@ -24,17 +25,29 @@ const BudgetOverview = () => {
                     variant={currentReport === "report2" ? "contained" : "outlined"}
                     color="primary"
                     onClick={() => handleReportToggle("report2")}
+                    sx={{ marginRight: 2 }}
                 >
                     Report 2
+                </Button>
+                <Button
+                    variant={currentReport === "report3" ? "contained" : "outlined"}
+                    color="primary"
+                    onClick={() => handleReportToggle("report3")}
+                >
+                    Transaction Data
                 </Button>
             </Box>
 
             <Box sx={{ display: "flex", justifyContent: "center", height: "85vh", alignItems: "center" }}>
                 {currentReport === "report1" ? (
                     <TransactionPieChart />
-                ) : (
+                ) : currentReport === "report2" ? (
                     <Typography variant="h5" textAlign="center">
                         This is Report 2
+                    </Typography>
+                ) : (
+                    <Typography variant="h5" textAlign="center">
+                        <TransactionView />
                     </Typography>
                 )}
             </Box>
