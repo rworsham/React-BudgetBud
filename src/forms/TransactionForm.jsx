@@ -14,7 +14,7 @@ const TransactionForm = () => {
     const [budget, setBudget] = useState('');
     const [isRecurring, setIsRecurring] = useState(false);
     const [recurringType, setRecurringType] = useState('');
-    const [nextOccurrence, setNextOccurrence] = useState('1111-11-11');
+    const [nextOccurrence, setNextOccurrence] = useState(null);
     const [categories, setCategories] = useState([]);
     const [budgets, setBudgets] = useState([]);
     const [error, setError] = useState('');
@@ -174,7 +174,7 @@ const TransactionForm = () => {
                                 required
                             >
                                 {categories.map((cat) => (
-                                    <MenuItem key={cat.id} value={cat.id}>
+                                    <MenuItem key={cat.id} value={cat.name}>
                                         {cat.name}
                                     </MenuItem>
                                 ))}
@@ -191,7 +191,7 @@ const TransactionForm = () => {
                                 required
                             >
                                 {budgets.map((budgetItem) => (
-                                    <MenuItem key={budgetItem.id} value={budgetItem.id}>
+                                    <MenuItem key={budgetItem.id} value={budgetItem.name}>
                                         {budgetItem.name}
                                     </MenuItem>
                                 ))}

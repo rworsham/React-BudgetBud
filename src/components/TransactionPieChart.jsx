@@ -18,7 +18,7 @@ export default function TransactionPieChart() {
 
             try {
                 const [Transactions, Budgets] = await Promise.all([
-                    api.get('/transactions/'),
+                    api.get('/transaction/'),
                     api.get('/budget/')
                 ]);
 

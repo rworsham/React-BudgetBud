@@ -13,6 +13,7 @@ export default function DataTable() {
     const paginationModel = { page: 0, pageSize: 5 };
     const columns = [
         { field: 'id', headerName: 'ID', width: 70 },
+        { field: 'date', headerName: 'Date', width: 100 },
         { field: 'amount', headerName: 'Amount', width: 70 },
         { field: 'transaction_type', headerName: 'Type', width: 130 },
         { field: 'description', headerName: 'Description', width: 200 },
@@ -32,7 +33,7 @@ export default function DataTable() {
 
             try {
                 setIsLoading(true);
-                const response = await api.get('/budget/');
+                const response = await api.get('/transaction/');
                 setRows(response.data);
                 setIsLoading(false);
             } catch (err) {
