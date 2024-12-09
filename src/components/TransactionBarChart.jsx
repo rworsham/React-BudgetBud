@@ -7,7 +7,7 @@ import {
     Tooltip,
     Legend,
     ResponsiveContainer,
-    Bar
+    Bar, Rectangle
 } from "recharts";
 import { AuthContext, api } from "../context/AuthContext";
 import { TextField, Button, Grid, Box, Typography } from "@mui/material";
@@ -112,7 +112,7 @@ export default function TransactionBarChart() {
                             return "Total";
                         }}
                     />
-                    <Bar dataKey="totalAmount" fill="#1DB954"/>
+                    <Bar dataKey="totalAmount" fill="#1DB954" activeBar={<Rectangle  stroke="#1DB954" />}/>
                 </BarChart>
             </ResponsiveContainer>
 
