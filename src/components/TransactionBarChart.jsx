@@ -10,7 +10,11 @@ import {
     Bar, Rectangle
 } from "recharts";
 import { AuthContext, api } from "../context/AuthContext";
-import { TextField, Button, Grid, Box, Typography } from "@mui/material";
+import { TextField, Button, Grid, Box, Typography, Paper } from "@mui/material";
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
+
 
 export default function TransactionBarChart() {
     const { authTokens } = useContext(AuthContext);
@@ -19,8 +23,10 @@ export default function TransactionBarChart() {
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
+    const [startDate, setStartDate] = useState(dayjs().startOf('month').format('YYYY-MM-DD'));
+    const [endDate, setEndDate] = useState(dayjs().endOf('month').format('YYYY-MM-DD'));
+
+
 
     useEffect(() => {
         const fetchTransactions = async () => {
@@ -53,6 +59,14 @@ export default function TransactionBarChart() {
 
         fetchTransactions();
     }, [authTokens, startDate, endDate]);
+
+    const handleStartDateChange = (newValue) => {
+        setStartDate(newValue ? newValue.format('YYYY-MM-DD') : null);
+    };
+
+    const handleEndDateChange = (newValue) => {
+        setEndDate(newValue ? newValue.format('YYYY-MM-DD') : null);
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -93,6 +107,13 @@ export default function TransactionBarChart() {
 
     return (
         <div>
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: 3 }}>
+                <Paper sx={{ padding: 4, textAlign: 'center' }}>
+                    <Typography variant="h6">
+                        Showing results for {dayjs(startDate).format('MMM D, YYYY')} - {dayjs(endDate).format('MMM D, YYYY')}
+                    </Typography>
+                </Paper>
+            </Box>
             <ResponsiveContainer width="100%" height={500}>
                 <BarChart
                     data={filteredTransactions}
@@ -123,24 +144,24 @@ export default function TransactionBarChart() {
                 <form onSubmit={handleSubmit}>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
-                            <TextField
-                                label="Start Date"
-                                type="date"
-                                fullWidth
-                                variant="outlined"
-                                value={startDate}
-                                onChange={(e) => setStartDate(e.target.value)}
-                            />
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePicker
+                                    label="Start Date"
+                                    value={dayjs(startDate)}
+                                    onChange={handleStartDateChange}
+                                    renderInput={(params) => <TextField {...params} fullWidth variant="outlined" />}
+                                />
+                            </LocalizationProvider>
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            <TextField
-                                label="End Date"
-                                type="date"
-                                fullWidth
-                                variant="outlined"
-                                value={endDate}
-                                onChange={(e) => setEndDate(e.target.value)}
-                            />
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePicker
+                                    label="End Date"
+                                    value={dayjs(endDate)}
+                                    onChange={handleEndDateChange}
+                                    renderInput={(params) => <TextField {...params} fullWidth variant="outlined" />}
+                                />
+                            </LocalizationProvider>
                         </Grid>
                     </Grid>
                     <Box sx={{ marginTop: 2, textAlign: "right" }}>
