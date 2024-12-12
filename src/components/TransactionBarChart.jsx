@@ -18,7 +18,6 @@ import dayjs from 'dayjs';
 
 export default function TransactionBarChart() {
     const { authTokens } = useContext(AuthContext);
-    const [transactions, setTransactions] = useState([]);
     const [filteredTransactions, setFilteredTransactions] = useState([]);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -47,7 +46,6 @@ export default function TransactionBarChart() {
                     name: item.category,
                     totalAmount: parseFloat(item.total_amount),
                 }));
-                setTransactions(formattedData);
                 setFilteredTransactions(formattedData);
                 setIsLoading(false);
             } catch (err) {
@@ -88,7 +86,6 @@ export default function TransactionBarChart() {
                 name: item.category,
                 totalAmount: parseFloat(item.total_amount),
             }));
-            setTransactions(formattedData);
             setFilteredTransactions(formattedData);
             setIsLoading(false);
         } catch (err) {
