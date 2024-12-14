@@ -82,7 +82,7 @@ export default function DataTable() {
 
             try {
                 setIsLoading(true);
-                const response = await api.post('/transaction/', {
+                const response = await api.post('/transaction-table-view/', {
                     params: {
                         start_date: startDate,
                         end_date: endDate,
@@ -120,7 +120,7 @@ export default function DataTable() {
         setError('');
 
         try {
-            const response = await api.post('/transaction/', {
+            const response = await api.post('/transaction-table-view/', {
                 start_date: startDate,
                 end_date: endDate,
             });
@@ -148,7 +148,7 @@ export default function DataTable() {
 
     const handleDeleteClick = async (id) => {
         try {
-            await api.delete(`/transaction/${id}`);
+            await api.delete(`/transaction-table-view/${id}`);
             setRows(rows.filter((row) => row.id !== id));
         } catch (err) {
             console.error('Error deleting row:', err);
@@ -158,7 +158,7 @@ export default function DataTable() {
 
     const updateRow = async (row) => {
         try {
-            await api.put(`/transaction/${row.id}`, row);
+            await api.put(`/transaction-table-view/${row.id}`, row);
             setRows(rows.map((existingRow) => (existingRow.id === row.id ? row : existingRow)));
         } catch (err) {
             console.error('Error updating row:', err);
