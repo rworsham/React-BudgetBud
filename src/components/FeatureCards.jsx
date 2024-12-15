@@ -4,16 +4,9 @@ import { Card, CardContent, CardMedia, Typography, Box } from '@mui/material';
 const FeatureCards = () => {
     return (
         <Box sx={{ width: '80%', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Box sx={{ width: '100%', marginBottom: 2 }}>
-                <Card sx={{ width: '100%', display: 'flex', flexDirection: 'column', boxSizing: 'border-box' }}>
-                    <CardMedia
-                        component="img"
-                        height="140"
-                        image="https://via.placeholder.com/300x140?text=Family+Group"
-                        alt="Family Group"
-                        sx={{ objectFit: 'cover' }}
-                    />
-                    <CardContent>
+            <Box sx={{ width: '100%', marginBottom: 2, display: 'flex', flexDirection: { xs: 'column', md: 'row-reverse' } }}>
+                <Card sx={{ width: '100%', display: 'flex', flexDirection: 'row', boxSizing: 'border-box' }}>
+                    <CardContent sx={{ width: '50%' }}>
                         <Typography variant="h6" component="div">
                             Family Group
                         </Typography>
@@ -22,19 +15,26 @@ const FeatureCards = () => {
                             This helps families or groups of people keep track of finances and share resources together.
                         </Typography>
                     </CardContent>
+                    <CardMedia
+                        component="img"
+                        height="140"
+                        image="https://via.placeholder.com/300x140?text=Family+Group"
+                        alt="Family Group"
+                        sx={{ objectFit: 'cover', width: '50%' }}
+                    />
                 </Card>
             </Box>
 
-            <Box sx={{ width: '100%', marginBottom: 2 }}>
-                <Card sx={{ width: '100%', display: 'flex', flexDirection: 'column', boxSizing: 'border-box' }}>
+            <Box sx={{ width: '100%', marginBottom: 2, display: 'flex', flexDirection: { xs: 'column', md: 'row' } }}>
+                <Card sx={{ width: '100%', display: 'flex', flexDirection: 'row', boxSizing: 'border-box' }}>
                     <CardMedia
                         component="img"
                         height="140"
                         image="https://via.placeholder.com/300x140?text=Budgeting"
                         alt="Budgeting"
-                        sx={{ objectFit: 'cover' }}
+                        sx={{ objectFit: 'cover', width: '50%' }}
                     />
-                    <CardContent>
+                    <CardContent sx={{ width: '50%' }}>
                         <Typography variant="h6" component="div">
                             Budgeting
                         </Typography>
@@ -47,16 +47,9 @@ const FeatureCards = () => {
                 </Card>
             </Box>
 
-            <Box sx={{ width: '100%', marginBottom: 2 }}>
-                <Card sx={{ width: '100%', display: 'flex', flexDirection: 'column', boxSizing: 'border-box' }}>
-                    <CardMedia
-                        component="img"
-                        height="140"
-                        image="https://via.placeholder.com/300x140?text=Transactions"
-                        alt="Transactions"
-                        sx={{ objectFit: 'cover' }}
-                    />
-                    <CardContent>
+            <Box sx={{ width: '100%', marginBottom: 2, display: 'flex', flexDirection: { xs: 'column', md: 'row-reverse' } }}>
+                <Card sx={{ width: '100%', display: 'flex', flexDirection: 'row', boxSizing: 'border-box' }}>
+                    <CardContent sx={{ width: '50%' }}>
                         <Typography variant="h6" component="div">
                             Transactions
                         </Typography>
@@ -67,6 +60,13 @@ const FeatureCards = () => {
                             saving you from having to manually enter them each time.
                         </Typography>
                     </CardContent>
+                    <CardMedia
+                        component="img"
+                        height="140"
+                        image="https://via.placeholder.com/300x140?text=Transactions"
+                        alt="Transactions"
+                        sx={{ objectFit: 'cover', width: '50%' }}
+                    />
                 </Card>
             </Box>
         </Box>
