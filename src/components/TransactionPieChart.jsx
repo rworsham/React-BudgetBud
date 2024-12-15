@@ -100,7 +100,7 @@ export default function TransactionPieChart() {
                                 endAngle={0}
                                 cx="50%"
                                 cy="50%"
-                                outerRadius={80}
+                                outerRadius={'80%'}
                                 fill="#1DB954"
                                 label={({ name, value }) => `${name}: $${value.toFixed(2)}`}
                             />
