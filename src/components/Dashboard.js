@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Box, Button, Typography, Dialog, DialogActions, DialogContent, DialogTitle, SpeedDial, SpeedDialAction, SpeedDialIcon, IconButton } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { Box, Button, Typography, Dialog, DialogActions, DialogContent, DialogTitle, SpeedDial, SpeedDialAction, SpeedDialIcon, IconButton, Menu, MenuItem } from '@mui/material';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import CategoryIcon from '@mui/icons-material/Category';
@@ -75,6 +76,8 @@ const Dashboard = () => {
     const [open, setOpen] = useState(false);
     const [modalType, setModalType] = useState('');
     const [collapsed, setCollapsed] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const navigate = useNavigate();
 
     const handleReportToggle = (report) => {
         setCurrentReport(report);
@@ -94,6 +97,14 @@ const Dashboard = () => {
         setCollapsed(!collapsed);
     };
 
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleCloseMenu = () => {
+        setAnchorEl(null);
+    };
+
     return (
         <Box sx={{ display: 'flex', height: '100vh', flexDirection: 'column' }}>
             <Box sx={{
@@ -109,9 +120,17 @@ const Dashboard = () => {
                     <MenuIcon />
                 </IconButton>
                 <Typography variant="h4">Dashboard</Typography>
-                <IconButton>
+                <IconButton onClick={handleClick}>
                     <AccountCircleIcon />
                 </IconButton>
+                <Menu
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={handleCloseMenu}
+                >
+                    <MenuItem onClick={() => { handleCloseMenu(); console.log("Go to Profile"); }}>Profile</MenuItem>
+                    <MenuItem onClick={() => { handleCloseMenu(); console.log("Logout"); navigate('/login') }}>Logout</MenuItem>
+                </Menu>
             </Box>
 
             <Box sx={{ display: 'flex', flexGrow: 1 }}>
