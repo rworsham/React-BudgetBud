@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import { Box, Button, Typography, Dialog, DialogActions, DialogContent, DialogTitle, SpeedDial, SpeedDialAction, SpeedDialIcon, IconButton, Menu, MenuItem } from '@mui/material';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
@@ -78,6 +78,11 @@ const Dashboard = () => {
     const [collapsed, setCollapsed] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const navigateToSegment = (segment) => {
+        navigate(`/${segment}`);
+    };
 
     const handleReportToggle = (report) => {
         setCurrentReport(report);
@@ -103,6 +108,19 @@ const Dashboard = () => {
 
     const handleCloseMenu = () => {
         setAnchorEl(null);
+    };
+
+    const renderContent = () => {
+        switch (location.pathname) {
+            case '/dashboard':
+                return (
+                    <Box sx={{ display: "flex", justifyContent: "center", height: "70vh", alignItems: "center" }}>
+                        <TransactionPieChart />
+                    </Box>
+                );
+            default:
+                return null;
+        }
     };
 
     return (
@@ -165,6 +183,7 @@ const Dashboard = () => {
                                     width: '100%',
                                     opacity: collapsed ? 0.7 : 1,
                                 }}
+                                onClick={() => navigateToSegment(item.segment)}
                             >
                                 {collapsed ? '' : item.title}
                             </Button>
@@ -174,6 +193,7 @@ const Dashboard = () => {
 
                 <Box sx={{ flexGrow: 1, padding: 3 }}>
                     <Box display="flex" justifyContent="center" mb={3}>
+                        {renderContent()}
                         <Button
                             variant={currentReport === "report1" ? "contained" : "outlined"}
                             color="primary"
