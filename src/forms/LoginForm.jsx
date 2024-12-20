@@ -38,19 +38,35 @@ const Login = () => {
                 <Box
                     sx={{
                         display: 'flex',
+                        flexDirection: 'column',
                         justifyContent: 'center',
                         alignItems: 'center',
                         margin: 'auto',
                         width: '50vh',
-                        height: '50vh',
-                        flexShrink: 0,
+                        height: 'auto',
                         padding: 2,
-                        backgroundColor: theme.palette.background.paper,
+                        backgroundColor: (theme) => theme.palette.background.paper,
                         borderRadius: 2,
                         boxShadow: 3,
                     }}
                 >
-                    <FormGroup sx={{ display: 'flex', flexDirection: 'column' }}>
+                    <Typography
+                        variant="h2"
+                        sx={{
+                            fontWeight: 'bold',
+                            fontSize: '4rem',
+                            background: 'linear-gradient(45deg, #1DB954, #006400)',
+                            WebkitBackgroundClip: 'text',
+                            color: 'transparent',
+                            display: 'inline-block',
+                            position: 'relative',
+                            marginBottom: 3,
+                        }}
+                    >
+                        BudgetBud
+                    </Typography>
+
+                    <FormGroup sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                         <FormControl>
                             <TextField
                                 id="username"
@@ -70,7 +86,7 @@ const Login = () => {
                                 onChange={(e) => setPassword(e.target.value)}
                                 sx={{ marginBottom: 3, width: '40vh' }}
                             />
-                            <Button variant="contained" type="submit">
+                            <Button variant="contained" type="submit" sx={{ marginBottom: 2 }}>
                                 Login
                             </Button>
                             {error && (
@@ -84,6 +100,7 @@ const Login = () => {
             </form>
         </div>
     );
-};
+}
+
 
 export default Login;

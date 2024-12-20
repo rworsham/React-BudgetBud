@@ -137,7 +137,21 @@ const Dashboard = () => {
                 <IconButton onClick={toggleSidebar}>
                     <MenuIcon />
                 </IconButton>
-                <Typography variant="h4">Dashboard</Typography>
+                <Typography
+                    variant="h4"
+                    sx={{
+                        fontWeight: 'bold',
+                        fontSize: '2rem',
+                        background: 'linear-gradient(45deg, #1DB954, #006400)',
+                        WebkitBackgroundClip: 'text',
+                        color: 'transparent',
+                        display: 'inline-block',
+                        position: 'relative',
+                    }}
+                >
+                    BudgetBud
+                </Typography>
+
                 <IconButton onClick={handleClick}>
                     <AccountCircleIcon />
                 </IconButton>
