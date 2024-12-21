@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {useLocation, useNavigate} from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Box, Button, Typography, Dialog, DialogActions, DialogContent, DialogTitle, SpeedDial, SpeedDialAction, SpeedDialIcon, IconButton, Menu, MenuItem } from '@mui/material';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
@@ -11,9 +11,7 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import LayersIcon from '@mui/icons-material/Layers';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import TransactionPieChart from './TransactionPieChart';
-import TransactionTableView from './TransactionTableView';
-import TransactionBarChart from './TransactionBarChart';
+import DashboardReports from './DashboardReports';
 import TransactionForm from '../forms/TransactionForm';
 import CategoryForm from '../forms/CategoryForm';
 import BudgetForm from '../forms/BudgetForm';
@@ -72,7 +70,6 @@ const NAVIGATION = [
 ];
 
 const Dashboard = () => {
-    const [currentReport, setCurrentReport] = useState("report1");
     const [open, setOpen] = useState(false);
     const [modalType, setModalType] = useState('');
     const [collapsed, setCollapsed] = useState(false);
@@ -82,10 +79,6 @@ const Dashboard = () => {
 
     const navigateToSegment = (segment) => {
         navigate(`/${segment}`);
-    };
-
-    const handleReportToggle = (report) => {
-        setCurrentReport(report);
     };
 
     const handleActionClick = (actionName) => {
@@ -115,7 +108,12 @@ const Dashboard = () => {
             case '/dashboard':
                 return (
                     <Box sx={{ display: "flex", justifyContent: "center", height: "70vh", alignItems: "center" }}>
-                        <TransactionPieChart />
+                        <DashboardReports />
+                    </Box>
+                );
+            case '/reports/transactions':
+                return (
+                    <Box sx={{ display: "flex", justifyContent: "center", height: "70vh", alignItems: "center" }}>
                     </Box>
                 );
             default:
@@ -206,41 +204,8 @@ const Dashboard = () => {
                 </Box>
 
                 <Box sx={{ flexGrow: 1, padding: 3 }}>
-                    <Box display="flex" justifyContent="center" mb={3}>
-                        {renderContent()}
-                        <Button
-                            variant={currentReport === "report1" ? "contained" : "outlined"}
-                            color="primary"
-                            onClick={() => handleReportToggle("report1")}
-                            sx={{ marginRight: 2 }}
-                        >
-                            Transaction Overview
-                        </Button>
-                        <Button
-                            variant={currentReport === "report2" ? "contained" : "outlined"}
-                            color="primary"
-                            onClick={() => handleReportToggle("report2")}
-                            sx={{ marginRight: 2 }}
-                        >
-                            Transaction Bar Chart
-                        </Button>
-                        <Button
-                            variant={currentReport === "report3" ? "contained" : "outlined"}
-                            color="primary"
-                            onClick={() => handleReportToggle("report3")}
-                        >
-                            Transaction Data
-                        </Button>
-                    </Box>
-
                     <Box sx={{ display: "flex", justifyContent: "center", height: "70vh", alignItems: "center" }}>
-                        {currentReport === "report1" ? (
-                            <TransactionPieChart />
-                        ) : currentReport === "report2" ? (
-                            <TransactionBarChart />
-                        ) : (
-                            <TransactionTableView />
-                        )}
+                        {renderContent()}
                     </Box>
 
                     <SpeedDial
