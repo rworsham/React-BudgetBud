@@ -149,7 +149,6 @@ const Dashboard = () => {
                 >
                     BudgetBud
                 </Typography>
-
                 <IconButton onClick={handleClick}>
                     <AccountCircleIcon />
                 </IconButton>
@@ -162,10 +161,10 @@ const Dashboard = () => {
                     <MenuItem onClick={() => { handleCloseMenu(); console.log("Logout"); navigate('/login') }}>Logout</MenuItem>
                 </Menu>
             </Box>
-
-            <Box sx={{ display: 'flex', flexGrow: 1 }}>
+            <Box sx={{ display: 'flex', flexGrow: 1}}>
                 <Box sx={{
                     width: collapsed ? 60 : 240,
+                    height: '100%',
                     bgcolor: 'background.paper',
                     borderRight: '1px solid',
                     borderColor: 'divider',
@@ -202,12 +201,10 @@ const Dashboard = () => {
                         )
                     ))}
                 </Box>
-
                 <Box sx={{ flexGrow: 1, padding: 3 }}>
                     <Box sx={{ display: "flex", justifyContent: "center", height: "70vh", alignItems: "center" }}>
                         {renderContent()}
                     </Box>
-
                     <SpeedDial
                         ariaLabel="SpeedDial basic example"
                         sx={{ position: 'absolute', bottom: 16, right: 16 }}
@@ -222,7 +219,6 @@ const Dashboard = () => {
                             />
                         ))}
                     </SpeedDial>
-
                     <Dialog open={open && modalType === 'Transaction'} onClose={handleClose}>
                         <DialogTitle>New Transaction</DialogTitle>
                         <DialogContent>
@@ -232,7 +228,6 @@ const Dashboard = () => {
                             <Button onClick={handleClose} color="primary">Close</Button>
                         </DialogActions>
                     </Dialog>
-
                     <Dialog open={open && modalType === 'Budget'} onClose={handleClose}>
                         <DialogTitle>Budget Modal</DialogTitle>
                         <DialogContent>
@@ -242,7 +237,6 @@ const Dashboard = () => {
                             <Button onClick={handleClose} color="primary">Close</Button>
                         </DialogActions>
                     </Dialog>
-
                     <Dialog open={open && modalType === 'Category'} onClose={handleClose}>
                         <DialogTitle>Category Modal</DialogTitle>
                         <DialogContent>
@@ -252,7 +246,6 @@ const Dashboard = () => {
                             <Button onClick={handleClose} color="primary">Close</Button>
                         </DialogActions>
                     </Dialog>
-
                     <Dialog open={open && modalType === 'Family'} onClose={handleClose}>
                         <DialogTitle>Family Modal</DialogTitle>
                         <DialogContent>

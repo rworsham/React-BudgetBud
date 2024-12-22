@@ -20,7 +20,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 
 export default function CombinedDashboard() {
-    const { authTokens } = useContext(AuthContext);
+    const {authTokens} = useContext(AuthContext);
     const [filteredTransactions, setFilteredTransactions] = useState([]);
     const [rows, setRows] = useState([]);
     const [error, setError] = useState('');
@@ -38,8 +38,18 @@ export default function CombinedDashboard() {
 
             try {
                 setIsLoading(true);
-                const barChartResponse = await api.post('/transaction-bar-chart/', { params: { start_date: startDate, end_date: endDate } });
-                const tableResponse = await api.post('/transaction-table-view/', { params: { start_date: startDate, end_date: endDate } });
+                const barChartResponse = await api.post('/transaction-bar-chart/', {
+                    params: {
+                        start_date: startDate,
+                        end_date: endDate
+                    }
+                });
+                const tableResponse = await api.post('/transaction-table-view/', {
+                    params: {
+                        start_date: startDate,
+                        end_date: endDate
+                    }
+                });
 
                 const barChartData = barChartResponse.data.map(item => ({
                     name: item.category,
@@ -67,17 +77,17 @@ export default function CombinedDashboard() {
     };
 
     const handleEditClick = (id) => {
-        setRowModesModel({ ...rowModesModel, [id]: { mode: 'edit' } });
+        setRowModesModel({...rowModesModel, [id]: {mode: 'edit'}});
     };
 
     const handleSaveClick = (id) => {
         const updatedRow = rows.find((row) => row.id === id);
         updateRow(updatedRow);
-        setRowModesModel({ ...rowModesModel, [id]: { mode: 'view' } });
+        setRowModesModel({...rowModesModel, [id]: {mode: 'view'}});
     };
 
     const handleCancelClick = (id) => {
-        setRowModesModel({ ...rowModesModel, [id]: { mode: 'view' } });
+        setRowModesModel({...rowModesModel, [id]: {mode: 'view'}});
     };
 
     const handleDeleteClick = async (id) => {
@@ -112,8 +122,14 @@ export default function CombinedDashboard() {
         setError('');
 
         try {
-            const barChartResponse = await api.post('/transaction-bar-chart/', { start_date: startDate, end_date: endDate });
-            const tableResponse = await api.post('/transaction-table-view/', { start_date: startDate, end_date: endDate });
+            const barChartResponse = await api.post('/transaction-bar-chart/', {
+                start_date: startDate,
+                end_date: endDate
+            });
+            const tableResponse = await api.post('/transaction-table-view/', {
+                start_date: startDate,
+                end_date: endDate
+            });
 
             const barChartData = barChartResponse.data.map(item => ({
                 name: item.category,
@@ -130,33 +146,36 @@ export default function CombinedDashboard() {
     };
 
     const columns = [
-        { field: 'id', headerName: 'ID', width: 70 },
-        { field: 'date', headerName: 'Date', width: 100, editable: true },
-        { field: 'amount', headerName: 'Amount', width: 70, editable: true },
-        { field: 'transaction_type', headerName: 'Type', width: 130, editable: true },
-        { field: 'description', headerName: 'Description', width: 200, editable: true },
-        { field: 'category', headerName: 'Category', width: 100, editable: true },
-        { field: 'budget', headerName: 'Budget', width: 100, editable: true },
-        { field: 'is_recurring', headerName: 'IsRecurring', width: 100, editable: true },
-        { field: 'next_occurrence', headerName: 'NextOccurrence', width: 100, editable: true },
+        {field: 'id', headerName: 'ID'},
+        {field: 'date', headerName: 'Date', editable: true},
+        {field: 'amount', headerName: 'Amount', editable: true},
+        {field: 'transaction_type', headerName: 'Type', editable: true},
+        {field: 'description', headerName: 'Description', editable: true},
+        {field: 'category', headerName: 'Category', editable: true},
+        {field: 'budget', headerName: 'Budget', editable: true},
+        {field: 'is_recurring', headerName: 'IsRecurring', editable: true},
+        {field: 'next_occurrence', headerName: 'NextOccurrence', editable: true},
         {
             field: 'actions',
             headerName: 'Actions',
-            width: 100,
             renderCell: (params) => {
                 const isInEditMode = rowModesModel[params.id]?.mode === 'edit';
                 if (isInEditMode) {
                     return (
                         <>
-                            <GridActionsCellItem icon={<SaveIcon />} label="Save" onClick={() => handleSaveClick(params.id)} />
-                            <GridActionsCellItem icon={<CancelIcon />} label="Cancel" onClick={() => handleCancelClick(params.id)} />
+                            <GridActionsCellItem icon={<SaveIcon/>} label="Save"
+                                                 onClick={() => handleSaveClick(params.id)}/>
+                            <GridActionsCellItem icon={<CancelIcon/>} label="Cancel"
+                                                 onClick={() => handleCancelClick(params.id)}/>
                         </>
                     );
                 }
                 return (
                     <>
-                        <GridActionsCellItem icon={<EditIcon />} label="Edit" onClick={() => handleEditClick(params.id)} />
-                        <GridActionsCellItem icon={<DeleteIcon />} label="Delete" onClick={() => handleDeleteClick(params.id)} />
+                        <GridActionsCellItem icon={<EditIcon/>} label="Edit"
+                                             onClick={() => handleEditClick(params.id)}/>
+                        <GridActionsCellItem icon={<DeleteIcon/>} label="Delete"
+                                             onClick={() => handleDeleteClick(params.id)}/>
                     </>
                 );
             },
@@ -172,16 +191,16 @@ export default function CombinedDashboard() {
     }
 
     return (
-        <div>
-            <Box sx={{ marginBottom: 3 }}>
-                <Paper sx={{ padding: 4, textAlign: 'center' }}>
+        <div style={{height: '100%', padding: '10px'}}>
+            <Box sx={{marginBottom: 3}}>
+                <Paper sx={{padding: 4, textAlign: 'center'}}>
                     <Typography variant="h6">
-                        Showing results for {dayjs(startDate).format('MMM D, YYYY')} - {dayjs(endDate).format('MMM D, YYYY')}
+                        Showing results
+                        for {dayjs(startDate).format('MMM D, YYYY')} - {dayjs(endDate).format('MMM D, YYYY')}
                     </Typography>
                 </Paper>
             </Box>
-
-            <Box sx={{ marginBottom: 3, padding: 2, border: '1px solid #ddd', borderRadius: 2 }}>
+            <Box sx={{marginBottom: 3, padding: 2, border: '1px solid #ddd', borderRadius: 2}}>
                 <Typography variant="h6" gutterBottom>
                     Filter by Date Range
                 </Typography>
@@ -193,7 +212,7 @@ export default function CombinedDashboard() {
                                     label="Start Date"
                                     value={dayjs(startDate)}
                                     onChange={handleStartDateChange}
-                                    renderInput={(params) => <TextField {...params} fullWidth variant="outlined" />}
+                                    renderInput={(params) => <TextField {...params} fullWidth variant="outlined"/>}
                                 />
                             </LocalizationProvider>
                         </Grid>
@@ -203,35 +222,33 @@ export default function CombinedDashboard() {
                                     label="End Date"
                                     value={dayjs(endDate)}
                                     onChange={handleEndDateChange}
-                                    renderInput={(params) => <TextField {...params} fullWidth variant="outlined" />}
+                                    renderInput={(params) => <TextField {...params} fullWidth variant="outlined"/>}
                                 />
                             </LocalizationProvider>
                         </Grid>
                     </Grid>
-                    <Box sx={{ marginTop: 2, textAlign: "right" }}>
+                    <Box sx={{marginTop: 2, textAlign: "right"}}>
                         <Button variant="contained" color="primary" type="submit">
                             Apply Date Range
                         </Button>
                     </Box>
                 </form>
             </Box>
-
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: 3 }}>
-                <Box sx={{ width: '48%' }}>
-                    <ResponsiveContainer width="100%" height={500}>
-                        <BarChart data={filteredTransactions} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="name" />
-                            <YAxis />
-                            <Tooltip />
-                            <Legend formatter={(value) => "Total"} />
-                            <Bar dataKey="totalAmount" fill="#1DB954" activeBar={<Rectangle stroke="#1DB954" />} />
+            <Box sx={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', marginBottom: 3}}>
+                <Box sx={{width: {xs: '100%', sm: '48%'}, marginBottom: {xs: 3, sm: 0}}}>
+                    <ResponsiveContainer width="100%" height={300}>
+                        <BarChart data={filteredTransactions} margin={{top: 5, right: 30, left: 20, bottom: 5}}>
+                            <CartesianGrid strokeDasharray="3 3"/>
+                            <XAxis dataKey="name"/>
+                            <YAxis/>
+                            <Tooltip/>
+                            <Legend formatter={(value) => "Total"}/>
+                            <Bar dataKey="totalAmount" fill="#1DB954" activeBar={<Rectangle stroke="#1DB954"/>}/>
                         </BarChart>
                     </ResponsiveContainer>
                 </Box>
-
-                <Box sx={{ width: '48%' }}>
-                    <ResponsiveContainer width="100%" height={500}>
+                <Box sx={{width: {xs: '100%', sm: '48%'}}}>
+                    <ResponsiveContainer width="100%" height={300}>
                         {filteredTransactions && filteredTransactions.length > 0 ? (
                             <PieChart>
                                 <Pie
@@ -243,7 +260,7 @@ export default function CombinedDashboard() {
                                     cy="50%"
                                     outerRadius="80%"
                                     fill="#1DB954"
-                                    label={({ name, value }) => `${name}: $${value.toFixed(2)}`}
+                                    label={({name, value}) => `${name}: $${value.toFixed(2)}`}
                                 />
                             </PieChart>
                         ) : (
@@ -252,14 +269,13 @@ export default function CombinedDashboard() {
                     </ResponsiveContainer>
                 </Box>
             </Box>
-
-            <Paper sx={{ height: 400, width: '100%' }}>
+            <Paper sx={{height: 400, width: '100%'}}>
                 <DataGrid
                     rows={rows}
                     columns={columns}
                     pageSize={5}
                     checkboxSelection
-                    sx={{ border: 0 }}
+                    sx={{border: 0}}
                 />
             </Paper>
         </div>
