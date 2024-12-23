@@ -4,6 +4,7 @@ import Paper from '@mui/material/Paper';
 import FeatureCards from "./FeatureCards";
 import { Box, Typography, Button } from '@mui/material';
 import {Link} from "react-router-dom";
+import AccountSignUp from "./Accountsignup";
 
 function Home() {
     return (
@@ -51,10 +52,9 @@ function Home() {
                 </Link>
             </Box>
             <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2}}/>
-            <Paper elevation={6} sx={{padding: 2}}>
-                <FeatureCards/>
-            </Paper>
+            <FeatureCards/>
             <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2}}/>
+            <AccountSignUp />
         </div>
     );
 }

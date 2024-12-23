@@ -4,7 +4,7 @@ import { Card, CardContent, CardMedia, Typography, Box } from '@mui/material';
 const FeatureCards = () => {
     return (
         <Box sx={{ width: '80%', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Box sx={{ width: '100%', marginBottom: 2, display: 'flex', flexDirection: { xs: 'column', md: 'row-reverse' } }}>
+            <Box sx={{ width: '100%', marginBottom: 4, display: 'flex', flexDirection: { xs: 'column', md: 'row-reverse' } }}>
                 <Card sx={{ width: '100%', display: 'flex', flexDirection: 'row', boxSizing: 'border-box' }}>
                     <CardContent sx={{ width: '50%' }}>
                         <Typography variant="h6" component="div">
@@ -24,8 +24,7 @@ const FeatureCards = () => {
                     />
                 </Card>
             </Box>
-
-            <Box sx={{ width: '100%', marginBottom: 2, display: 'flex', flexDirection: { xs: 'column', md: 'row' } }}>
+            <Box sx={{ width: '100%', marginBottom: 4, display: 'flex', flexDirection: { xs: 'column', md: 'row' } }}>
                 <Card sx={{ width: '100%', display: 'flex', flexDirection: 'row', boxSizing: 'border-box' }}>
                     <CardMedia
                         component="img"
@@ -46,8 +45,7 @@ const FeatureCards = () => {
                     </CardContent>
                 </Card>
             </Box>
-
-            <Box sx={{ width: '100%', marginBottom: 2, display: 'flex', flexDirection: { xs: 'column', md: 'row-reverse' } }}>
+            <Box sx={{ width: '100%', marginBottom: 4, display: 'flex', flexDirection: { xs: 'column', md: 'row-reverse' } }}>
                 <Card sx={{ width: '100%', display: 'flex', flexDirection: 'row', boxSizing: 'border-box' }}>
                     <CardContent sx={{ width: '50%' }}>
                         <Typography variant="h6" component="div">
