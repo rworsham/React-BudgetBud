@@ -4,7 +4,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline, Box } from '@mui/material';
 import { AuthProvider, AuthContext } from './context/AuthContext';
 import Home from './components/Home';
-import SignUpForm from './forms/SignUpForm';
+import SignUp from './components/SignUp';
 import Login from './components/Login';
 import Logout from './components/Logout';
 import Contact from './components/Contact';
@@ -29,7 +29,7 @@ const App = () => {
           <Box sx={{ backgroundColor: 'background.default', minHeight: '100vh' }}>
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/SignUp" element={<SignUpForm />} />
+              <Route path="/SignUp" element={<SignUp />} />
               <Route path="/login" element={<Login loginUser={loginUser} />} />
               <Route path="/logout" element={<Logout logout={logout} />} />
               <Route path="/contact" element={<Contact />} />

@@ -65,12 +65,29 @@ const SignUpForm = () => {
         <div
             style={{
                 display: 'flex',
+                flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
                 overflow: 'hidden',
-                height: '80vh',
+                height: '100vh',
             }}
         >
+            <Typography
+                variant="h2"
+                sx={{
+                    fontWeight: 'bold',
+                    fontSize: { xs: '2.5rem', sm: '4rem' },
+                    background: 'linear-gradient(45deg, #1DB954, #006400)',
+                    WebkitBackgroundClip: 'text',
+                    color: 'transparent',
+                    display: 'inline-block',
+                    position: 'relative',
+                    marginBottom: 3,
+                    marginTop: 3,
+                }}
+            >
+                BudgetBud
+            </Typography>
             <form onSubmit={handleSubmit}>
                 <Box
                     sx={{
@@ -80,7 +97,6 @@ const SignUpForm = () => {
                         alignItems: 'center',
                         margin: 'auto',
                         width: '50vh',
-                        height: 'auto',
                         padding: 2,
                         backgroundColor: (theme) => theme.palette.background.paper,
                         borderRadius: 2,
@@ -91,16 +107,16 @@ const SignUpForm = () => {
                         variant="h2"
                         sx={{
                             fontWeight: 'bold',
-                            fontSize: '4rem',
+                            fontSize: { xs: '1rem', sm: '2rem' },
                             background: 'linear-gradient(45deg, #1DB954, #006400)',
                             WebkitBackgroundClip: 'text',
                             color: 'transparent',
                             display: 'inline-block',
                             position: 'relative',
-                            marginBottom: 3,
+                            marginBottom: { xs: '0', sm: '2'},
                         }}
                     >
-                        BudgetBud
+                        Sign Up
                     </Typography>
                     <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2, width: '100%'}}/>
                     <FormGroup sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
@@ -111,7 +127,10 @@ const SignUpForm = () => {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
-                                sx={{ width: '40vh' }}
+                                sx={{
+                                    height: { xs: '40px', sm: '50px' },
+                                    width: { xs: '100%', sm: '40vh' }
+                                }}
                             />
                         </FormControl>
                         <FormControl sx={{marginBottom: 2}}>
@@ -121,7 +140,10 @@ const SignUpForm = () => {
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
                                 required
-                                sx={{ width: '40vh' }}
+                                sx={{
+                                    height: { xs: '40px', sm: '50px' },
+                                    width: { xs: '100%', sm: '40vh' }
+                                }}
                             />
                         </FormControl>
                         <FormControl sx={{marginBottom: 2}}>
@@ -131,7 +153,10 @@ const SignUpForm = () => {
                                 value={firstName}
                                 onChange={(e) => setFirstName(e.target.value)}
                                 required
-                                sx={{ width: '40vh' }}
+                                sx={{
+                                    height: { xs: '40px', sm: '50px' },
+                                    width: { xs: '100%', sm: '40vh' }
+                                }}
                             />
                         </FormControl>
                         <FormControl sx={{marginBottom: 2}}>
@@ -141,7 +166,10 @@ const SignUpForm = () => {
                                 value={lastName}
                                 onChange={(e) => setLastName(e.target.value)}
                                 required
-                                sx={{ width: '40vh' }}
+                                sx={{
+                                    height: { xs: '40px', sm: '50px' },
+                                    width: { xs: '100%', sm: '40vh' }
+                                }}
                             />
                         </FormControl>
                         <FormControl sx={{marginBottom: 2}}>
@@ -152,7 +180,10 @@ const SignUpForm = () => {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
-                                sx={{ width: '40vh' }}
+                                sx={{
+                                    height: { xs: '40px', sm: '50px' },
+                                    width: { xs: '100%', sm: '40vh' }
+                                }}
                             />
                         </FormControl>
                         <FormControl sx={{marginBottom: 2}}>
@@ -163,7 +194,10 @@ const SignUpForm = () => {
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                 required
-                                sx={{ width: '40vh' }}
+                                sx={{
+                                    height: { xs: '40px', sm: '50px' },
+                                    width: { xs: '100%', sm: '40vh' }
+                                }}
                             />
                         </FormControl>
                         <Button
@@ -181,15 +215,15 @@ const SignUpForm = () => {
                         )}
                     </FormGroup>
                     <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2, width: '100%'}}/>
-                    <Typography
-                        component="a"
-                        href="/login"
-                        sx={{ marginTop: 2, textDecoration: 'underline', color: 'inherit'}}
-                    >
-                        Already have an account? Sign in here!
-                    </Typography>
                 </Box>
             </form>
+            <Typography
+                component="a"
+                href="/login"
+                sx={{ marginTop: 2, textDecoration: 'underline', color: 'inherit', fontSize: '1rem'}}
+            >
+                Already have an account? Sign in here!
+            </Typography>
         </div>
     );
 };

@@ -29,12 +29,29 @@ const Login = () => {
         <div
             style={{
                 display: 'flex',
+                flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
                 overflow: 'hidden',
                 height: '80vh',
             }}
         >
+            <Typography
+                variant="h2"
+                sx={{
+                    fontWeight: 'bold',
+                    fontSize: { xs: '2.5rem', sm: '4rem' },
+                    background: 'linear-gradient(45deg, #1DB954, #006400)',
+                    WebkitBackgroundClip: 'text',
+                    color: 'transparent',
+                    display: 'inline-block',
+                    position: 'relative',
+                    marginBottom: 3,
+                    marginTop: 3,
+                }}
+            >
+                BudgetBud
+            </Typography>
             <form onSubmit={handleLogin}>
                 <Box
                     sx={{
@@ -55,7 +72,7 @@ const Login = () => {
                         variant="h2"
                         sx={{
                             fontWeight: 'bold',
-                            fontSize: '4rem',
+                            fontSize: { xs: '1rem', sm: '2rem' },
                             background: 'linear-gradient(45deg, #1DB954, #006400)',
                             WebkitBackgroundClip: 'text',
                             color: 'transparent',
@@ -64,7 +81,7 @@ const Login = () => {
                             marginBottom: 3,
                         }}
                     >
-                        BudgetBud
+                        Log In
                     </Typography>
                     <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2, width: '100%'}}/>
                     <FormGroup sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -76,7 +93,7 @@ const Login = () => {
                                 placeholder="Username"
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
-                                sx={{ marginBottom: 3, width: '40vh' }}
+                                sx={{ marginBottom: 4, width: '40vh' }}
                             />
                             <TextField
                                 id="password"
@@ -85,7 +102,7 @@ const Login = () => {
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                sx={{ marginBottom: 3, width: '40vh' }}
+                                sx={{ marginBottom: 4, width: '40vh' }}
                             />
                             <Button variant="contained" type="submit" sx={{ marginBottom: 2 }}>
                                 Login
@@ -98,15 +115,15 @@ const Login = () => {
                         </FormControl>
                     </FormGroup>
                     <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2, width: '100%'}}/>
-                    <Typography
-                        component="a"
-                        href="/SignUp"
-                        sx={{ marginTop: 2, textDecoration: 'underline', color: 'inherit'}}
-                    >
-                        Need an account? Sign Up here!
-                    </Typography>
                 </Box>
             </form>
+            <Typography
+                component="a"
+                href="/SignUp"
+                sx={{ marginTop: 2, textDecoration: 'underline', color: 'inherit', fontSize: '1rem' }}
+            >
+                Need an account? Sign Up here!
+            </Typography>
         </div>
     );
 }
