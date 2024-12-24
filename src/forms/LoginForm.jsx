@@ -3,6 +3,7 @@ import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button, FormGroup, FormControl, Box, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import Divider from "@mui/material/Divider";
 
 const Login = () => {
     const { loginUser } = useContext(AuthContext);
@@ -65,7 +66,7 @@ const Login = () => {
                     >
                         BudgetBud
                     </Typography>
-
+                    <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2, width: '100%'}}/>
                     <FormGroup sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                         <FormControl>
                             <TextField
@@ -96,6 +97,14 @@ const Login = () => {
                             )}
                         </FormControl>
                     </FormGroup>
+                    <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2, width: '100%'}}/>
+                    <Typography
+                        component="a"
+                        href="/SignUp"
+                        sx={{ marginTop: 2, textDecoration: 'underline', color: 'inherit'}}
+                    >
+                        Need an account? Sign Up here!
+                    </Typography>
                 </Box>
             </form>
         </div>
