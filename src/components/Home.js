@@ -5,6 +5,7 @@ import FeatureCards from "./FeatureCards";
 import { Box, Typography, Button } from '@mui/material';
 import {Link} from "react-router-dom";
 import AccountSignUp from "./Accountsignup";
+import DashboardAd from "./DashboardAdverstisement";
 
 function Home() {
     return (
@@ -55,6 +56,8 @@ function Home() {
             <FeatureCards/>
             <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2}}/>
             <AccountSignUp />
+            <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2}}/>
+            <DashboardAd />
         </div>
     );
 }
