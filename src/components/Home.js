@@ -5,7 +5,8 @@ import FeatureCards from "./FeatureCards";
 import { Box, Typography, Button } from '@mui/material';
 import {Link} from "react-router-dom";
 import AccountSignUp from "./Accountsignup";
-import DashboardAd from "./DashboardAdverstisement";
+import DashboardAd from "./DashboardAdvertisement";
+import ReportingAd from "./ReportingAdvertisement";
 
 function Home() {
     return (
@@ -58,6 +59,7 @@ function Home() {
             <AccountSignUp />
             <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2}}/>
             <DashboardAd />
+            <ReportingAd />
         </div>
     );
 }
