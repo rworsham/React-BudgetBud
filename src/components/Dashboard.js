@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Box, Button, Typography, Dialog, DialogActions, DialogContent, DialogTitle, SpeedDial, SpeedDialAction, SpeedDialIcon, IconButton, Menu, MenuItem } from '@mui/material';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
@@ -11,6 +11,7 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import LayersIcon from '@mui/icons-material/Layers';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import TransactionTableView from './TransactionTableView';
 import DashboardReports from './DashboardReports';
 import TransactionForm from '../forms/TransactionForm';
 import CategoryForm from '../forms/CategoryForm';
@@ -51,12 +52,12 @@ const NAVIGATION = [
         icon: <BarChartIcon />,
         children: [
             {
-                segment: 'transactions',
+                segment: 'reports/transactions',
                 title: 'Transactions',
                 icon: <BarChartIcon />,
             },
             {
-                segment: 'expenses',
+                segment: 'reports/expenses',
                 title: 'expenses',
                 icon: <BarChartIcon />,
             },
@@ -75,10 +76,10 @@ const Dashboard = () => {
     const [collapsed, setCollapsed] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const navigate = useNavigate();
-    const location = useLocation();
+    const [currentSegment, setCurrentSegment] = useState('dashboard');
 
     const navigateToSegment = (segment) => {
-        navigate(`/${segment}`);
+        setCurrentSegment(segment);
     };
 
     const handleActionClick = (actionName) => {
@@ -104,16 +105,17 @@ const Dashboard = () => {
     };
 
     const renderContent = () => {
-        switch (location.pathname) {
-            case '/dashboard':
+        switch (currentSegment) {
+            case 'dashboard':
                 return (
                     <Box sx={{ display: "flex", justifyContent: "center", height: "70vh", alignItems: "center" }}>
                         <DashboardReports />
                     </Box>
                 );
-            case '/reports/transactions':
+            case 'reports/transactions':
                 return (
                     <Box sx={{ display: "flex", justifyContent: "center", height: "70vh", alignItems: "center" }}>
+                        <TransactionTableView />
                     </Box>
                 );
             default:
@@ -177,27 +179,53 @@ const Dashboard = () => {
                     {NAVIGATION.map((item, index) => (
                         item.kind === 'header' ? (
                             <Box key={index} sx={{ padding: 2, opacity: collapsed ? 0 : 1 }}>
-                                <Typography variant="subtitle1" sx={{ display: collapsed ? 'none' : 'block' }}>{item.title}</Typography>
+                                <Typography variant="subtitle1" sx={{ display: collapsed ? 'none' : 'block' }}>
+                                    {item.title}
+                                </Typography>
                             </Box>
                         ) : item.kind === 'divider' ? (
                             <Box key={index} sx={{ borderBottom: '1px solid #ccc', marginBottom: 2 }} />
                         ) : (
-                            <Button
-                                key={index}
-                                startIcon={item.icon}
-                                sx={{
-                                    textAlign: 'left',
-                                    justifyContent: 'flex-start',
-                                    paddingLeft: collapsed ? 2 : 3,
-                                    marginBottom: 2,
-                                    display: 'flex',
-                                    width: '100%',
-                                    opacity: collapsed ? 0.7 : 1,
-                                }}
-                                onClick={() => navigateToSegment(item.segment)}
-                            >
-                                {collapsed ? '' : item.title}
-                            </Button>
+                            <Box key={index}>
+                                <Button
+                                    startIcon={item.icon}
+                                    sx={{
+                                        textAlign: 'left',
+                                        justifyContent: 'flex-start',
+                                        paddingLeft: collapsed ? 2 : 3,
+                                        marginBottom: 2,
+                                        display: 'flex',
+                                        width: '100%',
+                                        opacity: collapsed ? 0.7 : 1,
+                                    }}
+                                    onClick={() => navigateToSegment(item.segment)}
+                                >
+                                    {collapsed ? '' : item.title}
+                                </Button>
+
+                                {item.children && !collapsed && (
+                                    <Box sx={{ paddingLeft: 2 }}>
+                                        {item.children.map((child, childIndex) => (
+                                            <Button
+                                                key={childIndex}
+                                                startIcon={child.icon}
+                                                sx={{
+                                                    textAlign: 'left',
+                                                    justifyContent: 'flex-start',
+                                                    paddingLeft: collapsed ? 2 : 4,
+                                                    marginBottom: 1,
+                                                    display: 'flex',
+                                                    width: '100%',
+                                                    opacity: collapsed ? 0.7 : 1,
+                                                }}
+                                                onClick={() => navigateToSegment(child.segment)}
+                                            >
+                                                {collapsed ? '' : child.title}
+                                            </Button>
+                                        ))}
+                                    </Box>
+                                )}
+                            </Box>
                         )
                     ))}
                 </Box>

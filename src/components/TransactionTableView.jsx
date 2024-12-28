@@ -7,10 +7,11 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
+import { Download } from '@mui/icons-material';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
-import {Box, Button, Grid, TextField, Typography} from "@mui/material";
+import {Box, Button, Grid, TextField, Typography, IconButton} from "@mui/material";
 
 export default function DataTable() {
     const { authTokens } = useContext(AuthContext);
@@ -18,7 +19,7 @@ export default function DataTable() {
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [rowModesModel, setRowModesModel] = useState({});
-
+    const [downloadPdf, setDownloadPdf] = useState(false);
     const [startDate, setStartDate] = useState(dayjs().startOf('month').format('YYYY-MM-DD'));
     const [endDate, setEndDate] = useState(dayjs().endOf('month').format('YYYY-MM-DD'));
 
@@ -82,12 +83,33 @@ export default function DataTable() {
 
             try {
                 setIsLoading(true);
-                const response = await api.post('/transaction-table-view/', {
+                const dataPayload = {
+                    start_date: startDate,
+                    end_date: endDate,
+                };
+
+                if (downloadPdf) {
+                    dataPayload.format = 'pdf';
+                }
+                const response = await api.post('/transaction-table-view/', dataPayload, {
                     params: {
                         start_date: startDate,
                         end_date: endDate,
                     },
+                    responseType: downloadPdf ? 'blob' : 'json',
                 });
+
+                if (downloadPdf) {
+                    const blob = response.data;
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = 'transaction_report.pdf';
+                    link.click();
+                    setIsLoading(false);
+                    setDownloadPdf(false);
+                    return;
+                }
+
                 setRows(response.data);
                 setIsLoading(false);
             } catch (err) {
@@ -98,7 +120,7 @@ export default function DataTable() {
         };
 
         fetchTransactions();
-    }, [authTokens, startDate, endDate]);
+    }, [authTokens, startDate, endDate, downloadPdf]);
 
     const handleStartDateChange = (newValue) => {
         setStartDate(newValue ? newValue.format('YYYY-MM-DD') : null);
@@ -176,25 +198,35 @@ export default function DataTable() {
 
     return (
         <div>
-            <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: 3}}>
-                <Paper sx={{padding: 4, textAlign: 'center'}}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: 3 }}>
+                <Paper sx={{ padding: 4, textAlign: 'center' }}>
                     <Typography variant="h6">
-                        Showing results
-                        for {dayjs(startDate).format('MMM D, YYYY')} - {dayjs(endDate).format('MMM D, YYYY')}
+                        Showing results for {dayjs(startDate).format('MMM D, YYYY')} - {dayjs(endDate).format('MMM D, YYYY')}
                     </Typography>
                 </Paper>
             </Box>
-            <Paper sx={{height: 400, width: '100%'}}>
+            <Paper sx={{ height: 400, width: '100%', position: 'relative' }}>
+                <Box sx={{
+                    position: 'absolute',
+                    top: 16,
+                    right: 16,
+                    zIndex: 10
+                }}>
+                    <IconButton onClick={() => setDownloadPdf(true)}>
+                        <Download />
+                    </IconButton>
+                </Box>
+
                 <DataGrid
                     rows={rows}
                     columns={columns}
-                    rowModesModel={rowModesModel}
-                    onRowModesModelChange={setRowModesModel}
-                    pageSizeOptions={[5, 10]}
+                    pageSize={5}
+                    rowsPerPageOptions={[5, 10]}
                     checkboxSelection
-                    sx={{border: 0}}
+                    sx={{ border: 0 }}
                 />
             </Paper>
+
             <Box sx={{ marginTop: 3, padding: 2, border: '1px solid #ddd', borderRadius: 2 }}>
                 <Typography variant="h6" gutterBottom>
                     Filter by Date Range
@@ -231,4 +263,4 @@ export default function DataTable() {
             </Box>
         </div>
     );
-}
+};
