@@ -197,11 +197,12 @@ export default function DataTable() {
     }
 
     return (
-        <div>
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: 3 }}>
-                <Paper sx={{ padding: 4, textAlign: 'center' }}>
+        <div style={{height: '100%', padding: '10px'}}>
+            <Box sx={{marginBottom: 3}}>
+                <Paper sx={{padding: 4, textAlign: 'center'}}>
                     <Typography variant="h6">
-                        Showing results for {dayjs(startDate).format('MMM D, YYYY')} - {dayjs(endDate).format('MMM D, YYYY')}
+                        Showing results
+                        for {dayjs(startDate).format('MMM D, YYYY')} - {dayjs(endDate).format('MMM D, YYYY')}
                     </Typography>
                 </Paper>
             </Box>
