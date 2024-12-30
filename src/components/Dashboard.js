@@ -11,6 +11,7 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import LayersIcon from '@mui/icons-material/Layers';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import TransactionTableView from './TransactionTableView';
 import DashboardReports from './DashboardReports';
 import TransactionForm from '../forms/TransactionForm';
@@ -54,12 +55,12 @@ const NAVIGATION = [
             {
                 segment: 'reports/transactions',
                 title: 'Transactions',
-                icon: <BarChartIcon />,
+                icon: <ReceiptLongIcon />,
             },
             {
-                segment: 'reports/expenses',
-                title: 'expenses',
-                icon: <BarChartIcon />,
+                segment: 'reports/accounts',
+                title: 'Accounts',
+                icon: <AccountBalanceIcon />,
             },
         ],
     },
@@ -112,10 +113,20 @@ const Dashboard = () => {
                         <DashboardReports />
                     </Box>
                 );
+            case 'budget':
+                return (
+                    <Box sx={{ display: "flex", justifyContent: "center", height: "70vh", alignItems: "center" }}>
+                    </Box>
+                );
             case 'reports/transactions':
                 return (
                     <Box sx={{ display: "flex", justifyContent: "center", height: "70vh", alignItems: "center" }}>
                         <TransactionTableView />
+                    </Box>
+                );
+            case 'reports/accounts':
+                return (
+                    <Box sx={{ display: "flex", justifyContent: "center", height: "70vh", alignItems: "center" }}>
                     </Box>
                 );
             default:
