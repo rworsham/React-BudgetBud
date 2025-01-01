@@ -13,6 +13,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import TransactionTableView from './TransactionTableView';
+import BudgetTransactionOverview from './BudgetTransactionOverview';
 import DashboardReports from './DashboardReports';
 import TransactionForm from '../forms/TransactionForm';
 import CategoryForm from '../forms/CategoryForm';
@@ -116,6 +117,7 @@ const Dashboard = () => {
             case 'budget':
                 return (
                     <Box sx={{ display: "flex", justifyContent: "center", height: "70vh", alignItems: "center" }}>
+                        <BudgetTransactionOverview />
                     </Box>
                 );
             case 'reports/transactions':
