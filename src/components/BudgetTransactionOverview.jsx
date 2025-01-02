@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext, api } from "../context/AuthContext";
-import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import {Box, Button, Grid, Paper, TextField, Typography} from "@mui/material";
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
 export default function BudgetTransactionOverview() {
-    const { authTokens } = useContext(AuthContext);
+    const {authTokens} = useContext(AuthContext);
     const [reportData, setReportData] = useState(null);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -80,8 +80,14 @@ export default function BudgetTransactionOverview() {
     };
 
     const incomeExpenseData = [
-        { name: "Income", value: reportData?.transactions.filter(t => t.transaction_type === "income").reduce((sum, t) => sum + parseFloat(t.amount), 0) },
-        { name: "Expense", value: reportData?.transactions.filter(t => t.transaction_type === "expense").reduce((sum, t) => sum + parseFloat(t.amount), 0) },
+        {
+            name: "Income",
+            value: reportData?.transactions.filter(t => t.transaction_type === "income").reduce((sum, t) => sum + parseFloat(t.amount), 0)
+        },
+        {
+            name: "Expense",
+            value: reportData?.transactions.filter(t => t.transaction_type === "expense").reduce((sum, t) => sum + parseFloat(t.amount), 0)
+        },
     ];
 
     const expenseCategoriesData = reportData?.transactions
@@ -116,13 +122,16 @@ export default function BudgetTransactionOverview() {
     }
 
     return (
-        <div style={{ padding: '20px' }}>
-            <Box sx={{ marginBottom: 3 }}>
-                <Typography variant="h6" gutterBottom>
-                    Showing results for {dayjs(startDate).format('MMM D, YYYY')} - {dayjs(endDate).format('MMM D, YYYY')}
-                </Typography>
+        <div style={{padding: '20px'}}>
+            <Box sx={{marginBottom: 3}}>
+                <Paper sx={{padding: 4, textAlign: 'center'}}>
+                    <Typography variant="h6">
+                        Showing results
+                        for {dayjs(startDate).format('MMM D, YYYY')} - {dayjs(endDate).format('MMM D, YYYY')}
+                    </Typography>
+                </Paper>
             </Box>
-            <Box sx={{ marginBottom: 4 }}>
+            <Box sx={{marginBottom: 3, padding: 2, border: '1px solid #ddd', borderRadius: 2}}>
                 <Typography variant="h6" gutterBottom>
                     Filter by Date Range
                 </Typography>
@@ -134,7 +143,7 @@ export default function BudgetTransactionOverview() {
                                     label="Start Date"
                                     value={dayjs(startDate)}
                                     onChange={handleStartDateChange}
-                                    renderInput={(params) => <TextField {...params} fullWidth variant="outlined" />}
+                                    renderInput={(params) => <TextField {...params} fullWidth variant="outlined"/>}
                                 />
                             </LocalizationProvider>
                         </Grid>
@@ -144,65 +153,68 @@ export default function BudgetTransactionOverview() {
                                     label="End Date"
                                     value={dayjs(endDate)}
                                     onChange={handleEndDateChange}
-                                    renderInput={(params) => <TextField {...params} fullWidth variant="outlined" />}
+                                    renderInput={(params) => <TextField {...params} fullWidth variant="outlined"/>}
                                 />
                             </LocalizationProvider>
                         </Grid>
                     </Grid>
-                    <Box sx={{ marginTop: 2, textAlign: "right" }}>
+                    <Box sx={{marginTop: 2, textAlign: "right"}}>
                         <Button variant="contained" color="primary" type="submit">
                             Apply Date Range
                         </Button>
                     </Box>
                 </form>
             </Box>
-            <Box sx={{ marginBottom: 4 }}>
-                <Typography variant="h6" gutterBottom>
-                    Expense Categories Breakdown
-                </Typography>
-                <ResponsiveContainer width="100%" height={300}>
-                    <PieChart>
-                        <Pie data={pieChartData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} fill="#8884d8">
-                            {pieChartData.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={entry.value > 100 ? "#1DB954" : "#387908"} />
-                            ))}
-                        </Pie>
-                        <Tooltip />
-                    </PieChart>
-                </ResponsiveContainer>
-            </Box>
             <Grid container spacing={4}>
-                <Grid item xs={12} sm={6} md={6}>
-                    <Box sx={{ marginBottom: 4 }}>
+                <Grid item xs={12} sm={4}>
+                    <Box sx={{marginBottom: 4}}>
+                        <Typography variant="h6" gutterBottom>
+                            Expense Categories Breakdown
+                        </Typography>
+                        <ResponsiveContainer width="100%" height={300}>
+                            <PieChart>
+                                <Pie data={pieChartData} dataKey="value" nameKey="name" cx="50%" cy="50%"
+                                     outerRadius={80} fill="#8884d8">
+                                    {pieChartData.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={entry.value > 100 ? "#1DB954" : "#387908"}/>
+                                    ))}
+                                </Pie>
+                                <Tooltip/>
+                            </PieChart>
+                        </ResponsiveContainer>
+                    </Box>
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                    <Box sx={{marginBottom: 4}}>
                         <Typography variant="h6" gutterBottom>
                             Income vs Expense
                         </Typography>
                         <ResponsiveContainer width="100%" height={300}>
                             <BarChart data={incomeExpenseData}>
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="name" />
-                                <YAxis />
-                                <Tooltip />
-                                <Legend />
-                                <Bar dataKey="value" fill="#8884d8" />
+                                <CartesianGrid strokeDasharray="3 3"/>
+                                <XAxis dataKey="name"/>
+                                <YAxis/>
+                                <Tooltip/>
+                                <Legend/>
+                                <Bar dataKey="value" fill="#8884d8"/>
                             </BarChart>
                         </ResponsiveContainer>
                     </Box>
                 </Grid>
-                <Grid item xs={12} sm={6} md={6}>
-                    <Box sx={{ marginBottom: 4 }}>
+                <Grid item xs={12} sm={4}>
+                    <Box sx={{marginBottom: 4}}>
                         <Typography variant="h6" gutterBottom>
                             Budget vs Remaining Budget
                         </Typography>
                         <ResponsiveContainer width="100%" height={300}>
                             <BarChart data={budgetData}>
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="name" />
-                                <YAxis />
-                                <Tooltip />
-                                <Legend />
-                                <Bar dataKey="starting_budget" fill="#8884d8" />
-                                <Bar dataKey="remaining_budget" fill="#82ca9d" />
+                                <CartesianGrid strokeDasharray="3 3"/>
+                                <XAxis dataKey="name"/>
+                                <YAxis/>
+                                <Tooltip/>
+                                <Legend/>
+                                <Bar dataKey="starting_budget" fill="#8884d8"/>
+                                <Bar dataKey="remaining_budget" fill="#82ca9d"/>
                             </BarChart>
                         </ResponsiveContainer>
                     </Box>

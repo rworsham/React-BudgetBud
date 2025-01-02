@@ -116,8 +116,10 @@ const Dashboard = () => {
                 );
             case 'budget':
                 return (
-                    <Box sx={{ display: "flex", justifyContent: "center", height: "70vh", alignItems: "center" }}>
-                        <BudgetTransactionOverview />
+                    <Box sx={{ display: "flex", justifyContent: "center", height: "70vh", alignItems: "center", width: '100%' }}>
+                        <Box sx={{ width: '100%', maxWidth: 1200 }}>
+                            <BudgetTransactionOverview />
+                        </Box>
                     </Box>
                 );
             case 'reports/transactions':
