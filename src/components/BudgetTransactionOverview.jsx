@@ -147,22 +147,24 @@ export default function BudgetTransactionOverview() {
                                 />
                             </LocalizationProvider>
                         </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DatePicker
-                                    label="End Date"
-                                    value={dayjs(endDate)}
-                                    onChange={handleEndDateChange}
-                                    renderInput={(params) => <TextField {...params} fullWidth variant="outlined"/>}
-                                />
-                            </LocalizationProvider>
+                        <Grid item xs={12} sm={6} container spacing={2} alignItems="center">
+                            <Grid item xs={8}>
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DatePicker
+                                        label="End Date"
+                                        value={dayjs(endDate)}
+                                        onChange={handleEndDateChange}
+                                        renderInput={(params) => <TextField {...params} fullWidth variant="outlined"/>}
+                                    />
+                                </LocalizationProvider>
+                            </Grid>
+                            <Grid item xs={4} textAlign="right">
+                                <Button variant="contained" color="primary" type="submit">
+                                    Apply Date Range
+                                </Button>
+                            </Grid>
                         </Grid>
                     </Grid>
-                    <Box sx={{marginTop: 2, textAlign: "right"}}>
-                        <Button variant="contained" color="primary" type="submit">
-                            Apply Date Range
-                        </Button>
-                    </Box>
                 </form>
             </Box>
             <Grid container spacing={4}>
@@ -174,7 +176,8 @@ export default function BudgetTransactionOverview() {
                         <ResponsiveContainer width="100%" height={300}>
                             <PieChart>
                                 <Pie data={pieChartData} dataKey="value" nameKey="name" cx="50%" cy="50%"
-                                     outerRadius={80} fill="#8884d8">
+                                     outerRadius={80} fill="#8884d8"
+                                     label={({name, value}) => `${name}: $${value.toFixed(2)}`}>
                                     {pieChartData.map((entry, index) => (
                                         <Cell key={`cell-${index}`} fill={entry.value > 100 ? "#1DB954" : "#387908"}/>
                                     ))}

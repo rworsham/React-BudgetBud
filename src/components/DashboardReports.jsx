@@ -216,22 +216,24 @@ export default function CombinedDashboard() {
                                 />
                             </LocalizationProvider>
                         </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DatePicker
-                                    label="End Date"
-                                    value={dayjs(endDate)}
-                                    onChange={handleEndDateChange}
-                                    renderInput={(params) => <TextField {...params} fullWidth variant="outlined"/>}
-                                />
-                            </LocalizationProvider>
+                        <Grid item xs={12} sm={6} container spacing={2} alignItems="center">
+                            <Grid item xs={8}>
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DatePicker
+                                        label="End Date"
+                                        value={dayjs(endDate)}
+                                        onChange={handleEndDateChange}
+                                        renderInput={(params) => <TextField {...params} fullWidth variant="outlined"/>}
+                                    />
+                                </LocalizationProvider>
+                            </Grid>
+                            <Grid item xs={4} textAlign="right">
+                                <Button variant="contained" color="primary" type="submit">
+                                    Apply Date Range
+                                </Button>
+                            </Grid>
                         </Grid>
                     </Grid>
-                    <Box sx={{marginTop: 2, textAlign: "right"}}>
-                        <Button variant="contained" color="primary" type="submit">
-                            Apply Date Range
-                        </Button>
-                    </Box>
                 </form>
             </Box>
             <Box sx={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', marginBottom: 3}}>

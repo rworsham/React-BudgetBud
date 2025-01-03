@@ -180,7 +180,7 @@ const Dashboard = () => {
             </Box>
             <Box sx={{ display: 'flex', flexGrow: 1}}>
                 <Box sx={{
-                    width: collapsed ? 60 : 240,
+                    width: collapsed ? '5%' : '10%',
                     height: '100%',
                     bgcolor: 'background.paper',
                     borderRight: '1px solid',
