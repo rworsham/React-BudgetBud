@@ -198,13 +198,49 @@ export default function DataTable() {
 
     return (
         <div style={{height: '100%', padding: '10px'}}>
-            <Box sx={{marginBottom: 3}}>
-                <Paper sx={{padding: 4, textAlign: 'center'}}>
-                    <Typography variant="h6">
+            <Box sx={{ marginBottom: 1 }}>
+                <Paper sx={{ padding: 1, textAlign: 'center' }}>
+                    <Typography variant="body2">
                         Showing results
                         for {dayjs(startDate).format('MMM D, YYYY')} - {dayjs(endDate).format('MMM D, YYYY')}
                     </Typography>
                 </Paper>
+            </Box>
+            <Box sx={{ marginBottom: 1, padding: 1, border: '1px solid #ddd', borderRadius: 2 }}>
+                <Typography variant="body2" gutterBottom>
+                    Filter by Date Range
+                </Typography>
+                <form onSubmit={handleSubmit}>
+                    <Grid container spacing={1}>
+                        <Grid item xs={12} sm={6}>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePicker
+                                    label="Start Date"
+                                    value={dayjs(startDate)}
+                                    onChange={handleStartDateChange}
+                                    renderInput={(params) => <TextField {...params} fullWidth variant="outlined" size="small" />}
+                                />
+                            </LocalizationProvider>
+                        </Grid>
+                        <Grid item xs={12} sm={6} container spacing={1} alignItems="center">
+                            <Grid item xs={8}>
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DatePicker
+                                        label="End Date"
+                                        value={dayjs(endDate)}
+                                        onChange={handleEndDateChange}
+                                        renderInput={(params) => <TextField {...params} fullWidth variant="outlined" size="small" />}
+                                    />
+                                </LocalizationProvider>
+                            </Grid>
+                            <Grid item xs={4} textAlign="right">
+                                <Button variant="contained" color="primary" type="submit" size="small">
+                                    Apply Date Range
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </form>
             </Box>
             <Paper sx={{ height: 400, width: '100%', position: 'relative' }}>
                 <Box sx={{
@@ -213,55 +249,20 @@ export default function DataTable() {
                     right: 16,
                     zIndex: 10
                 }}>
-                    <IconButton onClick={() => setDownloadPdf(true)}>
+                    <IconButton onClick={() => setDownloadPdf(true)} sx={{ color: '#1DB954' }}>
                         <Download />
                     </IconButton>
                 </Box>
-
                 <DataGrid
                     rows={rows}
                     columns={columns}
                     pageSize={5}
                     rowsPerPageOptions={[5, 10]}
                     checkboxSelection
+                    className="GridColumn-hover"
                     sx={{ border: 0 }}
                 />
             </Paper>
-
-            <Box sx={{ marginTop: 3, padding: 2, border: '1px solid #ddd', borderRadius: 2 }}>
-                <Typography variant="h6" gutterBottom>
-                    Filter by Date Range
-                </Typography>
-                <form onSubmit={handleSubmit}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12} sm={6}>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DatePicker
-                                    label="Start Date"
-                                    value={dayjs(startDate)}
-                                    onChange={handleStartDateChange}
-                                    renderInput={(params) => <TextField {...params} fullWidth variant="outlined" />}
-                                />
-                            </LocalizationProvider>
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DatePicker
-                                    label="End Date"
-                                    value={dayjs(endDate)}
-                                    onChange={handleEndDateChange}
-                                    renderInput={(params) => <TextField {...params} fullWidth variant="outlined" />}
-                                />
-                            </LocalizationProvider>
-                        </Grid>
-                    </Grid>
-                    <Box sx={{ marginTop: 2, textAlign: "right" }}>
-                        <Button variant="contained" color="primary" type="submit">
-                            Apply Date Range
-                        </Button>
-                    </Box>
-                </form>
-            </Box>
         </div>
     );
 };

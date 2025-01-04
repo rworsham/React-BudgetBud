@@ -192,43 +192,43 @@ export default function CombinedDashboard() {
 
     return (
         <div style={{height: '100%', padding: '10px'}}>
-            <Box sx={{marginBottom: 3}}>
-                <Paper sx={{padding: 4, textAlign: 'center'}}>
-                    <Typography variant="h6">
+            <Box sx={{ marginBottom: 1 }}>
+                <Paper sx={{ padding: 1, textAlign: 'center' }}>
+                    <Typography variant="body2">
                         Showing results
                         for {dayjs(startDate).format('MMM D, YYYY')} - {dayjs(endDate).format('MMM D, YYYY')}
                     </Typography>
                 </Paper>
             </Box>
-            <Box sx={{marginBottom: 3, padding: 2, border: '1px solid #ddd', borderRadius: 2}}>
-                <Typography variant="h6" gutterBottom>
+            <Box sx={{ marginBottom: 1, padding: 1, border: '1px solid #ddd', borderRadius: 2 }}>
+                <Typography variant="body2" gutterBottom>
                     Filter by Date Range
                 </Typography>
                 <form onSubmit={handleSubmit}>
-                    <Grid container spacing={2}>
+                    <Grid container spacing={1}>
                         <Grid item xs={12} sm={6}>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DatePicker
                                     label="Start Date"
                                     value={dayjs(startDate)}
                                     onChange={handleStartDateChange}
-                                    renderInput={(params) => <TextField {...params} fullWidth variant="outlined"/>}
+                                    renderInput={(params) => <TextField {...params} fullWidth variant="outlined" size="small" />}
                                 />
                             </LocalizationProvider>
                         </Grid>
-                        <Grid item xs={12} sm={6} container spacing={2} alignItems="center">
+                        <Grid item xs={12} sm={6} container spacing={1} alignItems="center">
                             <Grid item xs={8}>
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DatePicker
                                         label="End Date"
                                         value={dayjs(endDate)}
                                         onChange={handleEndDateChange}
-                                        renderInput={(params) => <TextField {...params} fullWidth variant="outlined"/>}
+                                        renderInput={(params) => <TextField {...params} fullWidth variant="outlined" size="small" />}
                                     />
                                 </LocalizationProvider>
                             </Grid>
                             <Grid item xs={4} textAlign="right">
-                                <Button variant="contained" color="primary" type="submit">
+                                <Button variant="contained" color="primary" type="submit" size="small">
                                     Apply Date Range
                                 </Button>
                             </Grid>
@@ -238,7 +238,7 @@ export default function CombinedDashboard() {
             </Box>
             <Box sx={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', marginBottom: 3}}>
                 <Box sx={{width: {xs: '100%', sm: '48%'}, marginBottom: {xs: 3, sm: 0}}}>
-                    <ResponsiveContainer width="100%" height={300}>
+                    <ResponsiveContainer width="100%" height={250}>
                         <BarChart data={filteredTransactions} margin={{top: 5, right: 30, left: 20, bottom: 5}}>
                             <CartesianGrid strokeDasharray="3 3"/>
                             <XAxis dataKey="name"/>
@@ -250,7 +250,7 @@ export default function CombinedDashboard() {
                     </ResponsiveContainer>
                 </Box>
                 <Box sx={{width: {xs: '100%', sm: '48%'}}}>
-                    <ResponsiveContainer width="100%" height={300}>
+                    <ResponsiveContainer width="100%" height={250}>
                         {filteredTransactions && filteredTransactions.length > 0 ? (
                             <PieChart>
                                 <Pie
@@ -271,12 +271,13 @@ export default function CombinedDashboard() {
                     </ResponsiveContainer>
                 </Box>
             </Box>
-            <Paper sx={{height: 400, width: '100%'}}>
+            <Paper sx={{height: 350, width: '100%'}}>
                 <DataGrid
                     rows={rows}
                     columns={columns}
                     pageSize={5}
                     checkboxSelection
+                    className="GridColumn-hover"
                     sx={{border: 0}}
                 />
             </Paper>

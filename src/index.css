@@ -18,3 +18,19 @@ code {
 .MuiInputAdornment-root .MuiSvgIcon-root {
   color: #B3B3B3 !important;
 }
+
+.GridColumn-hover .MuiDataGrid-columnHeader:hover {
+  color: #1DB954
+}
+
+.GridColumn-hover .MuiDataGrid-columnHeaderTitle .MuiDataGrid-sortIcon,
+.GridColumn-hover .MuiDataGrid-columnHeaderTitle .MuiDataGrid-filterIcon,
+.GridColumn-hover .MuiDataGrid-columnHeaderTitle .MuiIconButton-root {
+  color: #B3B3B3 !important;
+}
+
+.GridColumn-hover .MuiDataGrid-columnHeaderTitle .MuiDataGrid-sortIcon:hover,
+.GridColumn-hover .MuiDataGrid-columnHeaderTitle .MuiDataGrid-filterIcon:hover,
+.GridColumn-hover .MuiDataGrid-columnHeaderTitle .MuiIconButton-root:hover {
+  color: #1DB954 !important;
+}

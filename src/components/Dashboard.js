@@ -110,13 +110,15 @@ const Dashboard = () => {
         switch (currentSegment) {
             case 'dashboard':
                 return (
-                    <Box sx={{ display: "flex", justifyContent: "center", height: "70vh", alignItems: "center" }}>
-                        <DashboardReports />
+                    <Box sx={{ display: "flex", justifyContent: "center", height: "90vh", alignItems: "flex-start" , width: "100%" }}>
+                        <Box sx={{ width: '100%', maxWidth: 1200 }}>
+                            <DashboardReports />
+                        </Box>
                     </Box>
                 );
             case 'budget':
                 return (
-                    <Box sx={{ display: "flex", justifyContent: "center", height: "70vh", alignItems: "center", width: '100%' }}>
+                    <Box sx={{ display: "flex", justifyContent: "center", height: "90vh", alignItems: "flex-start", width: '100%' }}>
                         <Box sx={{ width: '100%', maxWidth: 1200 }}>
                             <BudgetTransactionOverview />
                         </Box>
@@ -124,8 +126,10 @@ const Dashboard = () => {
                 );
             case 'reports/transactions':
                 return (
-                    <Box sx={{ display: "flex", justifyContent: "center", height: "70vh", alignItems: "center" }}>
-                        <TransactionTableView />
+                    <Box sx={{ display: "flex", justifyContent: "center", height: "90vh", alignItems: "flex-start", width: '100%' }}>
+                        <Box sx={{ width: '100%', maxWidth: 1200 }}>
+                            <TransactionTableView />
+                        </Box>
                     </Box>
                 );
             case 'reports/accounts':
@@ -245,7 +249,7 @@ const Dashboard = () => {
                     ))}
                 </Box>
                 <Box sx={{ flexGrow: 1, padding: 3 }}>
-                    <Box sx={{ display: "flex", justifyContent: "center", height: "70vh", alignItems: "center" }}>
+                    <Box sx={{ display: "flex", justifyContent: "center", height: "90vh", width: '100%' , alignItems: "center" }}>
                         {renderContent()}
                     </Box>
                     <SpeedDial
