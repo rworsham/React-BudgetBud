@@ -12,13 +12,24 @@ import LayersIcon from '@mui/icons-material/Layers';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
-import TransactionTableView from './TransactionTableView';
-import BudgetTransactionOverview from './BudgetTransactionOverview';
+import { styled, useTheme } from '@mui/material/styles';
+import MuiDrawer from '@mui/material/Drawer';
+import MuiAppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import List from '@mui/material/List';
+import CssBaseline from '@mui/material/CssBaseline';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
 import DashboardReports from './DashboardReports';
+import BudgetTransactionOverview from './BudgetTransactionOverview';
+import TransactionTableView from './TransactionTableView';
 import TransactionForm from '../forms/TransactionForm';
 import CategoryForm from '../forms/CategoryForm';
 import BudgetForm from '../forms/BudgetForm';
 
+const drawerWidth = 240;
 const actions = [
     { icon: <ReceiptLongIcon />, name: 'Transaction' },
     { icon: <CurrencyExchangeIcon />, name: 'Budget' },
@@ -27,62 +38,62 @@ const actions = [
 ];
 
 const NAVIGATION = [
-    {
-        kind: 'header',
-        title: 'Main items',
-    },
-    {
-        segment: 'dashboard',
-        title: 'Dashboard',
-        icon: <DashboardIcon />,
-    },
-    {
-        segment: 'budget',
-        title: 'Budget',
-        icon: <ShoppingCartIcon />,
-    },
-    {
-        kind: 'divider',
-    },
-    {
-        kind: 'header',
-        title: 'Analytics',
-    },
-    {
-        segment: 'reports',
-        title: 'Reports',
-        icon: <BarChartIcon />,
-        children: [
-            {
-                segment: 'reports/transactions',
-                title: 'Transactions',
-                icon: <ReceiptLongIcon />,
-            },
-            {
-                segment: 'reports/accounts',
-                title: 'Accounts',
-                icon: <AccountBalanceIcon />,
-            },
-        ],
-    },
-    {
-        segment: 'integrations',
-        title: 'Integrations',
-        icon: <LayersIcon />,
-    },
+    { kind: 'header', title: 'Main items' },
+    { segment: 'dashboard', title: 'Dashboard', icon: <DashboardIcon /> },
+    { segment: 'budget', title: 'Budget', icon: <ShoppingCartIcon /> },
+    { kind: 'divider' },
+    { segment: 'reports', title: 'Reports', icon: <BarChartIcon /> },
+    { segment: 'reports/transactions', title: 'Transactions', icon: <ReceiptLongIcon /> },
+    { segment: 'reports/accounts', title: 'Accounts', icon: <AccountBalanceIcon /> },
+    { segment: 'integrations', title: 'Integrations', icon: <LayersIcon /> },
 ];
 
+const openedMixin = (theme) => ({
+    width: drawerWidth,
+    transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+    }),
+    overflowX: 'hidden',
+});
+
+const closedMixin = (theme) => ({
+    transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+    }),
+    overflowX: 'hidden',
+    width: `calc(${theme.spacing(7)} + 1px)`,
+    [theme.breakpoints.up('sm')]: {
+        width: `calc(${theme.spacing(8)} + 1px)`,
+    },
+});
+
+const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
+    width: drawerWidth,
+    flexShrink: 0,
+    whiteSpace: 'nowrap',
+    boxSizing: 'border-box',
+    ...(open && {
+        ...openedMixin(theme),
+        '& .MuiDrawer-paper': openedMixin(theme),
+    }),
+    ...(!open && {
+        ...closedMixin(theme),
+        '& .MuiDrawer-paper': closedMixin(theme),
+    }),
+}));
+
 const Dashboard = () => {
+    const theme = useTheme();
     const [open, setOpen] = useState(false);
     const [modalType, setModalType] = useState('');
-    const [collapsed, setCollapsed] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
-    const navigate = useNavigate();
     const [currentSegment, setCurrentSegment] = useState('dashboard');
+    const [drawerOpen, setDrawerOpen] = useState(false);
+    const navigate = useNavigate();
 
-    const navigateToSegment = (segment) => {
-        setCurrentSegment(segment);
-    };
+    const navigateToSegment = (segment) => setCurrentSegment(segment);
 
     const handleActionClick = (actionName) => {
         setModalType(actionName);
@@ -92,10 +103,6 @@ const Dashboard = () => {
     const handleClose = () => {
         setOpen(false);
         setModalType('');
-    };
-
-    const toggleSidebar = () => {
-        setCollapsed(!collapsed);
     };
 
     const handleClick = (event) => {
@@ -109,34 +116,13 @@ const Dashboard = () => {
     const renderContent = () => {
         switch (currentSegment) {
             case 'dashboard':
-                return (
-                    <Box sx={{ display: "flex", justifyContent: "center", height: "90vh", alignItems: "flex-start" , width: "100%" }}>
-                        <Box sx={{ width: '100%', maxWidth: 1200 }}>
-                            <DashboardReports />
-                        </Box>
-                    </Box>
-                );
+                return <DashboardReports />;
             case 'budget':
-                return (
-                    <Box sx={{ display: "flex", justifyContent: "center", height: "90vh", alignItems: "flex-start", width: '100%' }}>
-                        <Box sx={{ width: '100%', maxWidth: 1200 }}>
-                            <BudgetTransactionOverview />
-                        </Box>
-                    </Box>
-                );
+                return <BudgetTransactionOverview />;
             case 'reports/transactions':
-                return (
-                    <Box sx={{ display: "flex", justifyContent: "center", height: "90vh", alignItems: "flex-start", width: '100%' }}>
-                        <Box sx={{ width: '100%', maxWidth: 1200 }}>
-                            <TransactionTableView />
-                        </Box>
-                    </Box>
-                );
+                return <TransactionTableView />;
             case 'reports/accounts':
-                return (
-                    <Box sx={{ display: "flex", justifyContent: "center", height: "70vh", alignItems: "center" }}>
-                    </Box>
-                );
+                return <Box sx={{ display: "flex", justifyContent: "center", height: "70vh", alignItems: "center" }} />;
             default:
                 return null;
         }
@@ -144,165 +130,88 @@ const Dashboard = () => {
 
     return (
         <Box sx={{ display: 'flex', height: '100vh', flexDirection: 'column' }}>
-            <Box sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                padding: 2,
-                backgroundColor: 'background.paper',
-                borderBottom: '1px solid',
-                borderColor: 'divider',
-            }}>
-                <IconButton onClick={toggleSidebar}>
-                    <MenuIcon />
-                </IconButton>
-                <Typography
-                    variant="h4"
-                    sx={{
-                        fontWeight: 'bold',
-                        fontSize: '2rem',
-                        background: 'linear-gradient(45deg, #1DB954, #006400)',
-                        WebkitBackgroundClip: 'text',
-                        color: 'transparent',
-                        display: 'inline-block',
-                        position: 'relative',
-                    }}
-                >
-                    BudgetBud
-                </Typography>
-                <IconButton onClick={handleClick}>
-                    <AccountCircleIcon />
-                </IconButton>
-                <Menu
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={handleCloseMenu}
-                >
-                    <MenuItem onClick={() => { handleCloseMenu(); console.log("Go to Profile"); }}>Profile</MenuItem>
-                    <MenuItem onClick={() => { handleCloseMenu(); console.log("Logout"); navigate('/login') }}>Logout</MenuItem>
-                </Menu>
-            </Box>
-            <Box sx={{ display: 'flex', flexGrow: 1}}>
-                <Box sx={{
-                    width: collapsed ? '5%' : '10%',
-                    height: '100%',
-                    bgcolor: 'background.paper',
-                    borderRight: '1px solid',
-                    borderColor: 'divider',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    paddingTop: 2,
-                    transition: 'width 0.3s ease, opacity 0.3s ease',
-                    overflow: 'hidden',
-                }}>
+            <CssBaseline />
+            <MuiAppBar position="fixed" sx={{ zIndex: theme.zIndex.drawer + 1, backgroundColor: theme.palette.background.paper }}>
+                <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <IconButton edge="start" color="inherit" aria-label="open drawer" onClick={() => setDrawerOpen(!drawerOpen)}>
+                        <MenuIcon />
+                    </IconButton>
+                    <Typography
+                        variant="h4"
+                        sx={{
+                            fontWeight: 'bold',
+                            fontSize: '2rem',
+                            background: 'linear-gradient(45deg, #1DB954, #006400)',
+                            WebkitBackgroundClip: 'text',
+                            color: 'transparent',
+                        }}
+                    >
+                        BudgetBud
+                    </Typography>
+                    <IconButton onClick={handleClick}>
+                        <AccountCircleIcon />
+                    </IconButton>
+                    <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleCloseMenu}>
+                        <MenuItem onClick={() => { handleCloseMenu(); console.log("Go to Profile"); }}>Profile</MenuItem>
+                        <MenuItem onClick={() => { handleCloseMenu(); console.log("Logout"); navigate('/login') }}>Logout</MenuItem>
+                    </Menu>
+                </Toolbar>
+            </MuiAppBar>
+            <Drawer variant="permanent" open={drawerOpen}>
+                <List>
                     {NAVIGATION.map((item, index) => (
                         item.kind === 'header' ? (
-                            <Box key={index} sx={{ padding: 2, opacity: collapsed ? 0 : 1 }}>
-                                <Typography variant="subtitle1" sx={{ display: collapsed ? 'none' : 'block' }}>
-                                    {item.title}
-                                </Typography>
-                            </Box>
+                            <Typography key={index} variant="subtitle1" sx={{ padding: 2 }}>
+                                {item.title}
+                            </Typography>
                         ) : item.kind === 'divider' ? (
-                            <Box key={index} sx={{ borderBottom: '1px solid #ccc', marginBottom: 2 }} />
+                            <Box key={index} sx={{ borderBottom: '1px solid black', marginBottom: 2 }} />
                         ) : (
-                            <Box key={index}>
-                                <Button
-                                    startIcon={item.icon}
-                                    sx={{
-                                        textAlign: 'left',
-                                        justifyContent: 'flex-start',
-                                        paddingLeft: collapsed ? 2 : 3,
-                                        marginBottom: 2,
-                                        display: 'flex',
-                                        width: '100%',
-                                        opacity: collapsed ? 0.7 : 1,
-                                    }}
-                                    onClick={() => navigateToSegment(item.segment)}
-                                >
-                                    {collapsed ? '' : item.title}
-                                </Button>
-
-                                {item.children && !collapsed && (
-                                    <Box sx={{ paddingLeft: 2 }}>
-                                        {item.children.map((child, childIndex) => (
-                                            <Button
-                                                key={childIndex}
-                                                startIcon={child.icon}
-                                                sx={{
-                                                    textAlign: 'left',
-                                                    justifyContent: 'flex-start',
-                                                    paddingLeft: collapsed ? 2 : 4,
-                                                    marginBottom: 1,
-                                                    display: 'flex',
-                                                    width: '100%',
-                                                    opacity: collapsed ? 0.7 : 1,
-                                                }}
-                                                onClick={() => navigateToSegment(child.segment)}
-                                            >
-                                                {collapsed ? '' : child.title}
-                                            </Button>
-                                        ))}
-                                    </Box>
-                                )}
-                            </Box>
+                            <ListItem key={index} disablePadding>
+                                <ListItemButton onClick={() => navigateToSegment(item.segment)}>
+                                    <ListItemIcon sx={{ color: theme.palette.primary.main }}>
+                                        {item.icon}
+                                    </ListItemIcon>
+                                    <ListItemText primary={item.title} sx={{ opacity: drawerOpen ? 1 : 0 }} />
+                                </ListItemButton>
+                            </ListItem>
                         )
                     ))}
+                </List>
+            </Drawer>
+            <Box sx={{ flexGrow: 1, padding: 3, marginTop: 10 }}>
+                <Box sx={{ display: "flex", justifyContent: "center", height: "90vh", alignItems: "center" }}>
+                    {renderContent()}
                 </Box>
-                <Box sx={{ flexGrow: 1, padding: 3 }}>
-                    <Box sx={{ display: "flex", justifyContent: "center", height: "90vh", width: '100%' , alignItems: "center" }}>
-                        {renderContent()}
-                    </Box>
-                    <SpeedDial
-                        ariaLabel="SpeedDial basic example"
-                        sx={{ position: 'absolute', bottom: 16, right: 16 }}
-                        icon={<SpeedDialIcon />}
-                    >
-                        {actions.map((action) => (
-                            <SpeedDialAction
-                                key={action.name}
-                                icon={action.icon}
-                                tooltipTitle={action.name}
-                                onClick={() => handleActionClick(action.name)}
-                            />
-                        ))}
-                    </SpeedDial>
-                    <Dialog open={open && modalType === 'Transaction'} onClose={handleClose}>
-                        <DialogTitle>New Transaction</DialogTitle>
-                        <DialogContent>
-                            <TransactionForm />
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={handleClose} color="primary">Close</Button>
-                        </DialogActions>
-                    </Dialog>
-                    <Dialog open={open && modalType === 'Budget'} onClose={handleClose}>
-                        <DialogTitle>Budget Modal</DialogTitle>
-                        <DialogContent>
-                            <BudgetForm />
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={handleClose} color="primary">Close</Button>
-                        </DialogActions>
-                    </Dialog>
-                    <Dialog open={open && modalType === 'Category'} onClose={handleClose}>
-                        <DialogTitle>Category Modal</DialogTitle>
-                        <DialogContent>
-                            <CategoryForm />
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={handleClose} color="primary">Close</Button>
-                        </DialogActions>
-                    </Dialog>
-                    <Dialog open={open && modalType === 'Family'} onClose={handleClose}>
-                        <DialogTitle>Family Modal</DialogTitle>
-                        <DialogContent>
-                            <p>Content related to the Family action goes here.</p>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={handleClose} color="primary">Close</Button>
-                        </DialogActions>
-                    </Dialog>
-                </Box>
+                <SpeedDial
+                    ariaLabel="SpeedDial basic example"
+                    sx={{ position: 'absolute', bottom: 16, right: 16 }}
+                    icon={<SpeedDialIcon />}
+                >
+                    {actions.map((action) => (
+                        <SpeedDialAction key={action.name} icon={action.icon} tooltipTitle={action.name} onClick={() => handleActionClick(action.name)} />
+                    ))}
+                </SpeedDial>
+                <Dialog open={open && modalType === 'Transaction'} onClose={handleClose}>
+                    <DialogTitle>New Transaction</DialogTitle>
+                    <DialogContent><TransactionForm /></DialogContent>
+                    <DialogActions><Button onClick={handleClose} color="primary">Close</Button></DialogActions>
+                </Dialog>
+                <Dialog open={open && modalType === 'Budget'} onClose={handleClose}>
+                    <DialogTitle>Budget Modal</DialogTitle>
+                    <DialogContent><BudgetForm /></DialogContent>
+                    <DialogActions><Button onClick={handleClose} color="primary">Close</Button></DialogActions>
+                </Dialog>
+                <Dialog open={open && modalType === 'Category'} onClose={handleClose}>
+                    <DialogTitle>Category Modal</DialogTitle>
+                    <DialogContent><CategoryForm /></DialogContent>
+                    <DialogActions><Button onClick={handleClose} color="primary">Close</Button></DialogActions>
+                </Dialog>
+                <Dialog open={open && modalType === 'Family'} onClose={handleClose}>
+                    <DialogTitle>Family Modal</DialogTitle>
+                    <DialogContent><p>Content related to the Family action goes here.</p></DialogContent>
+                    <DialogActions><Button onClick={handleClose} color="primary">Close</Button></DialogActions>
+                </Dialog>
             </Box>
         </Box>
     );
