@@ -1,18 +1,19 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext, api } from "../context/AuthContext";
-import {Box, Button, Grid, Paper, TextField, Typography} from "@mui/material";
+import { Box, Button, Grid, Paper, TextField, Typography, Tabs, Tab } from "@mui/material";
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
 export default function BudgetTransactionOverview() {
-    const {authTokens} = useContext(AuthContext);
+    const { authTokens } = useContext(AuthContext);
     const [reportData, setReportData] = useState(null);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [startDate, setStartDate] = useState(dayjs().startOf('month').format('YYYY-MM-DD'));
     const [endDate, setEndDate] = useState(dayjs().endOf('month').format('YYYY-MM-DD'));
+    const [selectedTab, setSelectedTab] = useState(0);
 
     useEffect(() => {
         const fetchTransactions = async () => {
@@ -113,6 +114,26 @@ export default function BudgetTransactionOverview() {
         remaining_budget: parseFloat(budget.remaining_budget),
     }));
 
+    const categoryTabs = Object.keys(expenseCategoriesData || {}).map((category, index) => (
+        <Tab label={category} key={index} />
+    ));
+
+    const categoryTabContent = Object.keys(expenseCategoriesData || {}).map((category, index) => {
+        const totalSpent = expenseCategoriesData[category];
+        const remainingBudget = reportData?.budgets_remaining?.find(b => b.budget_name === "Monthly")?.remaining_budget || 0;
+
+        return (
+            <div key={index} hidden={selectedTab !== index}>
+                <Typography variant="body1">
+                    {category} Expenses: ${totalSpent.toFixed(2)}
+                </Typography>
+                <Typography variant="body1">
+                    Remaining Budget: ${remainingBudget.toFixed(2)}
+                </Typography>
+            </div>
+        );
+    });
+
     if (isLoading) {
         return <div>Loading...</div>;
     }
@@ -122,12 +143,11 @@ export default function BudgetTransactionOverview() {
     }
 
     return (
-        <div style={{height: '100%', padding: '10px'}}>
+        <div style={{ height: '100%', padding: '10px' }}>
             <Box sx={{ marginBottom: 1 }}>
                 <Paper sx={{ padding: 1, textAlign: 'center' }}>
                     <Typography variant="body2">
-                        Showing results
-                        for {dayjs(startDate).format('MMM D, YYYY')} - {dayjs(endDate).format('MMM D, YYYY')}
+                        Showing results for {dayjs(startDate).format('MMM D, YYYY')} - {dayjs(endDate).format('MMM D, YYYY')}
                     </Typography>
                 </Paper>
             </Box>
@@ -169,7 +189,7 @@ export default function BudgetTransactionOverview() {
             </Box>
             <Grid container spacing={4}>
                 <Grid item xs={12} sm={4}>
-                    <Box sx={{marginBottom: 4}}>
+                    <Box sx={{ marginBottom: 4 }}>
                         <Typography variant="h6" gutterBottom>
                             Expense Categories Breakdown
                         </Typography>
@@ -177,52 +197,58 @@ export default function BudgetTransactionOverview() {
                             <PieChart>
                                 <Pie data={pieChartData} dataKey="value" nameKey="name" cx="50%" cy="50%"
                                      outerRadius={80} fill="#8884d8"
-                                     label={({name, value}) => `${name}: $${value.toFixed(2)}`}>
+                                     label={({ name, value }) => `${name}: $${value.toFixed(2)}`}>
                                     {pieChartData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={entry.value > 100 ? "#1DB954" : "#387908"}/>
+                                        <Cell key={`cell-${index}`} fill={entry.value > 100 ? "#1DB954" : "#387908"} />
                                     ))}
                                 </Pie>
-                                <Tooltip/>
+                                <Tooltip />
                             </PieChart>
                         </ResponsiveContainer>
                     </Box>
                 </Grid>
                 <Grid item xs={12} sm={4}>
-                    <Box sx={{marginBottom: 4}}>
+                    <Box sx={{ marginBottom: 4 }}>
                         <Typography variant="h6" gutterBottom>
                             Income vs Expense
                         </Typography>
                         <ResponsiveContainer width="100%" height={250}>
                             <BarChart data={incomeExpenseData}>
-                                <CartesianGrid strokeDasharray="3 3"/>
-                                <XAxis dataKey="name"/>
-                                <YAxis/>
-                                <Tooltip/>
-                                <Legend/>
-                                <Bar dataKey="value" fill="#8884d8"/>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="name" />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend />
+                                <Bar dataKey="value" fill="#8884d8" />
                             </BarChart>
                         </ResponsiveContainer>
                     </Box>
                 </Grid>
                 <Grid item xs={12} sm={4}>
-                    <Box sx={{marginBottom: 4}}>
+                    <Box sx={{ marginBottom: 4 }}>
                         <Typography variant="h6" gutterBottom>
                             Budget vs Remaining Budget
                         </Typography>
                         <ResponsiveContainer width="100%" height={250}>
                             <BarChart data={budgetData}>
-                                <CartesianGrid strokeDasharray="3 3"/>
-                                <XAxis dataKey="name"/>
-                                <YAxis/>
-                                <Tooltip/>
-                                <Legend/>
-                                <Bar dataKey="starting_budget" fill="#8884d8"/>
-                                <Bar dataKey="remaining_budget" fill="#82ca9d"/>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="name" />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend />
+                                <Bar dataKey="starting_budget" fill="#8884d8" />
+                                <Bar dataKey="remaining_budget" fill="#82ca9d" />
                             </BarChart>
                         </ResponsiveContainer>
                     </Box>
                 </Grid>
             </Grid>
+            <Box sx={{ width: '100%', bgcolor: 'background.paper', marginTop: 3 }}>
+                <Tabs value={selectedTab} onChange={(e, newValue) => setSelectedTab(newValue)} centered>
+                    {categoryTabs}
+                </Tabs>
+                {categoryTabContent}
+            </Box>
         </div>
     );
 }
