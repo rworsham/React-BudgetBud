@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext, api } from "../context/AuthContext";
-import { Box, Button, Grid, Paper, TextField, Typography, Tabs, Tab } from "@mui/material";
+import { Box, Button, Grid, Paper, TextField, Typography} from "@mui/material";
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
@@ -13,7 +13,6 @@ export default function BudgetTransactionOverview() {
     const [isLoading, setIsLoading] = useState(false);
     const [startDate, setStartDate] = useState(dayjs().startOf('month').format('YYYY-MM-DD'));
     const [endDate, setEndDate] = useState(dayjs().endOf('month').format('YYYY-MM-DD'));
-    const [selectedTab, setSelectedTab] = useState(0);
 
     useEffect(() => {
         const fetchTransactions = async () => {
@@ -114,26 +113,6 @@ export default function BudgetTransactionOverview() {
         remaining_budget: parseFloat(budget.remaining_budget),
     }));
 
-    const categoryTabs = Object.keys(expenseCategoriesData || {}).map((category, index) => (
-        <Tab label={category} key={index} />
-    ));
-
-    const categoryTabContent = Object.keys(expenseCategoriesData || {}).map((category, index) => {
-        const totalSpent = expenseCategoriesData[category];
-        const remainingBudget = reportData?.budgets_remaining?.find(b => b.budget_name === "Monthly")?.remaining_budget || 0;
-
-        return (
-            <div key={index} hidden={selectedTab !== index}>
-                <Typography variant="body1">
-                    {category} Expenses: ${totalSpent.toFixed(2)}
-                </Typography>
-                <Typography variant="body1">
-                    Remaining Budget: ${remainingBudget.toFixed(2)}
-                </Typography>
-            </div>
-        );
-    });
-
     if (isLoading) {
         return <div>Loading...</div>;
     }
@@ -190,7 +169,7 @@ export default function BudgetTransactionOverview() {
             <Grid container spacing={4}>
                 <Grid item xs={12} sm={4}>
                     <Box sx={{ marginBottom: 4 }}>
-                        <Typography variant="h6" gutterBottom>
+                        <Typography variant="h6" gutterBottom sx={{ textAlign: 'center' }}>
                             Expense Categories Breakdown
                         </Typography>
                         <ResponsiveContainer width="100%" height={250}>
@@ -209,7 +188,7 @@ export default function BudgetTransactionOverview() {
                 </Grid>
                 <Grid item xs={12} sm={4}>
                     <Box sx={{ marginBottom: 4 }}>
-                        <Typography variant="h6" gutterBottom>
+                        <Typography variant="h6" gutterBottom sx={{ textAlign: 'center' }}>
                             Income vs Expense
                         </Typography>
                         <ResponsiveContainer width="100%" height={250}>
@@ -226,7 +205,7 @@ export default function BudgetTransactionOverview() {
                 </Grid>
                 <Grid item xs={12} sm={4}>
                     <Box sx={{ marginBottom: 4 }}>
-                        <Typography variant="h6" gutterBottom>
+                        <Typography variant="h6" gutterBottom sx={{ textAlign: 'center' }}>
                             Budget vs Remaining Budget
                         </Typography>
                         <ResponsiveContainer width="100%" height={250}>
@@ -243,11 +222,39 @@ export default function BudgetTransactionOverview() {
                     </Box>
                 </Grid>
             </Grid>
-            <Box sx={{ width: '100%', bgcolor: 'background.paper', marginTop: 3 }}>
-                <Tabs value={selectedTab} onChange={(e, newValue) => setSelectedTab(newValue)} centered>
-                    {categoryTabs}
-                </Tabs>
-                {categoryTabContent}
+            <Box sx={{ marginBottom: 3 }}>
+                <Paper sx={{
+                    padding: 3,
+                    textAlign: 'center',
+                    backgroundColor: '#333333',
+                    borderRadius: 2,
+                    boxShadow: 3,
+                }}>
+                    <Typography variant="h6" sx={{
+                        textDecoration: 'underline',
+                        fontWeight: 'bold',
+                        color: '#1DB954',
+                        marginBottom: 1
+                    }}>
+                        Financial Overview
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: 'text.secondary', marginBottom: 1 }}>
+                        {dayjs(startDate).format('MMM D, YYYY')} - {dayjs(endDate).format('MMM D, YYYY')}
+                    </Typography>
+                    <Typography variant="body1" sx={{ fontWeight: 'bold', marginBottom: 1 }}>
+                        Total Income: ${incomeExpenseData[0]?.value ? incomeExpenseData[0].value.toFixed(2) : '0.00'}
+                    </Typography>
+                    <Typography variant="body1" sx={{ fontWeight: 'bold', marginBottom: 1 }}>
+                        Total Expenses: ${incomeExpenseData[1]?.value ? incomeExpenseData[1].value.toFixed(2) : '0.00'}
+                    </Typography>
+                    <Typography variant="body1" sx={{
+                        fontWeight: 'bold',
+                        color: '#1DB954',
+                        marginBottom: 1
+                    }}>
+                        Remaining Budget: ${budgetData?.reduce((acc, b) => acc + b.remaining_budget, 0).toFixed(2)}
+                    </Typography>
+                </Paper>
             </Box>
         </div>
     );
