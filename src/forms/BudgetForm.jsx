@@ -4,7 +4,7 @@ import { useTheme } from '@mui/material/styles';
 import {AuthContext, api} from "../context/AuthContext";
 
 
-const BudgetForm = () => {
+const BudgetForm = ({ onSuccess }) => {
     const { authTokens } = useContext(AuthContext);
     const [newBudget, setNewBudget] = useState('');
     const [amount, setAmount] = useState('');
@@ -66,6 +66,10 @@ const BudgetForm = () => {
             );
 
             console.log('New Category created:', response.data);
+
+            if (onSuccess) {
+                onSuccess();
+            }
 
         } catch (err) {
             setError('Failed to create new category. Please try again');

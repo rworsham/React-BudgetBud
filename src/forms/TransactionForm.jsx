@@ -1,10 +1,9 @@
 import { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { TextField, Button, FormGroup, FormControl, MenuItem, Select, InputLabel, Box, Typography, Checkbox, FormControlLabel } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { AuthContext , api } from '../context/AuthContext';
 
-const TransactionForm = () => {
+const TransactionForm = ({ onSuccess }) => {
     const { authTokens } = useContext(AuthContext);
     const [date, setDate] = useState('');
     const [amount, setAmount] = useState('');
@@ -20,7 +19,6 @@ const TransactionForm = () => {
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    const navigate = useNavigate();
     const theme = useTheme();
 
     useEffect(() => {
@@ -88,7 +86,11 @@ const TransactionForm = () => {
             });
 
             console.log('Transaction created:', response.data);
-            navigate('/dashboard');
+
+            if (onSuccess) {
+                onSuccess();
+            }
+
         } catch (err) {
             console.log('Api error')
             setError('Failed to create transaction. Please try again.');

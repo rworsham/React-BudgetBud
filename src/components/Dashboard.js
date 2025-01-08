@@ -91,6 +91,7 @@ const Dashboard = () => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [currentSegment, setCurrentSegment] = useState('dashboard');
     const [drawerOpen, setDrawerOpen] = useState(false);
+    const [successAlertOpen, setSuccessAlertOpen] = useState(false);
     const navigate = useNavigate();
 
     const navigateToSegment = (segment) => setCurrentSegment(segment);
@@ -103,6 +104,7 @@ const Dashboard = () => {
     const handleClose = () => {
         setOpen(false);
         setModalType('');
+        setSuccessAlertOpen(false);
     };
 
     const handleClick = (event) => {
@@ -111,6 +113,13 @@ const Dashboard = () => {
 
     const handleCloseMenu = () => {
         setAnchorEl(null);
+    };
+
+    const handleFormSuccess = () => {
+        setSuccessAlertOpen(true);
+        setTimeout(() => {
+            handleClose();
+        }, 5000);
     };
 
     const renderContent = () => {
@@ -184,7 +193,7 @@ const Dashboard = () => {
                     {renderContent()}
                 </Box>
                 <SpeedDial
-                    ariaLabel="SpeedDial basic example"
+                    ariaLabel="SpeedDial"
                     sx={{ position: 'absolute', bottom: 16, right: 16 }}
                     icon={<SpeedDialIcon />}
                 >
@@ -194,23 +203,32 @@ const Dashboard = () => {
                 </SpeedDial>
                 <Dialog open={open && modalType === 'Transaction'} onClose={handleClose}>
                     <DialogTitle>New Transaction</DialogTitle>
-                    <DialogContent><TransactionForm /></DialogContent>
+                    <DialogContent><TransactionForm onSuccess={handleFormSuccess}/></DialogContent>
                     <DialogActions><Button onClick={handleClose} color="primary">Close</Button></DialogActions>
                 </Dialog>
                 <Dialog open={open && modalType === 'Budget'} onClose={handleClose}>
                     <DialogTitle>Budget Modal</DialogTitle>
-                    <DialogContent><BudgetForm /></DialogContent>
+                    <DialogContent><BudgetForm onSuccess={handleFormSuccess}/></DialogContent>
                     <DialogActions><Button onClick={handleClose} color="primary">Close</Button></DialogActions>
                 </Dialog>
                 <Dialog open={open && modalType === 'Category'} onClose={handleClose}>
                     <DialogTitle>Category Modal</DialogTitle>
-                    <DialogContent><CategoryForm /></DialogContent>
+                    <DialogContent><CategoryForm onSuccess={handleFormSuccess}/></DialogContent>
                     <DialogActions><Button onClick={handleClose} color="primary">Close</Button></DialogActions>
                 </Dialog>
                 <Dialog open={open && modalType === 'Family'} onClose={handleClose}>
                     <DialogTitle>Family Modal</DialogTitle>
                     <DialogContent><p>Content related to the Family action goes here.</p></DialogContent>
                     <DialogActions><Button onClick={handleClose} color="primary">Close</Button></DialogActions>
+                </Dialog>
+                <Dialog open={successAlertOpen} onClose={handleClose}>
+                    <DialogTitle>Success</DialogTitle>
+                    <DialogContent>
+                        <Typography>Addition Successful!</Typography>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose} color="primary">Close</Button>
+                    </DialogActions>
                 </Dialog>
             </Box>
         </Box>

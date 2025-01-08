@@ -3,7 +3,7 @@ import { TextField, Button, FormGroup, FormControl, Box, Typography} from '@mui/
 import { useTheme } from '@mui/material/styles';
 import {AuthContext, api} from "../context/AuthContext";
 
-const CategoryForm = () => {
+const CategoryForm = ({ onSuccess }) => {
     const { authTokens } = useContext(AuthContext);
     const [newCategory, setNewCategory] = useState('');
     const [error, setError] = useState('');
@@ -76,6 +76,10 @@ const CategoryForm = () => {
             );
 
             console.log('New Category created:', response.data);
+
+            if (onSuccess) {
+                onSuccess();
+            }
 
         } catch (err) {
             setError('Failed to create new category. Please try again');
