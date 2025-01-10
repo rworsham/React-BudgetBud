@@ -28,6 +28,7 @@ import TransactionTableView from './TransactionTableView';
 import TransactionForm from '../forms/TransactionForm';
 import CategoryForm from '../forms/CategoryForm';
 import BudgetForm from '../forms/BudgetForm';
+import FamilyForm from "../forms/FamilyForm";
 
 const drawerWidth = 240;
 const actions = [
@@ -218,7 +219,7 @@ const Dashboard = () => {
                 </Dialog>
                 <Dialog open={open && modalType === 'Family'} onClose={handleClose}>
                     <DialogTitle>Family Modal</DialogTitle>
-                    <DialogContent><p>Content related to the Family action goes here.</p></DialogContent>
+                    <DialogContent><FamilyForm onSuccess={handleFormSuccess}/></DialogContent>
                     <DialogActions><Button onClick={handleClose} color="primary">Close</Button></DialogActions>
                 </Dialog>
                 <Dialog open={successAlertOpen} onClose={handleClose}>
