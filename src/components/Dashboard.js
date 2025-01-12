@@ -29,6 +29,7 @@ import TransactionForm from '../forms/TransactionForm';
 import CategoryForm from '../forms/CategoryForm';
 import BudgetForm from '../forms/BudgetForm';
 import FamilyForm from "../forms/FamilyForm";
+import AccountOverview from "./AccountOverview";
 
 const drawerWidth = 240;
 const actions = [
@@ -132,7 +133,7 @@ const Dashboard = () => {
             case 'reports/transactions':
                 return <TransactionTableView />;
             case 'reports/accounts':
-                return <Box sx={{ display: "flex", justifyContent: "center", height: "70vh", alignItems: "center" }} />;
+                return <AccountOverview />;
             default:
                 return null;
         }
