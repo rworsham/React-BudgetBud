@@ -32,6 +32,7 @@ export default function DataTable() {
         { field: 'description', headerName: 'Description', width: 200, editable: true },
         { field: 'category', headerName: 'Category', width: 100, editable: true },
         { field: 'budget', headerName: 'Budget', width: 100, editable: true },
+        { field: 'account', headerName: 'Account', width: 100, editable: true },
         { field: 'is_recurring', headerName: 'IsRecurring', width: 100, editable: true },
         { field: 'next_occurrence', headerName: 'NextOccurrence', width: 100, editable: true },
         {

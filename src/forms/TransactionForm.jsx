@@ -11,11 +11,13 @@ const TransactionForm = ({ onSuccess }) => {
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState('');
     const [budget, setBudget] = useState('');
+    const [account, setAccount] = useState('');
     const [isRecurring, setIsRecurring] = useState(false);
     const [recurringType, setRecurringType] = useState('');
     const [nextOccurrence, setNextOccurrence] = useState(null);
     const [categories, setCategories] = useState([]);
     const [budgets, setBudgets] = useState([]);
+    const [accounts, setAccounts] = useState([]);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
@@ -29,13 +31,15 @@ const TransactionForm = ({ onSuccess }) => {
             }
 
             try {
-                const [Categories, Budgets] = await Promise.all([
+                const [Categories, Budgets, Accounts] = await Promise.all([
                     api.get('/categories/'),
                     api.get('/budget/'),
+                    api.get('/accounts/')
                 ]);
 
                 setCategories(Categories.data);
                 setBudgets(Budgets.data);
+                setAccounts(Accounts.data);
 
                 setIsLoading(false);
             } catch (err) {
@@ -49,7 +53,7 @@ const TransactionForm = ({ onSuccess }) => {
     }, [authTokens]);
 
     const validateForm = () => {
-        if (!date || !amount || !category || !budget) {
+        if (!date || !amount || !category || !budget || !account) {
             setError('Please fill in all required fields.');
             return false;
         }
@@ -69,13 +73,14 @@ const TransactionForm = ({ onSuccess }) => {
         setError('');
 
         try {
-            const response = await api.post('/transactions/', {
+            const response = await api.post('/transaction/', {
                 date,
                 amount,
                 transaction_type: transactionType,
                 description,
                 category,
                 budget,
+                account,
                 is_recurring: isRecurring,
                 recurring_type: recurringType,
                 next_occurrence: nextOccurrence,
@@ -145,6 +150,7 @@ const TransactionForm = ({ onSuccess }) => {
                             <InputLabel>Transaction Type</InputLabel>
                             <Select
                                 label="Transaction Type"
+                                variant="outlined"
                                 value={transactionType}
                                 onChange={(e) => setTransactionType(e.target.value)}
                                 fullWidth
@@ -170,14 +176,33 @@ const TransactionForm = ({ onSuccess }) => {
                             <InputLabel>Category</InputLabel>
                             <Select
                                 label="Category"
+                                variant="outlined"
                                 value={category}
                                 onChange={(e) => setCategory(e.target.value)}
                                 fullWidth
                                 required
                             >
                                 {categories.map((cat) => (
-                                    <MenuItem key={cat.id} value={cat.name}>
+                                    <MenuItem key={cat.id} value={cat.id}>
                                         {cat.name}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+
+                        <FormControl sx={{ marginBottom: 2 }}>
+                            <InputLabel>Account</InputLabel>
+                            <Select
+                                label="Account"
+                                variant="outlined"
+                                value={account}
+                                onChange={(e) => setAccount(e.target.value)}
+                                fullWidth
+                                required
+                            >
+                                {accounts.map((acc) => (
+                                    <MenuItem key={acc.id} value={acc.id}>
+                                        {acc.name}
                                     </MenuItem>
                                 ))}
                             </Select>
@@ -187,13 +212,14 @@ const TransactionForm = ({ onSuccess }) => {
                             <InputLabel>Budget</InputLabel>
                             <Select
                                 label="Budget"
+                                variant="outlined"
                                 value={budget}
                                 onChange={(e) => setBudget(e.target.value)}
                                 fullWidth
                                 required
                             >
                                 {budgets.map((budgetItem) => (
-                                    <MenuItem key={budgetItem.id} value={budgetItem.name}>
+                                    <MenuItem key={budgetItem.id} value={budgetItem.id}>
                                         {budgetItem.name}
                                     </MenuItem>
                                 ))}
@@ -211,6 +237,7 @@ const TransactionForm = ({ onSuccess }) => {
                                     <InputLabel>Recurring Type</InputLabel>
                                     <Select
                                         label="Recurring Type"
+                                        variant="outlined"
                                         value={recurringType}
                                         onChange={(e) => setRecurringType(e.target.value)}
                                         fullWidth
