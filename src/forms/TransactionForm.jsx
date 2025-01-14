@@ -105,7 +105,7 @@ const TransactionForm = ({ onSuccess }) => {
     };
 
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
+        <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'auto'}}>
             <form onSubmit={handleSubmit}>
                 <Box
                     sx={{
@@ -113,16 +113,17 @@ const TransactionForm = ({ onSuccess }) => {
                         justifyContent: 'center',
                         alignItems: 'center',
                         margin: 'auto',
-                        width: '50vh',
-                        height: '60vh',
-                        padding: 2,
+                        width: '100%',
+                        maxWidth: 600,
+                        height: 'auto',
+                        padding: 3,
                         backgroundColor: theme.palette.background.paper,
                         borderRadius: 2,
                         boxShadow: 3,
                     }}
                 >
-                    <FormGroup sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-                        <FormControl sx={{ marginBottom: 2 }}>
+                    <FormGroup sx={{display: 'flex', flexDirection: 'column', width: '100%'}}>
+                        <FormControl sx={{marginBottom: 2}}>
                             <TextField
                                 type="date"
                                 label="Date"
@@ -133,8 +134,7 @@ const TransactionForm = ({ onSuccess }) => {
                                 required
                             />
                         </FormControl>
-
-                        <FormControl sx={{ marginBottom: 2 }}>
+                        <FormControl sx={{marginBottom: 2}}>
                             <TextField
                                 type="number"
                                 label="Amount"
@@ -145,8 +145,7 @@ const TransactionForm = ({ onSuccess }) => {
                                 required
                             />
                         </FormControl>
-
-                        <FormControl sx={{ marginBottom: 2 }}>
+                        <FormControl sx={{marginBottom: 2}}>
                             <InputLabel>Transaction Type</InputLabel>
                             <Select
                                 label="Transaction Type"
@@ -159,8 +158,7 @@ const TransactionForm = ({ onSuccess }) => {
                                 <MenuItem value="expense">Expense</MenuItem>
                             </Select>
                         </FormControl>
-
-                        <FormControl sx={{ marginBottom: 2 }}>
+                        <FormControl sx={{marginBottom: 2}}>
                             <TextField
                                 label="Description"
                                 variant="outlined"
@@ -171,8 +169,7 @@ const TransactionForm = ({ onSuccess }) => {
                                 rows={3}
                             />
                         </FormControl>
-
-                        <FormControl sx={{ marginBottom: 2 }}>
+                        <FormControl sx={{marginBottom: 2}}>
                             <InputLabel>Category</InputLabel>
                             <Select
                                 label="Category"
@@ -189,8 +186,7 @@ const TransactionForm = ({ onSuccess }) => {
                                 ))}
                             </Select>
                         </FormControl>
-
-                        <FormControl sx={{ marginBottom: 2 }}>
+                        <FormControl sx={{marginBottom: 2}}>
                             <InputLabel>Account</InputLabel>
                             <Select
                                 label="Account"
@@ -207,8 +203,7 @@ const TransactionForm = ({ onSuccess }) => {
                                 ))}
                             </Select>
                         </FormControl>
-
-                        <FormControl sx={{ marginBottom: 2 }}>
+                        <FormControl sx={{marginBottom: 2}}>
                             <InputLabel>Budget</InputLabel>
                             <Select
                                 label="Budget"
@@ -225,15 +220,14 @@ const TransactionForm = ({ onSuccess }) => {
                                 ))}
                             </Select>
                         </FormControl>
-
                         <FormControlLabel
-                            control={<Checkbox checked={isRecurring} onChange={() => setIsRecurring(!isRecurring)} />}
+                            control={<Checkbox checked={isRecurring} onChange={() => setIsRecurring(!isRecurring)}/>}
                             label="Is Recurring"
                         />
 
                         {isRecurring && (
                             <>
-                                <FormControl sx={{ marginBottom: 2 }}>
+                                <FormControl sx={{marginBottom: 2}}>
                                     <InputLabel>Recurring Type</InputLabel>
                                     <Select
                                         label="Recurring Type"
@@ -249,8 +243,7 @@ const TransactionForm = ({ onSuccess }) => {
                                         <MenuItem value="yearly">Yearly</MenuItem>
                                     </Select>
                                 </FormControl>
-
-                                <FormControl sx={{ marginBottom: 2 }}>
+                                <FormControl sx={{marginBottom: 2}}>
                                     <TextField
                                         type="date"
                                         label="Next Occurrence"
@@ -269,7 +262,7 @@ const TransactionForm = ({ onSuccess }) => {
                         </Button>
 
                         {error && (
-                            <Typography color="error" variant="body2" sx={{ marginTop: 2 }}>
+                            <Typography color="error" variant="body2" sx={{marginTop: 2}}>
                                 {error}
                             </Typography>
                         )}

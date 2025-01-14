@@ -204,22 +204,22 @@ const Dashboard = () => {
                     ))}
                 </SpeedDial>
                 <Dialog open={open && modalType === 'Transaction'} onClose={handleClose}>
-                    <DialogTitle>New Transaction</DialogTitle>
+                    <DialogTitle sx={{ textAlign: 'center' }}>New Transaction</DialogTitle>
                     <DialogContent><TransactionForm onSuccess={handleFormSuccess}/></DialogContent>
                     <DialogActions><Button onClick={handleClose} color="primary">Close</Button></DialogActions>
                 </Dialog>
                 <Dialog open={open && modalType === 'Budget'} onClose={handleClose}>
-                    <DialogTitle>Budget Modal</DialogTitle>
+                    <DialogTitle sx={{ textAlign: 'center' }}>New Budget</DialogTitle>
                     <DialogContent><BudgetForm onSuccess={handleFormSuccess}/></DialogContent>
                     <DialogActions><Button onClick={handleClose} color="primary">Close</Button></DialogActions>
                 </Dialog>
                 <Dialog open={open && modalType === 'Category'} onClose={handleClose}>
-                    <DialogTitle>Category Modal</DialogTitle>
+                    <DialogTitle sx={{ textAlign: 'center' }}>New Category</DialogTitle>
                     <DialogContent><CategoryForm onSuccess={handleFormSuccess}/></DialogContent>
                     <DialogActions><Button onClick={handleClose} color="primary">Close</Button></DialogActions>
                 </Dialog>
                 <Dialog open={open && modalType === 'Family'} onClose={handleClose}>
-                    <DialogTitle>Family Modal</DialogTitle>
+                    <DialogTitle sx={{ textAlign: 'center' }}>New Family</DialogTitle>
                     <DialogContent><FamilyForm onSuccess={handleFormSuccess}/></DialogContent>
                     <DialogActions><Button onClick={handleClose} color="primary">Close</Button></DialogActions>
                 </Dialog>

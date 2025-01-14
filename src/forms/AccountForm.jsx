@@ -93,7 +93,7 @@ const AccountForm = ({ onSuccess }) => {
     };
 
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
+        <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
             <form onSubmit={handleSubmit}>
                 <Box
                     sx={{
@@ -101,16 +101,17 @@ const AccountForm = ({ onSuccess }) => {
                         justifyContent: 'center',
                         alignItems: 'center',
                         margin: 'auto',
-                        width: '50vh',
-                        height: '60vh',
-                        padding: 2,
+                        width: '100%',
+                        maxWidth: 400,
+                        height: 'auto',
+                        padding: 3,
                         backgroundColor: theme.palette.background.paper,
                         borderRadius: 2,
                         boxShadow: 3,
                     }}
                 >
-                    <FormGroup sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-                        <FormControl sx={{ marginBottom: 2 }}>
+                    <FormGroup sx={{display: 'flex', flexDirection: 'column', width: '100%'}}>
+                        <FormControl sx={{marginBottom: 2}}>
                             <TextField
                                 label="New Account"
                                 variant="outlined"
@@ -120,7 +121,7 @@ const AccountForm = ({ onSuccess }) => {
                                 required
                             />
                         </FormControl>
-                        <FormControl sx={{ marginBottom: 2 }}>
+                        <FormControl sx={{marginBottom: 2}}>
                             <TextField
                                 type="number"
                                 label="Balance"
@@ -136,7 +137,7 @@ const AccountForm = ({ onSuccess }) => {
                         </Button>
 
                         {error && (
-                            <Typography color="error" variant="body2" sx={{ marginTop: 2 }}>
+                            <Typography color="error" variant="body2" sx={{marginTop: 2}}>
                                 {error}
                             </Typography>
                         )}

@@ -111,7 +111,7 @@ export default function AccountOverview() {
                 </Paper>
             </Box>
             <Dialog open={open && modalType === 'addAccount'} onClose={handleClose}>
-                <DialogTitle>New Account</DialogTitle>
+                <DialogTitle sx={{ textAlign: 'center' }}>New Account</DialogTitle>
                 <DialogContent>
                     <AccountForm onSuccess={handleFormSuccess}/>
                 </DialogContent>
