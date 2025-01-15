@@ -62,25 +62,31 @@ export default function AccountOverview() {
             }
         };
 
-        fetchAccounts();
-    }, [authTokens]);
+        const fetchAccountHistory = async () => {
+            if (!authTokens || !authTokens.access) {
+                setError('No authorization token found');
+                return;
+            }
 
-    const handleViewHistory = async (accountId) => {
-        setIsLoading(true);
-        try {
-            const response = await api.get(`/accounts/history/`, {
-                headers: {
-                    Authorization: `Bearer ${authTokens.access}`,
-                },
-            });
-            setAccountHistoryData(response.data);
-            setIsLoading(false);
-        } catch (err) {
-            console.error('Error fetching account history:', err);
-            setError('Failed to fetch account history');
-            setIsLoading(false);
-        }
-    };
+            try {
+                setIsLoading(true);
+                const response = await api.get(`/accounts/overview-report/`, {
+                    headers: {
+                        Authorization: `Bearer ${authTokens.access}`,
+                    },
+                });
+                setAccountHistoryData(response.data);
+                setIsLoading(false);
+            } catch (err) {
+                console.error('Error fetching account history:', err);
+                setError('Failed to fetch account history');
+                setIsLoading(false);
+            }
+        };
+
+        fetchAccounts();
+        fetchAccountHistory();
+    }, [authTokens]);
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -89,6 +95,11 @@ export default function AccountOverview() {
     if (error) {
         return <div>{error}</div>;
     }
+
+    const chartData = accountHistoryData ? accountHistoryData.map((entry) => ({
+        date: entry.date,
+        ...entry
+    })) : [];
 
     return (
         <div style={{ height: '100%', width: '75%', padding: '10px' }}>
@@ -146,7 +157,7 @@ export default function AccountOverview() {
                                     variant="contained"
                                     color="primary"
                                     size="small"
-                                    onClick={() => handleViewHistory(account.id)}
+                                    // onClick={() => handleViewHistory(account.id)}
                                     sx={{
                                         marginTop: 2,
                                         marginLeft: 'auto',
@@ -167,18 +178,22 @@ export default function AccountOverview() {
                     <Typography variant="h6" textAlign='center' gutterBottom>
                         Account Balance Over Time
                     </Typography>
+                    <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2}}/>
                     <ResponsiveContainer width="100%" height={300}>
-                        <LineChart data={accountHistoryData}>
-                            <XAxis dataKey="date" />
+                        <LineChart data={chartData}>
+                            <XAxis dataKey="name" />
                             <YAxis />
                             <Tooltip />
                             <Legend />
-                            <Line
-                                type="monotone"
-                                dataKey="balance"
-                                stroke="#8884d8"
-                                activeDot={{ r: 8 }}
-                            />
+                            {accountData.map((account) => (
+                                <Line
+                                    key={account.id}
+                                    type="monotone"
+                                    dataKey={account.name}
+                                    stroke="#1DB954"
+                                    activeDot={{ r: 8 }}
+                                />
+                            ))}
                         </LineChart>
                     </ResponsiveContainer>
                 </Box>
