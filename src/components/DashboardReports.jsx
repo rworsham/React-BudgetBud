@@ -18,6 +18,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
+import Divider from "@mui/material/Divider";
 
 export default function CombinedDashboard() {
     const {authTokens} = useContext(AuthContext);
@@ -191,7 +192,7 @@ export default function CombinedDashboard() {
     }
 
     return (
-        <div style={{height: '100%', padding: '10px'}}>
+        <div style={{ height: '100%', width: '75%', padding: '10px'}}>
             <Box sx={{ marginBottom: 1 }}>
                 <Paper sx={{ padding: 1, textAlign: 'center' }}>
                     <Typography variant="body2">
@@ -200,42 +201,55 @@ export default function CombinedDashboard() {
                     </Typography>
                 </Paper>
             </Box>
-            <Box sx={{ marginBottom: 1, padding: 1, border: '1px solid #ddd', borderRadius: 2 }}>
-                <Typography variant="body2" gutterBottom>
-                    Filter by Date Range
-                </Typography>
+            <Box sx={{ marginBottom: 1, padding: 1, border: '1px solid #ddd', borderRadius: 2, width: '100%' }}>
                 <form onSubmit={handleSubmit}>
-                    <Grid container spacing={1}>
-                        <Grid item xs={12} sm={6}>
+                    <Grid container justifyContent="center" alignItems="center" spacing={1}>
+                        <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: 1 }}>
+                            <Typography variant="body1" sx={{ marginRight: 4 }}>
+                                Filter by Date Range
+                            </Typography>
+                            <Button variant="contained" color="primary" type="submit" size="small" sx={{ padding: '6px 12px' }}>
+                                Apply Date Range
+                            </Button>
+                        </Grid>
+                        <Grid item xs={12} sm={6} sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DatePicker
                                     label="Start Date"
                                     value={dayjs(startDate)}
                                     onChange={handleStartDateChange}
-                                    renderInput={(params) => <TextField {...params} fullWidth variant="outlined" size="small" />}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            fullWidth
+                                            variant="outlined"
+                                            size="small"
+                                            sx={{ margin: 0 }}
+                                        />
+                                    )}
                                 />
                             </LocalizationProvider>
-                        </Grid>
-                        <Grid item xs={12} sm={6} container spacing={1} alignItems="center">
-                            <Grid item xs={8}>
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DatePicker
-                                        label="End Date"
-                                        value={dayjs(endDate)}
-                                        onChange={handleEndDateChange}
-                                        renderInput={(params) => <TextField {...params} fullWidth variant="outlined" size="small" />}
-                                    />
-                                </LocalizationProvider>
-                            </Grid>
-                            <Grid item xs={4} textAlign="right">
-                                <Button variant="contained" color="primary" type="submit" size="small">
-                                    Apply Date Range
-                                </Button>
-                            </Grid>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePicker
+                                    label="End Date"
+                                    value={dayjs(endDate)}
+                                    onChange={handleEndDateChange}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            fullWidth
+                                            variant="outlined"
+                                            size="small"
+                                            sx={{ margin: 0 }}
+                                        />
+                                    )}
+                                />
+                            </LocalizationProvider>
                         </Grid>
                     </Grid>
                 </form>
             </Box>
+            <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 5}}/>
             <Box sx={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', marginBottom: 3}}>
                 <Box sx={{width: {xs: '100%', sm: '48%'}, marginBottom: {xs: 3, sm: 0}}}>
                     <ResponsiveContainer width="100%" height={250}>
@@ -259,7 +273,7 @@ export default function CombinedDashboard() {
                                     startAngle={180}
                                     endAngle={0}
                                     cx="50%"
-                                    cy="50%"
+                                    cy="70%"
                                     outerRadius="80%"
                                     fill="#1DB954"
                                     label={({name, value}) => `${name}: $${value.toFixed(2)}`}

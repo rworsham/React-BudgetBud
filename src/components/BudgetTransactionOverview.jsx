@@ -5,6 +5,7 @@ import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import Divider from "@mui/material/Divider";
 
 export default function BudgetTransactionOverview() {
     const { authTokens } = useContext(AuthContext);
@@ -122,7 +123,7 @@ export default function BudgetTransactionOverview() {
     }
 
     return (
-        <div style={{ height: '100%', padding: '10px' }}>
+        <div style={{ height: '100%', width: '75%', padding: '10px' }}>
             <Box sx={{ marginBottom: 1 }}>
                 <Paper sx={{ padding: 1, textAlign: 'center' }}>
                     <Typography variant="body2">
@@ -166,6 +167,7 @@ export default function BudgetTransactionOverview() {
                     </Grid>
                 </form>
             </Box>
+            <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 5}}/>
             <Grid container spacing={4}>
                 <Grid item xs={12} sm={4}>
                     <Box sx={{ marginBottom: 4 }}>

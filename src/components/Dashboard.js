@@ -179,7 +179,19 @@ const Dashboard = () => {
                             <Box key={index} sx={{ borderBottom: '1px solid black', marginBottom: 2 }} />
                         ) : (
                             <ListItem key={index} disablePadding>
-                                <ListItemButton onClick={() => navigateToSegment(item.segment)}>
+                                    <ListItemButton
+                                        onClick={() => {
+                                            navigateToSegment(item.segment);
+                                        }}
+                                        sx={{
+                                            backgroundColor: currentSegment === item.segment ? theme.palette.primary.light : 'transparent',
+                                            boxShadow: currentSegment === item.segment ? '0px 4px 6px rgba(0, 0, 0, 0.5)' : 'none',
+                                            '&:hover': {
+                                                backgroundColor: currentSegment === item.segment ? theme.palette.primary.main : theme.palette.action.hover,
+                                            },
+                                            transition: 'all 0.3s ease',
+                                        }}
+                                    >
                                     <ListItemIcon sx={{ color: theme.palette.primary.main }}>
                                         {item.icon}
                                     </ListItemIcon>
