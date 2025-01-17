@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext, api } from "../context/AuthContext";
-import { Box, Button, Grid, Paper, TextField, Typography} from "@mui/material";
+import { Box, Button, Paper, TextField, Typography} from "@mui/material";
+import Grid from '@mui/material/Grid2';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
@@ -169,7 +170,7 @@ export default function BudgetTransactionOverview() {
             </Box>
             <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 5}}/>
             <Grid container spacing={4}>
-                <Grid item xs={12} sm={4}>
+                <Grid item xs={12} sm={4} size={4}>
                     <Box sx={{ marginBottom: 4 }}>
                         <Typography variant="h6" gutterBottom sx={{ textAlign: 'center' }}>
                             Expense Categories Breakdown
@@ -188,7 +189,7 @@ export default function BudgetTransactionOverview() {
                         </ResponsiveContainer>
                     </Box>
                 </Grid>
-                <Grid item xs={12} sm={4}>
+                <Grid item xs={12} sm={4} size={4}>
                     <Box sx={{ marginBottom: 4 }}>
                         <Typography variant="h6" gutterBottom sx={{ textAlign: 'center' }}>
                             Income vs Expense
@@ -205,7 +206,7 @@ export default function BudgetTransactionOverview() {
                         </ResponsiveContainer>
                     </Box>
                 </Grid>
-                <Grid item xs={12} sm={4}>
+                <Grid item xs={12} sm={4} size={4}>
                     <Box sx={{ marginBottom: 4 }}>
                         <Typography variant="h6" gutterBottom sx={{ textAlign: 'center' }}>
                             Budget vs Remaining Budget

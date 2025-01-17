@@ -2,7 +2,8 @@ import React, {useState, useEffect, useContext} from "react";
 import { PieChart, Pie, ResponsiveContainer } from "recharts";
 import { AuthContext , api } from "../context/AuthContext";
 import dayjs from "dayjs";
-import {Box, Button, Grid, Paper, TextField, Typography} from "@mui/material";
+import {Box, Button, Paper, TextField, Typography} from "@mui/material";
+import Grid from '@mui/material/Grid2';
 import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 

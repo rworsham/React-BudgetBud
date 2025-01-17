@@ -11,7 +11,8 @@ import { Download } from '@mui/icons-material';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
-import {Box, Button, Grid, TextField, Typography, IconButton} from "@mui/material";
+import {Box, Button, TextField, Typography, IconButton} from "@mui/material";
+import Grid from '@mui/material/Grid2';
 import Divider from "@mui/material/Divider";
 
 export default function DataTable() {

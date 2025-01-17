@@ -10,7 +10,8 @@ import {
     Bar, Rectangle
 } from "recharts";
 import { AuthContext, api } from "../context/AuthContext";
-import { TextField, Button, Grid, Box, Typography, Paper } from "@mui/material";
+import { TextField, Button, Box, Typography, Paper } from "@mui/material";
+import Grid from '@mui/material/Grid2';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';

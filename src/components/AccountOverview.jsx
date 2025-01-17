@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext, api } from "../context/AuthContext";
-import {Box, Button, Grid, Paper, Typography, Card, CardContent,
+import {Box, Button, Paper, Typography, Card, CardContent,
     Dialog, DialogTitle, DialogContent, DialogActions, IconButton
 } from "@mui/material";
+import Grid from '@mui/material/Grid2';
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import Divider from "@mui/material/Divider";
 import AddBoxIcon from '@mui/icons-material/AddBox';
@@ -143,7 +144,7 @@ export default function AccountOverview() {
             </Dialog>
             <Grid container spacing={4}>
                 {accountData.map((account) => (
-                    <Grid item xs={12} sm={4} key={account.id}>
+                    <Grid item xs={12} sm={4} size={4} key={account.id}>
                         <Card variant="outlined">
                             <CardContent>
                                 <Typography variant="h6" textAlign='center' gutterBottom>
