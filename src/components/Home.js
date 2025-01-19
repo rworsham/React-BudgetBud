@@ -7,6 +7,7 @@ import {Link} from "react-router-dom";
 import AccountSignUp from "./Accountsignup";
 import DashboardAd from "./DashboardAdvertisement";
 import ReportingAd from "./ReportingAdvertisement";
+import Advertisement from "./Advertisement";
 
 function Home() {
     return (
@@ -34,7 +35,7 @@ function Home() {
                 >
                     BudgetBud
                 </Typography>
-                <Link to="/login" style={{ textDecoration: 'none', position: 'absolute', right: '20px' }}>
+                <Link to="/login" style={{textDecoration: 'none', position: 'absolute', right: '20px'}}>
                     <Button
                         variant="contained"
                         sx={{
@@ -54,12 +55,14 @@ function Home() {
                 </Link>
             </Box>
             <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2}}/>
+            <Advertisement />
+            <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2}}/>
             <FeatureCards/>
             <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2}}/>
-            <AccountSignUp />
+            <AccountSignUp/>
             <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2}}/>
-            <DashboardAd />
-            <ReportingAd />
+            <DashboardAd/>
+            <ReportingAd/>
         </div>
     );
 }
