@@ -1,5 +1,5 @@
 import React from 'react';
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Paper, TextField, Typography } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, Box, Paper, TextField, Typography } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -77,11 +77,6 @@ const DateRangeFilterForm = ({ startDate, endDate, handleStartDateChange, handle
                                         )}
                                     />
                                 </LocalizationProvider>
-                            </Grid>
-                            <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: 1 }}>
-                                <Button variant="contained" color="primary" type="submit" size="medium" sx={{ padding: '6px 12px' }}>
-                                    Apply Date Range
-                                </Button>
                             </Grid>
                         </Grid>
                     </form>

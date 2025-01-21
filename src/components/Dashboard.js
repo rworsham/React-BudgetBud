@@ -92,7 +92,7 @@ const Dashboard = () => {
     const [modalType, setModalType] = useState('');
     const [anchorEl, setAnchorEl] = useState(null);
     const [currentSegment, setCurrentSegment] = useState('dashboard');
-    const [drawerOpen, setDrawerOpen] = useState(false);
+    const [drawerOpen, setDrawerOpen] = useState(true);
     const [successAlertOpen, setSuccessAlertOpen] = useState(false);
     const navigate = useNavigate();
 

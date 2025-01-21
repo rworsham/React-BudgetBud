@@ -1,19 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
-import {
-    Box,
-    Paper,
-    Typography,
-    Button,
-    TextField,
-    Accordion, AccordionSummary, AccordionDetails,
-} from "@mui/material";
-import Grid from '@mui/material/Grid2';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Box, Paper } from "@mui/material";
 import { BarChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Bar, Rectangle } from "recharts";
 import { PieChart, Pie } from "recharts";
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
-import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { AuthContext, api } from "../context/AuthContext";
 import EditIcon from '@mui/icons-material/Edit';
@@ -21,9 +10,10 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import Divider from "@mui/material/Divider";
+import DateRangeFilterForm from "../forms/DateRangeFilterForm";
 
-export default function CombinedDashboard() {
-    const {authTokens} = useContext(AuthContext);
+export default function DashboardReports() {
+    const { authTokens } = useContext(AuthContext);
     const [filteredTransactions, setFilteredTransactions] = useState([]);
     const [rows, setRows] = useState([]);
     const [error, setError] = useState('');
@@ -42,16 +32,12 @@ export default function CombinedDashboard() {
             try {
                 setIsLoading(true);
                 const barChartResponse = await api.post('/transaction-bar-chart/', {
-                    params: {
-                        start_date: startDate,
-                        end_date: endDate
-                    }
+                    start_date: startDate,
+                    end_date: endDate
                 });
                 const tableResponse = await api.post('/transaction-table-view/', {
-                    params: {
-                        start_date: startDate,
-                        end_date: endDate
-                    }
+                    start_date: startDate,
+                    end_date: endDate
                 });
 
                 const barChartData = barChartResponse.data.map(item => ({
@@ -80,17 +66,17 @@ export default function CombinedDashboard() {
     };
 
     const handleEditClick = (id) => {
-        setRowModesModel({...rowModesModel, [id]: {mode: 'edit'}});
+        setRowModesModel({ ...rowModesModel, [id]: { mode: 'edit' } });
     };
 
     const handleSaveClick = (id) => {
         const updatedRow = rows.find((row) => row.id === id);
         updateRow(updatedRow);
-        setRowModesModel({...rowModesModel, [id]: {mode: 'view'}});
+        setRowModesModel({ ...rowModesModel, [id]: { mode: 'view' } });
     };
 
     const handleCancelClick = (id) => {
-        setRowModesModel({...rowModesModel, [id]: {mode: 'view'}});
+        setRowModesModel({ ...rowModesModel, [id]: { mode: 'view' } });
     };
 
     const handleDeleteClick = async (id) => {
@@ -113,51 +99,16 @@ export default function CombinedDashboard() {
         }
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        if (!startDate || !endDate) {
-            setError('Please enter both start and end dates');
-            return;
-        }
-
-        setIsLoading(true);
-        setError('');
-
-        try {
-            const barChartResponse = await api.post('/transaction-bar-chart/', {
-                start_date: startDate,
-                end_date: endDate
-            });
-            const tableResponse = await api.post('/transaction-table-view/', {
-                start_date: startDate,
-                end_date: endDate
-            });
-
-            const barChartData = barChartResponse.data.map(item => ({
-                name: item.category,
-                totalAmount: parseFloat(item.total_amount),
-            }));
-
-            setFilteredTransactions(barChartData);
-            setRows(tableResponse.data);
-            setIsLoading(false);
-        } catch (err) {
-            setError('Failed to fetch data. Please try again');
-            setIsLoading(false);
-        }
-    };
-
     const columns = [
-        {field: 'id', headerName: 'ID'},
-        {field: 'date', headerName: 'Date', editable: true},
-        {field: 'amount', headerName: 'Amount', editable: true},
-        {field: 'transaction_type', headerName: 'Type', editable: true},
-        {field: 'description', headerName: 'Description', editable: true},
-        {field: 'category', headerName: 'Category', editable: true},
-        {field: 'budget', headerName: 'Budget', editable: true},
-        {field: 'is_recurring', headerName: 'IsRecurring', editable: true},
-        {field: 'next_occurrence', headerName: 'NextOccurrence', editable: true},
+        { field: 'id', headerName: 'ID' },
+        { field: 'date', headerName: 'Date', editable: true },
+        { field: 'amount', headerName: 'Amount', editable: true },
+        { field: 'transaction_type', headerName: 'Type', editable: true },
+        { field: 'description', headerName: 'Description', editable: true },
+        { field: 'category', headerName: 'Category', editable: true },
+        { field: 'budget', headerName: 'Budget', editable: true },
+        { field: 'is_recurring', headerName: 'IsRecurring', editable: true },
+        { field: 'next_occurrence', headerName: 'NextOccurrence', editable: true },
         {
             field: 'actions',
             headerName: 'Actions',
@@ -166,19 +117,15 @@ export default function CombinedDashboard() {
                 if (isInEditMode) {
                     return (
                         <>
-                            <GridActionsCellItem icon={<SaveIcon/>} label="Save"
-                                                 onClick={() => handleSaveClick(params.id)}/>
-                            <GridActionsCellItem icon={<CancelIcon/>} label="Cancel"
-                                                 onClick={() => handleCancelClick(params.id)}/>
+                            <GridActionsCellItem icon={<SaveIcon />} label="Save" onClick={() => handleSaveClick(params.id)} />
+                            <GridActionsCellItem icon={<CancelIcon />} label="Cancel" onClick={() => handleCancelClick(params.id)} />
                         </>
                     );
                 }
                 return (
                     <>
-                        <GridActionsCellItem icon={<EditIcon/>} label="Edit"
-                                             onClick={() => handleEditClick(params.id)}/>
-                        <GridActionsCellItem icon={<DeleteIcon/>} label="Delete"
-                                             onClick={() => handleDeleteClick(params.id)}/>
+                        <GridActionsCellItem icon={<EditIcon />} label="Edit" onClick={() => handleEditClick(params.id)} />
+                        <GridActionsCellItem icon={<DeleteIcon />} label="Delete" onClick={() => handleDeleteClick(params.id)} />
                     </>
                 );
             },
@@ -194,88 +141,28 @@ export default function CombinedDashboard() {
     }
 
     return (
-        <div style={{ height: '100%', width: '75%', padding: '10px'}}>
-            <Accordion>
-                <AccordionSummary
-                    expandIcon={<ExpandMoreIcon sx={{ fontSize: 30 }}/>}
-                    aria-controls="panel1-content"
-                    id="panel1-header"
-                    sx={{ justifyContent: 'space-between' }}
-                >
-                    <Box sx={{ marginBottom: 1 }}>
-                        <Paper sx={{ padding: 1, textAlign: 'center' }}>
-                            <Typography variant="body2">
-                                Showing results for {dayjs(startDate).format('MMM D, YYYY')} - {dayjs(endDate).format('MMM D, YYYY')}
-                            </Typography>
-                        </Paper>
-                    </Box>
-                </AccordionSummary>
-                <AccordionDetails>
-                    <Box sx={{ marginBottom: 1, padding: 1, border: '1px solid #ddd', borderRadius: 2, width: '100%' }}>
-                        <form onSubmit={handleSubmit}>
-                            <Grid container justifyContent="center" alignItems="center" spacing={1}>
-                                <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: 1 }}>
-                                    <Typography variant="body1" sx={{ marginRight: 4 }}>
-                                        Filter by Date Range
-                                    </Typography>
-                                    <Button variant="contained" color="primary" type="submit" size="small" sx={{ padding: '6px 12px' }}>
-                                        Apply Date Range
-                                    </Button>
-                                </Grid>
-                                <Grid item xs={12} sm={6} sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
-                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        <DatePicker
-                                            label="Start Date"
-                                            value={dayjs(startDate)}
-                                            onChange={handleStartDateChange}
-                                            renderInput={(params) => (
-                                                <TextField
-                                                    {...params}
-                                                    fullWidth
-                                                    variant="outlined"
-                                                    size="small"
-                                                    sx={{ margin: 0 }}
-                                                />
-                                            )}
-                                        />
-                                    </LocalizationProvider>
-                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        <DatePicker
-                                            label="End Date"
-                                            value={dayjs(endDate)}
-                                            onChange={handleEndDateChange}
-                                            renderInput={(params) => (
-                                                <TextField
-                                                    {...params}
-                                                    fullWidth
-                                                    variant="outlined"
-                                                    size="small"
-                                                    sx={{ margin: 0 }}
-                                                />
-                                            )}
-                                        />
-                                    </LocalizationProvider>
-                                </Grid>
-                            </Grid>
-                        </form>
-                    </Box>
-                </AccordionDetails>
-            </Accordion>
-            <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 5}}/>
-            <Box sx={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', marginBottom: 3}}>
-                <Box sx={{width: {xs: '100%', sm: '48%'}, marginBottom: {xs: 3, sm: 0}}}>
+        <div style={{ height: '100%', width: '75%', padding: '10px' }}>
+            <DateRangeFilterForm
+                startDate={startDate}
+                endDate={endDate}
+                handleStartDateChange={handleStartDateChange}
+                handleEndDateChange={handleEndDateChange}
+            />
+            <Divider sx={{ borderColor: '#1DB954', marginTop: 2, marginBottom: 5 }} />
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', marginBottom: 3 }}>
+                <Box sx={{ width: { xs: '100%', sm: '48%' }, marginBottom: { xs: 3, sm: 0 } }}>
                     <ResponsiveContainer width="100%" height={250}>
-                        <BarChart data={filteredTransactions} margin={{top: 5, right: 30, left: 20, bottom: 5}}>
-                            <CartesianGrid strokeDasharray="3 3"/>
-                            <XAxis dataKey="name"/>
-                            <YAxis/>
-                            <Tooltip/>
-                            <Legend formatter={(value) => "Total"}/>
-                            <Bar dataKey="totalAmount" fill="#1DB954" activeBar={<Rectangle stroke="#1DB954"/>}/>
+                        <BarChart data={filteredTransactions} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="name" />
+                            <YAxis />
+                            <Tooltip />
+                            <Legend formatter={(value) => "Total"} />
+                            <Bar dataKey="totalAmount" fill="#1DB954" activeBar={<Rectangle stroke="#1DB954" />} />
                         </BarChart>
                     </ResponsiveContainer>
                 </Box>
-                <Box sx={{width: {xs: '100%', sm: '48%'}}}>
+                <Box sx={{ width: { xs: '100%', sm: '48%' } }}>
                     <ResponsiveContainer width="100%" height={250}>
                         {filteredTransactions && filteredTransactions.length > 0 ? (
                             <PieChart>
@@ -288,7 +175,7 @@ export default function CombinedDashboard() {
                                     cy="70%"
                                     outerRadius="80%"
                                     fill="#1DB954"
-                                    label={({name, value}) => `${name}: $${value.toFixed(2)}`}
+                                    label={({ name, value }) => `${name}: $${value.toFixed(2)}`}
                                 />
                             </PieChart>
                         ) : (
@@ -297,14 +184,14 @@ export default function CombinedDashboard() {
                     </ResponsiveContainer>
                 </Box>
             </Box>
-            <Paper sx={{height: 350, width: '100%'}}>
+            <Paper sx={{ height: 350, width: '100%' }}>
                 <DataGrid
                     rows={rows}
                     columns={columns}
                     pageSize={5}
                     checkboxSelection
                     className="GridColumn-hover"
-                    sx={{border: 0}}
+                    sx={{ border: 0 }}
                 />
             </Paper>
         </div>
