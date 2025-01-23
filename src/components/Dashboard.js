@@ -30,6 +30,7 @@ import CategoryForm from '../forms/CategoryForm';
 import BudgetForm from '../forms/BudgetForm';
 import FamilyForm from "../forms/FamilyForm";
 import AccountOverview from "./AccountOverview";
+import ReportDashboard from "./ReportDashboard";
 
 const drawerWidth = 240;
 const actions = [
@@ -130,6 +131,8 @@ const Dashboard = () => {
                 return <DashboardReports />;
             case 'budget':
                 return <BudgetTransactionOverview />;
+            case 'reports':
+                return <ReportDashboard />
             case 'reports/transactions':
                 return <TransactionTableView />;
             case 'reports/accounts':
