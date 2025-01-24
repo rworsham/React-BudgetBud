@@ -14,13 +14,12 @@ import AddBoxIcon from "@mui/icons-material/AddBox";
 import React, {useContext, useEffect, useState} from "react";
 import {useTheme} from "@mui/material/styles";
 import {api, AuthContext} from "../context/AuthContext";
-import AccountForm from "../forms/AccountForm";
+import ReportDashboardSelectionForm from "../forms/ReportDashboardSelectionForm";
 
 
 export default function ReportDashboard() {
     const theme = useTheme();
     const { authTokens } = useContext(AuthContext);
-    const [reportChoices, setReportChoices] = useState([]);
     const [userReports, setUserReports] = useState(null);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -47,29 +46,6 @@ export default function ReportDashboard() {
     };
 
     useEffect(() => {
-        const fetchReportChoices = async () => {
-            if (!authTokens || !authTokens.access) {
-                setError('No authorization token found');
-                return;
-            }
-
-            try {
-                setIsLoading(true);
-                const response = await api.get('/user/dashboard-report-options/', {
-                    headers: {
-                        Authorization: `Bearer ${authTokens.access}`,
-                    },
-                });
-
-                setReportChoices(response.data);
-                setIsLoading(false);
-            } catch (err) {
-                console.error('Error fetching Report choices:', err);
-                setError('Failed to fetch Report choices');
-                setIsLoading(false);
-            }
-        };
-
         const fetchUserReports = async () => {
             if (!authTokens || !authTokens.access) {
                 setError('No authorization token found');
@@ -92,7 +68,6 @@ export default function ReportDashboard() {
             }
         };
 
-        fetchReportChoices();
         fetchUserReports();
     }, [authTokens]);
 
@@ -127,7 +102,7 @@ return (
         <Dialog open={open && modalType === 'addReport'} onClose={handleClose}>
             <DialogTitle sx={{ textAlign: 'center' }}>Add Report</DialogTitle>
             <DialogContent>
-                <AccountForm onSuccess={handleFormSuccess}/>
+                <ReportDashboardSelectionForm onSuccess={handleFormSuccess}/>
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose} color="primary">
