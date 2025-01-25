@@ -15,6 +15,7 @@ import React, {useContext, useEffect, useState} from "react";
 import {useTheme} from "@mui/material/styles";
 import {api, AuthContext} from "../context/AuthContext";
 import ReportDashboardSelectionForm from "../forms/ReportDashboardSelectionForm";
+import ExpenseCategoriesPieChart from "../DashboardReports/ExpenseCategoriesPieChart";
 
 
 export default function ReportDashboard() {
@@ -119,6 +120,19 @@ return (
                 <Button onClick={handleClose} color="primary">Close</Button>
             </DialogActions>
         </Dialog>
+        {
+            Array.isArray(userReports) && userReports.length > 0 &&
+            userReports.map((report, index) => (
+                <div key={index}>
+                    {report.display_name === "Expense Categories Pie Chart" && (
+                        <ExpenseCategoriesPieChart
+                            x_size={report.x_size}
+                            y_size={report.y_size}
+                        />
+                    )}
+                </div>
+            ))
+        }
     </div>
     );
 }
