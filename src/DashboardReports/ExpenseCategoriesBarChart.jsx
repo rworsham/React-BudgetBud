@@ -1,9 +1,19 @@
-import React, {useState, useEffect, useContext} from "react";
-import { PieChart, Pie, ResponsiveContainer } from "recharts";
-import { AuthContext , api } from "../context/AuthContext";
-import dayjs from "dayjs";
+import React, { useState, useEffect, useContext } from "react";
+import {
+    BarChart,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    Legend,
+    ResponsiveContainer,
+    Bar, Rectangle
+} from "recharts";
+import { AuthContext, api } from "../context/AuthContext";
+import dayjs from 'dayjs';
 
-export default function TransactionPieChart({ x_size, y_size }) {
+
+export default function ExpenseCategoriesBarChart({x_size, y_size}) {
     const { authTokens } = useContext(AuthContext);
     const [filteredTransactions, setFilteredTransactions] = useState([]);
     const [error, setError] = useState('');
@@ -34,7 +44,7 @@ export default function TransactionPieChart({ x_size, y_size }) {
     }, [x_size, y_size]);
 
     useEffect(() => {
-        const fetchChoices = async () => {
+        const fetchTransactions = async () => {
             if (!authTokens || !authTokens.access) {
                 setError('No authorization token found');
                 return;
@@ -42,13 +52,17 @@ export default function TransactionPieChart({ x_size, y_size }) {
 
             try {
                 setIsLoading(true);
-                const response = await api.post('/transaction-pie-chart/', {
+                const response = await api.post('/transaction-bar-chart/', {
                     params: {
                         start_date: startDate,
                         end_date: endDate,
                     },
                 });
-                setFilteredTransactions(response.data);
+                const formattedData = response.data.map(item => ({
+                    name: item.category,
+                    totalAmount: parseFloat(item.total_amount),
+                }));
+                setFilteredTransactions(formattedData);
                 setIsLoading(false);
             } catch (err) {
                 console.error('Error fetching data:', err);
@@ -57,7 +71,7 @@ export default function TransactionPieChart({ x_size, y_size }) {
             }
         };
 
-        fetchChoices();
+        fetchTransactions();
     }, [authTokens, startDate, endDate]);
 
     if (isLoading) {
@@ -78,25 +92,28 @@ export default function TransactionPieChart({ x_size, y_size }) {
                 justifyContent: "center",
             }}
         >
-            <ResponsiveContainer width="100%" height="100%">
-                {filteredTransactions && filteredTransactions.length > 0 ? (
-                    <PieChart>
-                        <Pie
-                            dataKey="value"
-                            data={filteredTransactions}
-                            startAngle={180}
-                            endAngle={0}
-                            cx="50%"
-                            cy="50%"
-                            outerRadius={'80%'}
-                            fill="#1DB954"
-                            label={({ name, value }) => `${name}: $${value.toFixed(2)}`}
-                        />
-                    </PieChart>
-                ) : (
-                    <div>No data available</div>
-                )}
-            </ResponsiveContainer>
+        <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+                data={filteredTransactions}
+                margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 5,
+                }}
+            >
+                <CartesianGrid strokeDasharray="3 3"/>
+                <XAxis dataKey="name"/>
+                <YAxis/>
+                <Tooltip/>
+                <Legend
+                    formatter={(value) => {
+                        return "Total";
+                    }}
+                />
+                <Bar dataKey="totalAmount" fill="#1DB954" activeBar={<Rectangle  stroke="#1DB954" />}/>
+            </BarChart>
+        </ResponsiveContainer>
         </div>
     );
 }

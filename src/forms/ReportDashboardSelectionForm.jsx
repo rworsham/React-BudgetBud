@@ -119,9 +119,9 @@ const ReportDashboardSelectionForm = ({ onSuccess }) => {
                                 label="Select X Size"
                                 required
                             >
-                                <MenuItem value="small">Small</MenuItem>
-                                <MenuItem value="medium">Medium</MenuItem>
-                                <MenuItem value="large">Large</MenuItem>
+                                <MenuItem value="33">Small</MenuItem>
+                                <MenuItem value="66">Medium</MenuItem>
+                                <MenuItem value="100">Large</MenuItem>
                             </Select>
                         </FormControl>
 
@@ -135,9 +135,9 @@ const ReportDashboardSelectionForm = ({ onSuccess }) => {
                                 label="Select Y Size"
                                 required
                             >
-                                <MenuItem value="small">Small</MenuItem>
-                                <MenuItem value="medium">Medium</MenuItem>
-                                <MenuItem value="large">Large</MenuItem>
+                                <MenuItem value="33">Small</MenuItem>
+                                <MenuItem value="66">Medium</MenuItem>
+                                <MenuItem value="100">Large</MenuItem>
                             </Select>
                         </FormControl>
                         <Button variant="contained" type="submit" disabled={isLoading} fullWidth>

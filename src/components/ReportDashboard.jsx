@@ -9,6 +9,7 @@ import {
     Paper,
     Typography
 } from "@mui/material";
+import Grid from '@mui/material/Grid2';
 import Divider from "@mui/material/Divider";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import React, {useContext, useEffect, useState} from "react";
@@ -16,6 +17,8 @@ import {useTheme} from "@mui/material/styles";
 import {api, AuthContext} from "../context/AuthContext";
 import ReportDashboardSelectionForm from "../forms/ReportDashboardSelectionForm";
 import ExpenseCategoriesPieChart from "../DashboardReports/ExpenseCategoriesPieChart";
+import BudgetRemainingBudgetBarChart from "../DashboardReports/BudgetRemainingBudgetBarChart";
+import ExpenseCategoriesBarChart from "../DashboardReports/ExpenseCategoriesBarChart";
 
 
 export default function ReportDashboard() {
@@ -120,19 +123,34 @@ return (
                 <Button onClick={handleClose} color="primary">Close</Button>
             </DialogActions>
         </Dialog>
-        {
-            Array.isArray(userReports) && userReports.length > 0 &&
-            userReports.map((report, index) => (
-                <div key={index}>
-                    {report.display_name === "Expense Categories Pie Chart" && (
-                        <ExpenseCategoriesPieChart
-                            x_size={report.x_size}
-                            y_size={report.y_size}
-                        />
-                    )}
-                </div>
-            ))
-        }
+        <Grid container justifyContent="center" alignItems="flex-start">
+            {Array.isArray(userReports) && userReports.length > 0 &&
+                userReports.map((report, index) => (
+                    <Grid item key={index}>
+                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'auto' }}>
+                            {report.display_name === "Expense Categories Pie Chart" && (
+                                <ExpenseCategoriesPieChart
+                                    x_size={report.x_size}
+                                    y_size={report.y_size}
+                                />
+                            )}
+                            {report.display_name === "Budget Vs Remaining Budget" && (
+                                <BudgetRemainingBudgetBarChart
+                                    x_size={report.x_size}
+                                    y_size={report.y_size}
+                                />
+                            )}
+                            {report.display_name === "Expense Categories Bar Chart" && (
+                                <ExpenseCategoriesBarChart
+                                    x_size={report.x_size}
+                                    y_size={report.y_size}
+                                />
+                            )}
+                        </div>
+                    </Grid>
+                ))
+            }
+        </Grid>
     </div>
     );
 }
