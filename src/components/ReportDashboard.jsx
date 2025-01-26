@@ -19,6 +19,7 @@ import ReportDashboardSelectionForm from "../forms/ReportDashboardSelectionForm"
 import ExpenseCategoriesPieChart from "../DashboardReports/ExpenseCategoriesPieChart";
 import BudgetRemainingBudgetBarChart from "../DashboardReports/BudgetRemainingBudgetBarChart";
 import ExpenseCategoriesBarChart from "../DashboardReports/ExpenseCategoriesBarChart";
+import AccountBalanceHistoryLineChart from "../DashboardReports/AccountBalanceHistoryLineChart";
 
 
 export default function ReportDashboard() {
@@ -142,6 +143,12 @@ return (
                             )}
                             {report.display_name === "Expense Categories Bar Chart" && (
                                 <ExpenseCategoriesBarChart
+                                    x_size={report.x_size}
+                                    y_size={report.y_size}
+                                />
+                            )}
+                            {report.display_name === "Account Balance History Line Chart" && (
+                                <AccountBalanceHistoryLineChart
                                     x_size={report.x_size}
                                     y_size={report.y_size}
                                 />
