@@ -20,6 +20,7 @@ import ExpenseCategoriesPieChart from "../DashboardReports/ExpenseCategoriesPieC
 import BudgetRemainingBudgetBarChart from "../DashboardReports/BudgetRemainingBudgetBarChart";
 import ExpenseCategoriesBarChart from "../DashboardReports/ExpenseCategoriesBarChart";
 import AccountBalanceHistoryLineChart from "../DashboardReports/AccountBalanceHistoryLineChart";
+import IncomeExpenseBarChart from "../DashboardReports/IncomeExpenseBarChart";
 
 
 export default function ReportDashboard() {
@@ -149,6 +150,12 @@ return (
                             )}
                             {report.display_name === "Account Balance History Line Chart" && (
                                 <AccountBalanceHistoryLineChart
+                                    x_size={report.x_size}
+                                    y_size={report.y_size}
+                                />
+                            )}
+                            {report.display_name === "Income vs. Expense Bar Chart" && (
+                                <IncomeExpenseBarChart
                                     x_size={report.x_size}
                                     y_size={report.y_size}
                                 />
