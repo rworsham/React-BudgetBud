@@ -12,10 +12,12 @@ import {
 import Grid from '@mui/material/Grid2';
 import Divider from "@mui/material/Divider";
 import AddBoxIcon from "@mui/icons-material/AddBox";
+import EditNoteIcon from '@mui/icons-material/EditNote';
 import React, {useContext, useEffect, useState} from "react";
 import {useTheme} from "@mui/material/styles";
 import {api, AuthContext} from "../context/AuthContext";
 import ReportDashboardSelectionForm from "../forms/ReportDashboardSelectionForm";
+import ReportDashboardEditForm from "../forms/ReportDashboardEditForm";
 import ExpenseCategoriesPieChart from "../DashboardReports/ExpenseCategoriesPieChart";
 import BudgetRemainingBudgetBarChart from "../DashboardReports/BudgetRemainingBudgetBarChart";
 import ExpenseCategoriesBarChart from "../DashboardReports/ExpenseCategoriesBarChart";
@@ -91,7 +93,7 @@ return (
             Custom Reports
         </Typography>
         <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2}}/>
-        <Box display="flex" justifyContent="center" alignItems="center" sx={{padding: 2}}>
+        <Box display="flex" justifyContent="center" alignItems="center" sx={{padding: 2, gap: '10px'}}>
             <Paper
                 elevation={3}
                 sx={{display: 'flex', alignItems: 'center', padding: '10px 20px',cursor: 'pointer', backgroundColor: '#333333'}}
@@ -104,11 +106,34 @@ return (
                     Add Report
                 </Typography>
             </Paper>
+            <Paper
+                elevation={3}
+                sx={{display: 'flex', alignItems: 'center', padding: '10px 20px',cursor: 'pointer', backgroundColor: '#333333'}}
+                onClick={() => handleOpen('editReport')}
+            >
+                <IconButton edge="start" color="inherit">
+                    <EditNoteIcon sx={{ color: theme.palette.primary.main }}/>
+                </IconButton>
+                <Typography variant="button" sx={{ ml: 1 , color: theme.palette.primary.main}}>
+                    Edit Reports
+                </Typography>
+            </Paper>
         </Box>
         <Dialog open={open && modalType === 'addReport'} onClose={handleClose}>
             <DialogTitle sx={{ textAlign: 'center' }}>Add Report</DialogTitle>
             <DialogContent>
                 <ReportDashboardSelectionForm onSuccess={handleFormSuccess}/>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={handleClose} color="primary">
+                    Close
+                </Button>
+            </DialogActions>
+        </Dialog>
+        <Dialog open={open && modalType === 'editReport'} onClose={handleClose}>
+            <DialogTitle sx={{ textAlign: 'center' }}>Edit Report</DialogTitle>
+            <DialogContent>
+                <ReportDashboardEditForm onSuccess={handleFormSuccess}/>
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose} color="primary">

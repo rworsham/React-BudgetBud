@@ -102,7 +102,7 @@ export default function IncomeExpenseBarChart({x_size, y_size}) {
                     <XAxis dataKey="name" />
                     <YAxis />
                     <Tooltip />
-                    <Legend />
+                    <Legend verticalAlign="top" height={36}/>
                     <Bar dataKey="value" fill="#8884d8" />
                 </BarChart>
             </ResponsiveContainer>

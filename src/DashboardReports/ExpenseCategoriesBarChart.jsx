@@ -106,11 +106,7 @@ export default function ExpenseCategoriesBarChart({x_size, y_size}) {
                 <XAxis dataKey="name"/>
                 <YAxis/>
                 <Tooltip/>
-                <Legend
-                    formatter={(value) => {
-                        return "Total";
-                    }}
-                />
+                <Legend dataKey="name" verticalAlign="top" height={36}/>
                 <Bar dataKey="totalAmount" fill="#1DB954" activeBar={<Rectangle  stroke="#1DB954" />}/>
             </BarChart>
         </ResponsiveContainer>

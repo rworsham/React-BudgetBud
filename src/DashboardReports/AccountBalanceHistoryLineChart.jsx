@@ -110,7 +110,7 @@ export default function AccountOverview({x_size, y_size}) {
                         <XAxis dataKey="name" />
                         <YAxis />
                         <Tooltip />
-                        <Legend />
+                        <Legend verticalAlign="top" height={36}/>
                         {accountData.map((account) => (
                             <Line
                                 key={account.id}

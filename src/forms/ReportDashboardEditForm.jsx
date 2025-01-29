@@ -3,7 +3,7 @@ import { Button, FormGroup, FormControl, Box, Typography, Select, MenuItem, Inpu
 import { useTheme } from '@mui/material/styles';
 import { AuthContext, api } from "../context/AuthContext";
 
-const ReportDashboardSelectionForm = ({ onSuccess }) => {
+const ReportDashboardEditForm = ({ onSuccess }) => {
     const { authTokens } = useContext(AuthContext);
     const [selectedReport, setSelectedReport] = useState('');
     const [xSize, setXSize] = useState('');
@@ -22,7 +22,7 @@ const ReportDashboardSelectionForm = ({ onSuccess }) => {
 
             try {
                 setIsLoading(true);
-                const response = await api.get('/user/dashboard-report-options/');
+                const response = await api.get('/user/reports/');
                 setReports(response.data);
                 setIsLoading(false);
             } catch (err) {
@@ -53,12 +53,12 @@ const ReportDashboardSelectionForm = ({ onSuccess }) => {
 
         try {
             const data = {
-                report: selectedReport,
+                report_id: selectedReport,
                 x_size: xSize,
                 y_size: ySize,
             };
 
-            const response = await api.post('/user/reports/', data);
+            const response = await api.patch('/user/reports/', data);
             console.log('Report Added to Dashboard:', response.data);
 
             if (onSuccess) {
@@ -156,4 +156,4 @@ const ReportDashboardSelectionForm = ({ onSuccess }) => {
     );
 };
 
-export default ReportDashboardSelectionForm;
+export default ReportDashboardEditForm;

@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from "react";
-import { PieChart, Pie, ResponsiveContainer } from "recharts";
+import { PieChart, Pie, ResponsiveContainer, Legend } from "recharts";
 import { AuthContext , api } from "../context/AuthContext";
 import dayjs from "dayjs";
 
@@ -81,6 +81,7 @@ export default function TransactionPieChart({ x_size, y_size }) {
             <ResponsiveContainer width="100%" height="100%">
                 {filteredTransactions && filteredTransactions.length > 0 ? (
                     <PieChart>
+                        <Legend verticalAlign="top" height={36}/>
                         <Pie
                             dataKey="value"
                             data={filteredTransactions}

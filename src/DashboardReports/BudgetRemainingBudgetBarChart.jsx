@@ -96,7 +96,7 @@ export default function BudgetRemainingBudgetBarChart({x_size, y_size}) {
                     <XAxis dataKey="name" />
                     <YAxis />
                     <Tooltip />
-                    <Legend />
+                    <Legend verticalAlign="top" height={36}/>
                     <Bar dataKey="starting_budget" fill="#8884d8" />
                     <Bar dataKey="remaining_budget" fill="#82ca9d" />
                 </BarChart>
