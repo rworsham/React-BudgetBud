@@ -35,6 +35,14 @@ const ReportDashboardEditForm = ({ onSuccess }) => {
         fetchReportChoices();
     }, [authTokens]);
 
+    useEffect(() => {
+        const selected = reports.find((report) => report.id === selectedReport);
+        if (selected) {
+            setXSize(selected.x_size);
+            setYSize(selected.y_size);
+        }
+    }, [selectedReport, reports]);
+
     const validateForm = () => {
         if (!selectedReport || !xSize || !ySize) {
             setError('Please fill in all required fields');

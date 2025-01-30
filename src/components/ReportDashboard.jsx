@@ -34,6 +34,7 @@ export default function ReportDashboard() {
     const [open, setOpen] = useState(false);
     const [modalType, setModalType] = useState('');
     const [successAlertOpen, setSuccessAlertOpen] = useState(false);
+    const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
     const handleOpen = (type) => {
         setModalType(type);
@@ -46,11 +47,9 @@ export default function ReportDashboard() {
         setSuccessAlertOpen(false);
     };
 
-    const handleFormSuccess = () => {
+    const handleFormSuccess = async () => {
         setSuccessAlertOpen(true);
-        setTimeout(() => {
-            handleClose();
-        }, 5000);
+        setIsFormSubmitted(true);
     };
 
     useEffect(() => {
@@ -69,6 +68,7 @@ export default function ReportDashboard() {
                 });
                 setUserReports(response.data);
                 setIsLoading(false);
+                setIsFormSubmitted(false);
             } catch (err) {
                 console.error('Error fetching User reports:', err);
                 setError('Failed to fetch User reports');
@@ -77,7 +77,7 @@ export default function ReportDashboard() {
         };
 
         fetchUserReports();
-    }, [authTokens]);
+    }, [authTokens, isFormSubmitted]);
 
     if (isLoading) {
         return <div>Loading...</div>;
