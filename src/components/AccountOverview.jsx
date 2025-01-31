@@ -9,6 +9,7 @@ import Divider from "@mui/material/Divider";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import AccountForm from "../forms/AccountForm";
 import {useTheme} from "@mui/material/styles";
+import AccountHistory from "./AccountHistory";
 
 export default function AccountOverview() {
     const theme = useTheme();
@@ -20,6 +21,7 @@ export default function AccountOverview() {
     const [open, setOpen] = useState(false);
     const [modalType, setModalType] = useState('');
     const [successAlertOpen, setSuccessAlertOpen] = useState(false);
+    const [selectedAccountId, setSelectedAccountId] = useState(null);
 
     const handleOpen = (type) => {
         setModalType(type);
@@ -30,6 +32,7 @@ export default function AccountOverview() {
         setOpen(false);
         setModalType('');
         setSuccessAlertOpen(false);
+        setSelectedAccountId(null);
     };
 
     const handleFormSuccess = () => {
@@ -158,7 +161,10 @@ export default function AccountOverview() {
                                     variant="contained"
                                     color="primary"
                                     size="small"
-                                    // onClick={() => handleViewHistory(account.id)}
+                                    onClick={() => {
+                                        setSelectedAccountId(account.id);
+                                        handleOpen('viewHistory');
+                                    }}
                                     sx={{
                                         marginTop: 2,
                                         marginLeft: 'auto',
@@ -174,6 +180,17 @@ export default function AccountOverview() {
                     </Grid>
                 ))}
             </Grid>
+            <Dialog open={open && modalType === 'viewHistory'} onClose={handleClose} maxWidth="lg" fullWidth>
+                <DialogTitle sx={{ textAlign: 'center' }}>Account History</DialogTitle>
+                <DialogContent>
+                    {selectedAccountId && <AccountHistory account_id={selectedAccountId} />}
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                        Close
+                    </Button>
+                </DialogActions>
+            </Dialog>
             {accountHistoryData && accountHistoryData.length > 0 && (
                 <Box sx={{ marginTop: 4 }}>
                     <Typography variant="h6" textAlign='center' gutterBottom>
