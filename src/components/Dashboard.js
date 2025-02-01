@@ -31,6 +31,7 @@ import BudgetForm from '../forms/BudgetForm';
 import FamilyForm from "../forms/FamilyForm";
 import AccountOverview from "./AccountOverview";
 import ReportDashboard from "./ReportDashboard";
+import Profile from './Profile';
 
 const drawerWidth = 240;
 const actions = [
@@ -166,7 +167,7 @@ const Dashboard = () => {
                         <AccountCircleIcon />
                     </IconButton>
                     <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleCloseMenu}>
-                        <MenuItem onClick={() => { handleCloseMenu(); console.log("Go to Profile"); }}>Profile</MenuItem>
+                        <MenuItem onClick={() => { handleActionClick('Profile'); }}>Profile</MenuItem>
                         <MenuItem onClick={() => { handleCloseMenu(); console.log("Logout"); navigate('/login') }}>Logout</MenuItem>
                     </Menu>
                 </Toolbar>
@@ -237,6 +238,15 @@ const Dashboard = () => {
                     <DialogTitle sx={{ textAlign: 'center' }}>New Family</DialogTitle>
                     <DialogContent><FamilyForm onSuccess={handleFormSuccess}/></DialogContent>
                     <DialogActions><Button onClick={handleClose} color="primary">Close</Button></DialogActions>
+                </Dialog>
+                <Dialog open={open && modalType === 'Profile'} onClose={handleClose} maxWidth="lg" fullWidth>
+                    <DialogTitle sx={{ textAlign: 'center' }}>User Profile</DialogTitle>
+                    <DialogContent><Profile /></DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose} color="primary">
+                            Close
+                        </Button>
+                    </DialogActions>
                 </Dialog>
                 <Dialog open={successAlertOpen} onClose={handleClose}>
                     <DialogTitle>Success</DialogTitle>
