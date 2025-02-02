@@ -10,6 +10,7 @@ export default function Profile() {
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [userDetails, setUserDetails] = useState({});
+    const [userStats, setUserStats] = useState({});
 
     useEffect(() => {
         const fetchUserDetails = async () => {
@@ -20,12 +21,21 @@ export default function Profile() {
 
             try {
                 setIsLoading(true);
-                const response = await api.get('/user/', {
+
+                const userResponse = await api.get('/user/', {
                     headers: {
                         Authorization: `Bearer ${authTokens.access}`,
                     },
                 });
-                setUserDetails(response.data);
+                setUserDetails(userResponse.data);
+
+                const statsResponse = await api.get('/profile/stats/', {
+                    headers: {
+                        Authorization: `Bearer ${authTokens.access}`,
+                    },
+                });
+                setUserStats(statsResponse.data);
+
                 setIsLoading(false);
             } catch (err) {
                 console.error('Error fetching data:', err);
@@ -75,7 +85,7 @@ export default function Profile() {
                                         Transactions Submitted
                                     </Typography>
                                     <Typography variant="h6">
-                                        3
+                                        {userStats.total_transactions}
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={4} textAlign="center">
@@ -83,15 +93,15 @@ export default function Profile() {
                                         Savings Goals Met
                                     </Typography>
                                     <Typography variant="h6">
-                                        4
+                                        {userStats.savings_goals_met}
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={4} textAlign="center">
                                     <Typography variant="body1">
-                                        Lifetime Balance
+                                        Lifetime Transaction Balance
                                     </Typography>
                                     <Typography variant="h6">
-                                        $1,000,000
+                                        ${userStats.net_balance}
                                     </Typography>
                                 </Grid>
                             </Grid>

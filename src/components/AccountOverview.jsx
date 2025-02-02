@@ -10,6 +10,7 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 import AccountForm from "../forms/AccountForm";
 import {useTheme} from "@mui/material/styles";
 import AccountHistory from "./AccountHistory";
+import SavingsGoalForm from "../forms/SavingsGoalForm";
 
 export default function AccountOverview() {
     const theme = useTheme();
@@ -157,24 +158,34 @@ export default function AccountOverview() {
                                 <Typography variant="body1" textAlign='center'>
                                     Balance: ${parseFloat(account.balance).toFixed(2)}
                                 </Typography>
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    size="small"
-                                    onClick={() => {
-                                        setSelectedAccountId(account.id);
-                                        handleOpen('viewHistory');
-                                    }}
-                                    sx={{
-                                        marginTop: 2,
-                                        marginLeft: 'auto',
-                                        marginRight: 'auto',
-                                        display: 'block',
-                                        textAlign: 'center',
-                                    }}
-                                >
-                                    View History
-                                </Button>
+                                <Grid container spacing={1} sx={{ marginTop: 2, justifyContent: 'center' }}>
+                                    <Grid item>
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            size="small"
+                                            onClick={() => {
+                                                setSelectedAccountId(account.id);
+                                                handleOpen('viewHistory');
+                                            }}
+                                        >
+                                            View History
+                                        </Button>
+                                    </Grid>
+                                    <Grid item>
+                                        <Button
+                                            variant="contained"
+                                            color="secondary"
+                                            size="small"
+                                            onClick={() => {
+                                                setSelectedAccountId(account.id);
+                                                handleOpen('setSavingsGoal');
+                                            }}
+                                        >
+                                            Set Saving Goal
+                                        </Button>
+                                    </Grid>
+                                </Grid>
                             </CardContent>
                         </Card>
                     </Grid>
@@ -189,6 +200,26 @@ export default function AccountOverview() {
                     <Button onClick={handleClose} color="primary">
                         Close
                     </Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog open={open && modalType === 'setSavingsGoal'} onClose={handleClose} maxWidth="lg" fullWidth>
+                <DialogTitle sx={{ textAlign: 'center' }}>Set Savings Goal</DialogTitle>
+                <DialogContent>
+                    {selectedAccountId && <SavingsGoalForm account_id={selectedAccountId} onSuccess={handleFormSuccess}/>}
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                        Close
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog open={successAlertOpen} onClose={handleClose}>
+                <DialogTitle>Success</DialogTitle>
+                <DialogContent>
+                    <Typography>Addition Successful!</Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">Close</Button>
                 </DialogActions>
             </Dialog>
             {accountHistoryData && accountHistoryData.length > 0 && (
