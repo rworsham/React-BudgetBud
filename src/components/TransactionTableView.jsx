@@ -9,12 +9,14 @@ import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import { Download } from '@mui/icons-material';
 import dayjs from 'dayjs';
-import { Box, IconButton } from "@mui/material";
+import {Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Typography} from '@mui/material';
 import Divider from "@mui/material/Divider";
 import DateRangeFilterForm from "../forms/DateRangeFilterForm";
 
 export default function DataTable() {
     const { authTokens } = useContext(AuthContext);
+    const [successType, setSuccessType] = useState('');
+    const [successAlertOpen, setSuccessAlertOpen] = useState(false);
     const [rows, setRows] = useState([]);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -47,12 +49,12 @@ export default function DataTable() {
                             <GridActionsCellItem
                                 icon={<SaveIcon />}
                                 label="Save"
-                                onClick={() => handleSaveClick(params.id)}
+                                onClick={() => handleSaveClick(params)}
                             />
                             <GridActionsCellItem
                                 icon={<CancelIcon />}
                                 label="Cancel"
-                                onClick={() => handleCancelClick(params.id)}
+                                onClick={() => handleCancelClick(params)}
                             />
                         </>
                     );
@@ -74,6 +76,18 @@ export default function DataTable() {
             },
         },
     ];
+
+    const handleClose = () => {
+        setSuccessAlertOpen(false);
+    };
+
+    const handleFormSuccess = (successType) => {
+        setSuccessAlertOpen(true);
+        setSuccessType(successType)
+        setTimeout(() => {
+            handleClose();
+        }, 5000);
+    };
 
     useEffect(() => {
         const fetchTransactions = async () => {
@@ -131,48 +145,26 @@ export default function DataTable() {
         setEndDate(newValue ? newValue.format('YYYY-MM-DD') : null);
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        if (!startDate || !endDate) {
-            setError('Please enter both start and end dates');
-            return;
-        }
-
-        setIsLoading(true);
-        setError('');
-
-        try {
-            const response = await api.post('/transaction-table-view/', {
-                start_date: startDate,
-                end_date: endDate,
-            });
-            setRows(response.data);
-            setIsLoading(false);
-        } catch (err) {
-            setError('Failed to fetch data. Please try again');
-            setIsLoading(false);
-        }
-    };
-
     const handleEditClick = (id) => {
         setRowModesModel({ ...rowModesModel, [id]: { mode: 'edit' } });
     };
 
-    const handleSaveClick = (id) => {
-        const updatedRow = rows.find((row) => row.id === id);
+    const handleSaveClick = (params) => {
+        const updatedRow = { ...params.row };
+        setRows(rows.map((row) => (row.id === updatedRow.id ? updatedRow : row)));
         updateRow(updatedRow);
-        setRowModesModel({ ...rowModesModel, [id]: { mode: 'view' } });
+        setRowModesModel({ ...rowModesModel, [params.id]: { mode: 'view' } });
     };
 
-    const handleCancelClick = (id) => {
-        setRowModesModel({ ...rowModesModel, [id]: { mode: 'view' } });
+    const handleCancelClick = (params) => {
+        setRowModesModel({ ...rowModesModel, [params.id]: { mode: 'view' } });
     };
 
     const handleDeleteClick = async (id) => {
         try {
             await api.delete(`/transaction/${id}/`);
             setRows(rows.filter((row) => row.id !== id));
+            handleFormSuccess('delete');
         } catch (err) {
             console.error('Error deleting row:', err);
             setError('Failed to delete row');
@@ -183,6 +175,7 @@ export default function DataTable() {
         try {
             await api.put(`/transaction/${row.id}/`, row);
             setRows(rows.map((existingRow) => (existingRow.id === row.id ? row : existingRow)));
+            handleFormSuccess('update');
         } catch (err) {
             console.error('Error updating row:', err);
             setError('Failed to update row');
@@ -227,6 +220,17 @@ export default function DataTable() {
                     sx={{ border: 0 }}
                 />
             </Paper>
+            <Dialog open={successAlertOpen} onClose={handleClose}>
+                <DialogTitle>Success</DialogTitle>
+                <DialogContent>
+                    <Typography>
+                        {successType === 'update' ? 'Transaction Updated!' : 'Transaction Deleted!'}
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">Close</Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 };
