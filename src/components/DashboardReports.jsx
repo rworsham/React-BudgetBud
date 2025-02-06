@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Box, Paper } from "@mui/material";
+import { Box, Paper} from "@mui/material";
 import { BarChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Bar, Rectangle } from "recharts";
 import { PieChart, Pie } from "recharts";
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
@@ -11,6 +11,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import Divider from "@mui/material/Divider";
 import DateRangeFilterForm from "../forms/DateRangeFilterForm";
+import ChartDataError from "./ChartDataError";
 
 export default function DashboardReports() {
     const { authTokens } = useContext(AuthContext);
@@ -152,14 +153,18 @@ export default function DashboardReports() {
             <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', marginBottom: 3 }}>
                 <Box sx={{ width: { xs: '100%', sm: '48%' }, marginBottom: { xs: 3, sm: 0 } }}>
                     <ResponsiveContainer width="100%" height={250}>
-                        <BarChart data={filteredTransactions} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="name" />
-                            <YAxis />
-                            <Tooltip />
-                            <Legend formatter={(value) => "Total"} />
-                            <Bar dataKey="totalAmount" fill="#1DB954" activeBar={<Rectangle stroke="#1DB954" />} />
-                        </BarChart>
+                        {filteredTransactions && filteredTransactions.length > 0 ? (
+                            <BarChart data={filteredTransactions} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="name" />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend formatter={(value) => "Total"} />
+                                <Bar dataKey="totalAmount" fill="#1DB954" activeBar={<Rectangle stroke="#1DB954" />} />
+                            </BarChart>
+                        ) : (
+                            <ChartDataError />
+                        )}
                     </ResponsiveContainer>
                 </Box>
                 <Box sx={{ width: { xs: '100%', sm: '48%' } }}>
@@ -179,21 +184,25 @@ export default function DashboardReports() {
                                 />
                             </PieChart>
                         ) : (
-                            <div>No data available</div>
+                            <ChartDataError />
                         )}
                     </ResponsiveContainer>
                 </Box>
             </Box>
-            <Paper sx={{ height: 350, width: '100%' }}>
-                <DataGrid
-                    rows={rows}
-                    columns={columns}
-                    pageSize={5}
-                    checkboxSelection
-                    className="GridColumn-hover"
-                    sx={{ border: 0 }}
-                />
-            </Paper>
+            {rows && rows.length > 0 ? (
+                <Paper sx={{ height: 350, width: '100%' }}>
+                    <DataGrid
+                        rows={rows}
+                        columns={columns}
+                        pageSize={5}
+                        checkboxSelection
+                        className="GridColumn-hover"
+                        sx={{ border: 0 }}
+                    />
+                </Paper>
+            ) : (
+                <ChartDataError height={350}/>
+            )}
         </div>
     );
 }

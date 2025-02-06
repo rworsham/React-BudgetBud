@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext, api } from "../context/AuthContext";
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import ChartDataError from "../components/ChartDataError";
 
 export default function AccountOverview({x_size, y_size}) {
     const { authTokens } = useContext(AuthContext);
@@ -104,7 +105,7 @@ export default function AccountOverview({x_size, y_size}) {
                 justifyContent: "center",
             }}
         >
-            {accountHistoryData && accountHistoryData.length > 0 && (
+            {accountHistoryData && accountHistoryData.length > 0 ? (
                 <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={chartData}>
                         <XAxis dataKey="name" />
@@ -122,7 +123,9 @@ export default function AccountOverview({x_size, y_size}) {
                         ))}
                     </LineChart>
                 </ResponsiveContainer>
-            )}
+            ) : (
+                <ChartDataError />
+                )}
         </div>
     );
 }

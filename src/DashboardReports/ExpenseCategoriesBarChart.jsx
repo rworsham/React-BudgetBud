@@ -11,6 +11,7 @@ import {
 } from "recharts";
 import { AuthContext, api } from "../context/AuthContext";
 import dayjs from 'dayjs';
+import ChartDataError from "../components/ChartDataError";
 
 
 export default function ExpenseCategoriesBarChart({x_size, y_size}) {
@@ -92,24 +93,28 @@ export default function ExpenseCategoriesBarChart({x_size, y_size}) {
                 justifyContent: "center",
             }}
         >
-        <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-                data={filteredTransactions}
-                margin={{
-                    top: 5,
-                    right: 30,
-                    left: 20,
-                    bottom: 5,
-                }}
-            >
-                <CartesianGrid strokeDasharray="3 3"/>
-                <XAxis dataKey="name"/>
-                <YAxis/>
-                <Tooltip/>
-                <Legend dataKey="name" verticalAlign="top" height={36}/>
-                <Bar dataKey="totalAmount" fill="#1DB954" activeBar={<Rectangle  stroke="#1DB954" />}/>
-            </BarChart>
-        </ResponsiveContainer>
+            <ResponsiveContainer width="100%" height="100%">
+                {filteredTransactions && filteredTransactions.length > 0 ? (
+                    <BarChart
+                        data={filteredTransactions}
+                        margin={{
+                            top: 5,
+                            right: 30,
+                            left: 20,
+                            bottom: 5,
+                        }}
+                    >
+                        <CartesianGrid strokeDasharray="3 3"/>
+                        <XAxis dataKey="name"/>
+                        <YAxis/>
+                        <Tooltip/>
+                        <Legend dataKey="name" verticalAlign="top" height={36}/>
+                        <Bar dataKey="totalAmount" fill="#1DB954" activeBar={<Rectangle  stroke="#1DB954" />}/>
+                    </BarChart>
+                ) : (
+                    <ChartDataError />
+                )}
+            </ResponsiveContainer>
         </div>
     );
 }

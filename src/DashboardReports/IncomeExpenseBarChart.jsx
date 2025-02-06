@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { AuthContext, api } from "../context/AuthContext";
 import dayjs from 'dayjs';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts';
+import ChartDataError from "../components/ChartDataError";
 
 export default function IncomeExpenseBarChart({x_size, y_size}) {
     const { authTokens } = useContext(AuthContext);
@@ -97,14 +98,18 @@ export default function IncomeExpenseBarChart({x_size, y_size}) {
             }}
         >
             <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={incomeExpenseData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend verticalAlign="top" height={36}/>
-                    <Bar dataKey="value" fill="#8884d8" />
-                </BarChart>
+                {incomeExpenseData && incomeExpenseData.length > 0 ? (
+                    <BarChart data={incomeExpenseData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="name" />
+                        <YAxis />
+                        <Tooltip />
+                        <Legend verticalAlign="top" height={36}/>
+                        <Bar dataKey="value" fill="#8884d8" />
+                    </BarChart>
+                ) : (
+                    <ChartDataError />
+                )}
             </ResponsiveContainer>
         </div>
     );

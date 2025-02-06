@@ -2,6 +2,7 @@ import React, {useState, useEffect, useContext} from "react";
 import { PieChart, Pie, ResponsiveContainer, Legend } from "recharts";
 import { AuthContext , api } from "../context/AuthContext";
 import dayjs from "dayjs";
+import ChartDataError from "../components/ChartDataError";
 
 export default function TransactionPieChart({ x_size, y_size }) {
     const { authTokens } = useContext(AuthContext);
@@ -95,7 +96,7 @@ export default function TransactionPieChart({ x_size, y_size }) {
                         />
                     </PieChart>
                 ) : (
-                    <div>No data available</div>
+                    <ChartDataError />
                 )}
             </ResponsiveContainer>
         </div>
