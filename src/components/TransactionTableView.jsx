@@ -199,7 +199,7 @@ export default function DataTable() {
                 handleEndDateChange={handleEndDateChange}
             />
             <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 5}}/>
-            <Paper sx={{ height: 400, width: '100%', position: 'relative' }}>
+            <Paper sx={{ height: '65vh' , width: '100%', position: 'relative' }}>
                 <Box sx={{
                     position: 'absolute',
                     top: 16,

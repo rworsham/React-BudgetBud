@@ -6,6 +6,7 @@ import Grid from '@mui/material/Grid2';
 import dayjs from 'dayjs';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import Divider from "@mui/material/Divider";
+import ChartDataError from "./ChartDataError";
 
 export default function BudgetTransactionOverview() {
     const { authTokens } = useContext(AuthContext);
@@ -138,16 +139,20 @@ export default function BudgetTransactionOverview() {
                             Expense Categories Breakdown
                         </Typography>
                         <ResponsiveContainer width="100%" height={250}>
-                            <PieChart>
-                                <Pie data={pieChartData} dataKey="value" nameKey="name" cx="50%" cy="50%"
-                                     outerRadius={80} fill="#8884d8"
-                                     label={({ name, value }) => `${name}: $${value.toFixed(2)}`}>
-                                    {pieChartData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={entry.value > 100 ? "#1DB954" : "#387908"} />
-                                    ))}
-                                </Pie>
-                                <Tooltip />
-                            </PieChart>
+                            {pieChartData && pieChartData.length > 0 ? (
+                                <PieChart>
+                                    <Pie data={pieChartData} dataKey="value" nameKey="name" cx="50%" cy="50%"
+                                         outerRadius={80} fill="#8884d8"
+                                         label={({ name, value }) => `${name}: $${value.toFixed(2)}`}>
+                                        {pieChartData.map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={entry.value > 100 ? "#1DB954" : "#387908"} />
+                                        ))}
+                                    </Pie>
+                                    <Tooltip />
+                                </PieChart>
+                            ) : (
+                                <ChartDataError/>
+                            )}
                         </ResponsiveContainer>
                     </Box>
                 </Grid>
@@ -157,14 +162,18 @@ export default function BudgetTransactionOverview() {
                             Income vs Expense
                         </Typography>
                         <ResponsiveContainer width="100%" height={250}>
-                            <BarChart data={incomeExpenseData}>
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="name" />
-                                <YAxis />
-                                <Tooltip />
-                                <Legend />
-                                <Bar dataKey="value" fill="#8884d8" />
-                            </BarChart>
+                            {incomeExpenseData && (incomeExpenseData[0]?.value > 0 || incomeExpenseData[1]?.value > 0) ? (
+                                <BarChart data={incomeExpenseData}>
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dataKey="name" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Legend />
+                                    <Bar dataKey="value" fill="#8884d8" />
+                                </BarChart>
+                            ) : (
+                                <ChartDataError/>
+                            )}
                         </ResponsiveContainer>
                     </Box>
                 </Grid>
@@ -174,15 +183,19 @@ export default function BudgetTransactionOverview() {
                             Budget vs Remaining Budget
                         </Typography>
                         <ResponsiveContainer width="100%" height={250}>
-                            <BarChart data={budgetData}>
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="name" />
-                                <YAxis />
-                                <Tooltip />
-                                <Legend />
-                                <Bar dataKey="starting_budget" fill="#8884d8" />
-                                <Bar dataKey="remaining_budget" fill="#82ca9d" />
-                            </BarChart>
+                            {budgetData && budgetData.length > 0 ? (
+                                <BarChart data={budgetData}>
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dataKey="name" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Legend />
+                                    <Bar dataKey="starting_budget" fill="#8884d8" />
+                                    <Bar dataKey="remaining_budget" fill="#82ca9d" />
+                                </BarChart>
+                            ) : (
+                                <ChartDataError/>
+                            )}
                         </ResponsiveContainer>
                     </Box>
                 </Grid>

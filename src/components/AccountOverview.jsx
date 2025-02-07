@@ -222,12 +222,12 @@ export default function AccountOverview() {
                     <Button onClick={handleClose} color="primary">Close</Button>
                 </DialogActions>
             </Dialog>
+            <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2}}/>
             {accountHistoryData && accountHistoryData.length > 0 && (
                 <Box sx={{ marginTop: 4 }}>
                     <Typography variant="h6" textAlign='center' gutterBottom>
                         Account Balance Over Time
                     </Typography>
-                    <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2}}/>
                     <ResponsiveContainer width="100%" height={300}>
                         <LineChart data={chartData}>
                             <XAxis dataKey="name" />

@@ -7,6 +7,7 @@ import dayjs from 'dayjs';
 import { Box, IconButton } from "@mui/material";
 import Divider from "@mui/material/Divider";
 import DateRangeFilterForm from "../forms/DateRangeFilterForm";
+import ChartDataError from "./ChartDataError";
 
 export default function AccountHistory({account_id}) {
     const { authTokens } = useContext(AuthContext);
@@ -109,15 +110,19 @@ export default function AccountHistory({account_id}) {
                         <Download />
                     </IconButton>
                 </Box>
-                <DataGrid
-                    rows={rows}
-                    columns={columns}
-                    pageSize={5}
-                    rowsPerPageOptions={[5, 10]}
-                    checkboxSelection
-                    className="GridColumn-hover"
-                    sx={{ border: 0 }}
-                />
+                {rows && rows.length > 0 ? (
+                    <DataGrid
+                        rows={rows}
+                        columns={columns}
+                        pageSize={5}
+                        rowsPerPageOptions={[5, 10]}
+                        checkboxSelection
+                        className="GridColumn-hover"
+                        sx={{ border: 0 }}
+                    />
+                ) : (
+                    <ChartDataError/>
+                )}
             </Paper>
         </div>
     );

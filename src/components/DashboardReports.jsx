@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Box, Paper} from "@mui/material";
+import {Box, Paper, Typography} from "@mui/material";
 import { BarChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Bar, Rectangle } from "recharts";
 import { PieChart, Pie } from "recharts";
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
@@ -152,43 +152,53 @@ export default function DashboardReports() {
             <Divider sx={{ borderColor: '#1DB954', marginTop: 2, marginBottom: 5 }} />
             <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', marginBottom: 3 }}>
                 <Box sx={{ width: { xs: '100%', sm: '48%' }, marginBottom: { xs: 3, sm: 0 } }}>
-                    <ResponsiveContainer width="100%" height={250}>
-                        {filteredTransactions && filteredTransactions.length > 0 ? (
-                            <BarChart data={filteredTransactions} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="name" />
-                                <YAxis />
-                                <Tooltip />
-                                <Legend formatter={(value) => "Total"} />
-                                <Bar dataKey="totalAmount" fill="#1DB954" activeBar={<Rectangle stroke="#1DB954" />} />
-                            </BarChart>
-                        ) : (
-                            <ChartDataError />
-                        )}
-                    </ResponsiveContainer>
+                    <Typography variant="h6" gutterBottom sx={{ textAlign: 'center' }}>
+                        Transaction Bar Chart
+                    </Typography>
+                        <ResponsiveContainer width="100%" height={250}>
+                            {filteredTransactions && filteredTransactions.length > 0 ? (
+                                <BarChart data={filteredTransactions} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dataKey="name" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Legend formatter={(value) => "Total"} />
+                                    <Bar dataKey="totalAmount" fill="#1DB954" activeBar={<Rectangle stroke="#1DB954" />} />
+                                </BarChart>
+                            ) : (
+                                <ChartDataError />
+                            )}
+                        </ResponsiveContainer>
                 </Box>
                 <Box sx={{ width: { xs: '100%', sm: '48%' } }}>
-                    <ResponsiveContainer width="100%" height={250}>
-                        {filteredTransactions && filteredTransactions.length > 0 ? (
-                            <PieChart>
-                                <Pie
-                                    dataKey="totalAmount"
-                                    data={filteredTransactions}
-                                    startAngle={180}
-                                    endAngle={0}
-                                    cx="50%"
-                                    cy="70%"
-                                    outerRadius="80%"
-                                    fill="#1DB954"
-                                    label={({ name, value }) => `${name}: $${value.toFixed(2)}`}
-                                />
-                            </PieChart>
-                        ) : (
-                            <ChartDataError />
-                        )}
-                    </ResponsiveContainer>
+                    <Typography variant="h6" gutterBottom sx={{ textAlign: 'center' }}>
+                        Expense Pie Chart
+                    </Typography>
+                        <ResponsiveContainer width="100%" height={250}>
+                            {filteredTransactions && filteredTransactions.length > 0 ? (
+                                <PieChart>
+                                    <Pie
+                                        dataKey="totalAmount"
+                                        data={filteredTransactions}
+                                        startAngle={180}
+                                        endAngle={0}
+                                        cx="50%"
+                                        cy="70%"
+                                        outerRadius="80%"
+                                        fill="#1DB954"
+                                        label={({ name, value }) => `${name}: $${value.toFixed(2)}`}
+                                    />
+                                </PieChart>
+                            ) : (
+                                <ChartDataError />
+                            )}
+                        </ResponsiveContainer>
                 </Box>
             </Box>
+            <Divider sx={{ borderColor: '#1DB954', marginTop: 2, marginBottom: 5 }} />
+            <Typography variant="h6" gutterBottom sx={{ textAlign: 'center' }}>
+                Transaction Grid
+            </Typography>
             {rows && rows.length > 0 ? (
                 <Paper sx={{ height: 350, width: '100%' }}>
                     <DataGrid
