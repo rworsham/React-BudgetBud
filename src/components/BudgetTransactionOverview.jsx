@@ -1,18 +1,36 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext, api } from "../context/AuthContext";
 import DateRangeFilterForm from "../forms/DateRangeFilterForm";
-import { Box, Paper, Typography} from "@mui/material";
+import {
+    Box,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    Paper,
+    Typography
+} from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import dayjs from 'dayjs';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import Divider from "@mui/material/Divider";
 import ChartDataError from "./ChartDataError";
+import {useTheme} from "@mui/material/styles";
+import AddBoxIcon from "@mui/icons-material/AddBox";
+import EditNoteIcon from "@mui/icons-material/EditNote";
+import BudgetForm from "../forms/BudgetForm";
 
 export default function BudgetTransactionOverview() {
+    const theme = useTheme();
     const { authTokens } = useContext(AuthContext);
     const [reportData, setReportData] = useState(null);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [modalType, setModalType] = useState('');
+    const [successAlertOpen, setSuccessAlertOpen] = useState(false);
     const [startDate, setStartDate] = useState(dayjs().startOf('month').format('YYYY-MM-DD'));
     const [endDate, setEndDate] = useState(dayjs().endOf('month').format('YYYY-MM-DD'));
 
@@ -55,6 +73,24 @@ export default function BudgetTransactionOverview() {
 
     const handleEndDateChange = (newValue) => {
         setEndDate(newValue ? newValue.format('YYYY-MM-DD') : null);
+    };
+
+    const handleOpen = (type) => {
+        setModalType(type);
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+        setModalType('');
+        setSuccessAlertOpen(false);
+    };
+
+    const handleFormSuccess = () => {
+        setSuccessAlertOpen(true);
+        setTimeout(() => {
+            handleClose();
+        }, 5000);
     };
 
     const handleSubmit = async (e) => {
@@ -200,6 +236,34 @@ export default function BudgetTransactionOverview() {
                     </Box>
                 </Grid>
             </Grid>
+            <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 5}}/>
+            <Box display="flex" justifyContent="center" alignItems="center" sx={{padding: 2, gap: '10px'}}>
+                <Paper
+                    elevation={3}
+                    sx={{display: 'flex', alignItems: 'center', padding: '10px 20px',cursor: 'pointer', backgroundColor: '#333333'}}
+                    onClick={() => handleOpen('addBudget')}
+                >
+                    <IconButton edge="start" color="inherit">
+                        <AddBoxIcon sx={{ color: theme.palette.primary.main }}/>
+                    </IconButton>
+                    <Typography variant="button" sx={{ ml: 1 , color: theme.palette.primary.main}}>
+                        Add Budget
+                    </Typography>
+                </Paper>
+                <Paper
+                    elevation={3}
+                    sx={{display: 'flex', alignItems: 'center', padding: '10px 20px',cursor: 'pointer', backgroundColor: '#333333'}}
+                    onClick={() => handleOpen('editBudget')}
+                >
+                    <IconButton edge="start" color="inherit">
+                        <EditNoteIcon sx={{ color: theme.palette.primary.main }}/>
+                    </IconButton>
+                    <Typography variant="button" sx={{ ml: 1 , color: theme.palette.primary.main}}>
+                        Edit Budgets
+                    </Typography>
+                </Paper>
+            </Box>
+            <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 5}}/>
             <Box sx={{ marginBottom: 3 }}>
                 <Paper sx={{
                     padding: 3,
@@ -234,6 +298,25 @@ export default function BudgetTransactionOverview() {
                     </Typography>
                 </Paper>
             </Box>
+            <Dialog open={open && modalType === 'addBudget'} onClose={handleClose}>
+                <DialogTitle sx={{ textAlign: 'center' }}>New Budget</DialogTitle>
+                <DialogContent><BudgetForm onSuccess={handleFormSuccess}/></DialogContent>
+                <DialogActions><Button onClick={handleClose} color="primary">Close</Button></DialogActions>
+            </Dialog>
+            <Dialog open={open && modalType === 'editBudget'} onClose={handleClose}>
+                <DialogTitle sx={{ textAlign: 'center' }}>New Budget</DialogTitle>
+                <DialogContent><BudgetForm onSuccess={handleFormSuccess}/></DialogContent>
+                <DialogActions><Button onClick={handleClose} color="primary">Close</Button></DialogActions>
+            </Dialog>
+            <Dialog open={successAlertOpen} onClose={handleClose}>
+                <DialogTitle>Success</DialogTitle>
+                <DialogContent>
+                    <Typography>Addition Successful!</Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">Close</Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 }
