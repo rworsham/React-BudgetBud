@@ -3,7 +3,7 @@ import { AuthContext, api } from "../context/AuthContext";
 import DateRangeFilterForm from "../forms/DateRangeFilterForm";
 import {
     Box,
-    Button,
+    Button, Card, CardContent,
     Dialog,
     DialogActions,
     DialogContent,
@@ -21,6 +21,9 @@ import {useTheme} from "@mui/material/styles";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import BudgetForm from "../forms/BudgetForm";
+import BudgetEditForm from "../forms/BudgetEditForm";
+import AccountHistory from "./AccountHistory";
+import SavingsGoalForm from "../forms/SavingsGoalForm";
 
 export default function BudgetTransactionOverview() {
     const theme = useTheme();
@@ -28,6 +31,8 @@ export default function BudgetTransactionOverview() {
     const [reportData, setReportData] = useState(null);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [existingBudgets, setExistingBudgets] = useState([]);
+    const [selectedBudgetId, setSelectedBudgetId] = useState();
     const [open, setOpen] = useState(false);
     const [modalType, setModalType] = useState('');
     const [successAlertOpen, setSuccessAlertOpen] = useState(false);
@@ -54,7 +59,8 @@ export default function BudgetTransactionOverview() {
                         end_date: endDate,
                     },
                 });
-
+                const budgetResponse = await api.get('/budget/');
+                setExistingBudgets(budgetResponse.data);
                 setReportData(response.data);
                 setIsLoading(false);
             } catch (err) {
@@ -91,30 +97,6 @@ export default function BudgetTransactionOverview() {
         setTimeout(() => {
             handleClose();
         }, 5000);
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        if (!startDate || !endDate) {
-            setError('Please enter both start and end dates');
-            return;
-        }
-
-        setIsLoading(true);
-        setError('');
-
-        try {
-            const response = await api.post('/budget-transaction-overview/', {
-                start_date: startDate,
-                end_date: endDate,
-            });
-            setReportData(response.data);
-            setIsLoading(false);
-        } catch (err) {
-            setError('Failed to fetch data. Please try again');
-            setIsLoading(false);
-        }
     };
 
     const incomeExpenseData = [
@@ -263,6 +245,51 @@ export default function BudgetTransactionOverview() {
                     </Typography>
                 </Paper>
             </Box>
+            <Grid container spacing={4}>
+                {existingBudgets.map((budget) => (
+                    <Grid item xs={12} sm={4} size={4} key={budget.id}>
+                        <Card variant="outlined">
+                            <CardContent>
+                                <Typography variant="h6" textAlign='center' gutterBottom>
+                                    {budget.name}
+                                </Typography>
+                                <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2}}/>
+                                <Typography variant="body1" textAlign='center'>
+                                    Balance: ${parseFloat(budget.total_amount).toFixed(2)}
+                                </Typography>
+                                <Grid container spacing={1} sx={{ marginTop: 2, justifyContent: 'center' }}>
+                                    <Grid item>
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            size="small"
+                                            onClick={() => {
+                                                setSelectedBudgetId(budget.id);
+                                                handleOpen('viewHistory');
+                                            }}
+                                        >
+                                            View History
+                                        </Button>
+                                    </Grid>
+                                    <Grid item>
+                                        <Button
+                                            variant="contained"
+                                            color="secondary"
+                                            size="small"
+                                            onClick={() => {
+                                                setSelectedBudgetId(budget.id);
+                                                handleOpen('setBudgetGoal');
+                                            }}
+                                        >
+                                            Set Budget Goal
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                ))}
+            </Grid>
             <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 5}}/>
             <Box sx={{ marginBottom: 3 }}>
                 <Paper sx={{
@@ -305,8 +332,30 @@ export default function BudgetTransactionOverview() {
             </Dialog>
             <Dialog open={open && modalType === 'editBudget'} onClose={handleClose}>
                 <DialogTitle sx={{ textAlign: 'center' }}>New Budget</DialogTitle>
-                <DialogContent><BudgetForm onSuccess={handleFormSuccess}/></DialogContent>
+                <DialogContent><BudgetEditForm onSuccess={handleFormSuccess}/></DialogContent>
                 <DialogActions><Button onClick={handleClose} color="primary">Close</Button></DialogActions>
+            </Dialog>
+            <Dialog open={open && modalType === 'viewHistory'} onClose={handleClose} maxWidth="lg" fullWidth>
+                <DialogTitle sx={{ textAlign: 'center' }}>Account History</DialogTitle>
+                <DialogContent>
+                    {selectedBudgetId && <AccountHistory budget_id={selectedBudgetId} />}
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                        Close
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog open={open && modalType === 'setBudgetGoal'} onClose={handleClose} maxWidth="lg" fullWidth>
+                <DialogTitle sx={{ textAlign: 'center' }}>Set Savings Goal</DialogTitle>
+                <DialogContent>
+                    {selectedBudgetId && <SavingsGoalForm account_id={selectedBudgetId} onSuccess={handleFormSuccess}/>}
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                        Close
+                    </Button>
+                </DialogActions>
             </Dialog>
             <Dialog open={successAlertOpen} onClose={handleClose}>
                 <DialogTitle>Success</DialogTitle>
