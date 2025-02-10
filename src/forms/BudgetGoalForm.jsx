@@ -4,7 +4,7 @@ import { useTheme } from '@mui/material/styles';
 import {AuthContext, api} from "../context/AuthContext";
 
 
-const SavingsGoalForm = ({ onSuccess, account_id }) => {
+const BudgetGoalForm = ({ onSuccess, budget_id }) => {
     const { authTokens } = useContext(AuthContext);
     const [amount, setAmount] = useState('');
     const [error, setError] = useState('');
@@ -23,18 +23,18 @@ const SavingsGoalForm = ({ onSuccess, account_id }) => {
         setError('');
 
         try {
-            const response = await api.post('/account/savings-goal/',
-                { account: account_id, target_balance: amount }
+            const response = await api.post('/budget/savings-goal/',
+                { budget: budget_id, target_balance: amount }
             );
 
-            console.log('New Savings Goal created:', response.data);
+            console.log('New Budget Goal created:', response.data);
 
             if (onSuccess) {
                 onSuccess();
             }
 
         } catch (err) {
-            setError('Failed to create new Savings Goal. Please try again');
+            setError('Failed to create new Budget Goal. Please try again');
         } finally {
             setIsLoading(false);
         }
@@ -86,4 +86,4 @@ const SavingsGoalForm = ({ onSuccess, account_id }) => {
     );
 };
 
-export default SavingsGoalForm;
+export default BudgetGoalForm;

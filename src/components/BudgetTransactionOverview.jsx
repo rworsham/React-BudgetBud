@@ -22,8 +22,8 @@ import AddBoxIcon from "@mui/icons-material/AddBox";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import BudgetForm from "../forms/BudgetForm";
 import BudgetEditForm from "../forms/BudgetEditForm";
-import AccountHistory from "./AccountHistory";
-import SavingsGoalForm from "../forms/SavingsGoalForm";
+import BudgetGoalForm from "../forms/BudgetGoalForm";
+import BudgetHistory from "./BudgetHistory";
 
 export default function BudgetTransactionOverview() {
     const theme = useTheme();
@@ -338,7 +338,7 @@ export default function BudgetTransactionOverview() {
             <Dialog open={open && modalType === 'viewHistory'} onClose={handleClose} maxWidth="lg" fullWidth>
                 <DialogTitle sx={{ textAlign: 'center' }}>Account History</DialogTitle>
                 <DialogContent>
-                    {selectedBudgetId && <AccountHistory budget_id={selectedBudgetId} />}
+                    {selectedBudgetId && <BudgetHistory budget_id={selectedBudgetId} />}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">
@@ -349,7 +349,7 @@ export default function BudgetTransactionOverview() {
             <Dialog open={open && modalType === 'setBudgetGoal'} onClose={handleClose} maxWidth="lg" fullWidth>
                 <DialogTitle sx={{ textAlign: 'center' }}>Set Savings Goal</DialogTitle>
                 <DialogContent>
-                    {selectedBudgetId && <SavingsGoalForm account_id={selectedBudgetId} onSuccess={handleFormSuccess}/>}
+                    {selectedBudgetId && <BudgetGoalForm budget_id={selectedBudgetId} onSuccess={handleFormSuccess}/>}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">

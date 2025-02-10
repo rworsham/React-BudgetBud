@@ -112,6 +112,7 @@ export const AuthProvider = ({ children }) => {
             console.error('Error refreshing token:', err);
         } finally {
             refreshingRef.current = false;
+            setLoading(false);
         }
     }, []);
 
@@ -125,6 +126,7 @@ export const AuthProvider = ({ children }) => {
             setUser(response.data);
             setLoading(false);
         } catch (err) {
+            setLoading(false);
             console.error('Error fetching user data:', err);
         }
     };

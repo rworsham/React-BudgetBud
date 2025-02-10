@@ -1,11 +1,13 @@
-import { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { TextField, Button, FormGroup, FormControl, MenuItem, Select, InputLabel, Box, Typography, Checkbox, FormControlLabel } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { AuthContext , api } from '../context/AuthContext';
+import { AuthContext, api } from '../context/AuthContext';
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 const TransactionForm = ({ onSuccess }) => {
     const { authTokens } = useContext(AuthContext);
-    const [date, setDate] = useState('');
+    const [date, setDate] = useState(null);
     const [amount, setAmount] = useState('');
     const [transactionType, setTransactionType] = useState('expense');
     const [description, setDescription] = useState('');
@@ -95,9 +97,7 @@ const TransactionForm = ({ onSuccess }) => {
             if (onSuccess) {
                 onSuccess();
             }
-
         } catch (err) {
-            console.log('Api error')
             setError('Failed to create transaction. Please try again.');
         } finally {
             setIsLoading(false);
@@ -123,16 +123,21 @@ const TransactionForm = ({ onSuccess }) => {
                     }}
                 >
                     <FormGroup sx={{display: 'flex', flexDirection: 'column', width: '100%'}}>
-                        <FormControl sx={{marginBottom: 2}}>
-                            <TextField
-                                type="date"
-                                label="Date"
-                                variant="outlined"
-                                value={date}
-                                onChange={(e) => setDate(e.target.value)}
-                                fullWidth
-                                required
-                            />
+                        <FormControl sx={{ marginBottom: 2 }}>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePicker
+                                    label="Date"
+                                    value={date}
+                                    onChange={(newDate) => setDate(newDate)}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            variant="outlined"
+                                            required
+                                        />
+                                    )}
+                                />
+                            </LocalizationProvider>
                         </FormControl>
                         <FormControl sx={{marginBottom: 2}}>
                             <TextField
@@ -243,16 +248,21 @@ const TransactionForm = ({ onSuccess }) => {
                                         <MenuItem value="yearly">Yearly</MenuItem>
                                     </Select>
                                 </FormControl>
-                                <FormControl sx={{marginBottom: 2}}>
-                                    <TextField
-                                        type="date"
-                                        label="Next Occurrence"
-                                        variant="outlined"
-                                        value={nextOccurrence}
-                                        onChange={(e) => setNextOccurrence(e.target.value)}
-                                        fullWidth
-                                        required={isRecurring}
-                                    />
+                                <FormControl sx={{ marginBottom: 2 }}>
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <DatePicker
+                                            label="Next Occurence"
+                                            value={nextOccurrence}
+                                            onChange={(newDate) => setNextOccurrence(newDate)}
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    variant="outlined"
+                                                    required={isRecurring}
+                                                />
+                                            )}
+                                        />
+                                    </LocalizationProvider>
                                 </FormControl>
                             </>
                         )}
