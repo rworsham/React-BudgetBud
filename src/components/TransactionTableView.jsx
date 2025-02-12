@@ -9,7 +9,17 @@ import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import { Download } from '@mui/icons-material';
 import dayjs from 'dayjs';
-import {Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Typography} from '@mui/material';
+import {
+    Box,
+    Button,
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    Typography
+} from '@mui/material';
 import Divider from "@mui/material/Divider";
 import DateRangeFilterForm from "../forms/DateRangeFilterForm";
 
@@ -182,10 +192,6 @@ export default function DataTable() {
         }
     };
 
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-
     if (error) {
         return <div>{error}</div>;
     }
@@ -231,6 +237,18 @@ export default function DataTable() {
                     <Button onClick={handleClose} color="primary">Close</Button>
                 </DialogActions>
             </Dialog>
+            {isLoading && (
+                <Box
+                    sx={{
+                        position: 'fixed',
+                        top: 100,
+                        right: 16,
+                        zIndex: 1300,
+                    }}
+                >
+                    <CircularProgress color="success" />
+                </Box>
+            )}
         </div>
     );
 };

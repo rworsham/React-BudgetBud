@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext, api } from "../context/AuthContext";
-import {Box, Button, Paper, Typography, Card, CardContent,
-    Dialog, DialogTitle, DialogContent, DialogActions, IconButton
+import {
+    Box, Button, Paper, Typography, Card, CardContent,
+    Dialog, DialogTitle, DialogContent, DialogActions, IconButton, CircularProgress
 } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
@@ -18,7 +19,8 @@ export default function AccountOverview() {
     const [accountData, setAccountData] = useState([]);
     const [accountHistoryData, setAccountHistoryData] = useState(null);
     const [error, setError] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
+    const [isAccountsLoading, setIsAccountsLoading] = useState(false);
+    const [isHistoryLoading, setIsHistoryLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const [modalType, setModalType] = useState('');
     const [successAlertOpen, setSuccessAlertOpen] = useState(false);
@@ -51,7 +53,7 @@ export default function AccountOverview() {
             }
 
             try {
-                setIsLoading(true);
+                setIsAccountsLoading(true);
                 const response = await api.get('/accounts/', {
                     headers: {
                         Authorization: `Bearer ${authTokens.access}`,
@@ -59,11 +61,11 @@ export default function AccountOverview() {
                 });
 
                 setAccountData(response.data);
-                setIsLoading(false);
+                setIsAccountsLoading(false);
             } catch (err) {
                 console.error('Error fetching account data:', err);
                 setError('Failed to fetch account data');
-                setIsLoading(false);
+                setIsAccountsLoading(false);
             }
         };
 
@@ -74,28 +76,24 @@ export default function AccountOverview() {
             }
 
             try {
-                setIsLoading(true);
+                setIsHistoryLoading(true);
                 const response = await api.get(`/accounts/overview-report/`, {
                     headers: {
                         Authorization: `Bearer ${authTokens.access}`,
                     },
                 });
                 setAccountHistoryData(response.data);
-                setIsLoading(false);
+                setIsHistoryLoading(false);
             } catch (err) {
                 console.error('Error fetching account history:', err);
                 setError('Failed to fetch account history');
-                setIsLoading(false);
+                setIsHistoryLoading(false);
             }
         };
 
         fetchAccounts();
         fetchAccountHistory();
     }, [authTokens]);
-
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
 
     if (error) {
         return <div>{error}</div>;
@@ -245,6 +243,18 @@ export default function AccountOverview() {
                             ))}
                         </LineChart>
                     </ResponsiveContainer>
+                </Box>
+            )}
+            {(isAccountsLoading || isHistoryLoading) && (
+                <Box
+                    sx={{
+                        position: 'fixed',
+                        top: 100,
+                        right: 16,
+                        zIndex: 1300,
+                    }}
+                >
+                    <CircularProgress color="success" />
                 </Box>
             )}
         </div>

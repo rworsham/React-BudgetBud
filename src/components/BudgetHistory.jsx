@@ -47,7 +47,7 @@ export default function BudgetHistory({budget_id}) {
                 if (downloadPdf) {
                     dataPayload.format = 'pdf';
                 }
-                const response = await api.post('/budget/history/', dataPayload, {
+                const response = await api.post('/budget-history/', dataPayload, {
                     responseType: downloadPdf ? 'blob' : 'json',
                 });
 

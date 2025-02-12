@@ -3,7 +3,7 @@ import { AuthContext, api } from "../context/AuthContext";
 import DateRangeFilterForm from "../forms/DateRangeFilterForm";
 import {
     Box,
-    Button, Card, CardContent,
+    Button, Card, CardContent, CircularProgress,
     Dialog,
     DialogActions,
     DialogContent,
@@ -132,10 +132,6 @@ export default function BudgetTransactionOverview() {
         starting_budget: parseFloat(budget.starting_budget),
         remaining_budget: parseFloat(budget.remaining_budget),
     }));
-
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
 
     if (error) {
         return <div>{error}</div>;
@@ -366,6 +362,18 @@ export default function BudgetTransactionOverview() {
                     <Button onClick={handleClose} color="primary">Close</Button>
                 </DialogActions>
             </Dialog>
+            {isLoading && (
+                <Box
+                    sx={{
+                        position: 'fixed',
+                        top: 100,
+                        right: 16,
+                        zIndex: 1300,
+                    }}
+                >
+                    <CircularProgress color="success" />
+                </Box>
+            )}
         </div>
     );
 }

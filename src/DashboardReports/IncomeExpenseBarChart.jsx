@@ -3,6 +3,7 @@ import { AuthContext, api } from "../context/AuthContext";
 import dayjs from 'dayjs';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts';
 import ChartDataError from "../components/ChartDataError";
+import {Box, CircularProgress} from "@mui/material";
 
 export default function IncomeExpenseBarChart({x_size, y_size}) {
     const { authTokens } = useContext(AuthContext);
@@ -111,6 +112,18 @@ export default function IncomeExpenseBarChart({x_size, y_size}) {
                     <ChartDataError />
                 )}
             </ResponsiveContainer>
+            {isLoading && (
+                <Box
+                    sx={{
+                        position: 'fixed',
+                        top: 100,
+                        right: 16,
+                        zIndex: 1300,
+                    }}
+                >
+                    <CircularProgress color="success" />
+                </Box>
+            )}
         </div>
     );
 }

@@ -12,6 +12,7 @@ import {
 import { AuthContext, api } from "../context/AuthContext";
 import dayjs from 'dayjs';
 import ChartDataError from "../components/ChartDataError";
+import {Box, CircularProgress} from "@mui/material";
 
 
 export default function ExpenseCategoriesBarChart({x_size, y_size}) {
@@ -115,6 +116,18 @@ export default function ExpenseCategoriesBarChart({x_size, y_size}) {
                     <ChartDataError />
                 )}
             </ResponsiveContainer>
+            {isLoading && (
+                <Box
+                    sx={{
+                        position: 'fixed',
+                        top: 100,
+                        right: 16,
+                        zIndex: 1300,
+                    }}
+                >
+                    <CircularProgress color="success" />
+                </Box>
+            )}
         </div>
     );
 }

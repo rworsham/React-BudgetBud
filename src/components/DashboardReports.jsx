@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import {Box, Paper, Typography} from "@mui/material";
+import {Box, CircularProgress, Paper, Typography} from "@mui/material";
 import { BarChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Bar, Rectangle } from "recharts";
 import { PieChart, Pie } from "recharts";
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
@@ -133,10 +133,6 @@ export default function DashboardReports() {
         },
     ];
 
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-
     if (error) {
         return <div>{error}</div>;
     }
@@ -212,6 +208,18 @@ export default function DashboardReports() {
                 </Paper>
             ) : (
                 <ChartDataError height={350}/>
+            )}
+            {isLoading && (
+                <Box
+                    sx={{
+                        position: 'fixed',
+                        top: 100,
+                        right: 16,
+                        zIndex: 1300,
+                    }}
+                >
+                    <CircularProgress color="success" />
+                </Box>
             )}
         </div>
     );
