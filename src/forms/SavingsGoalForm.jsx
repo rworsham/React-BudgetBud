@@ -8,7 +8,7 @@ const SavingsGoalForm = ({ onSuccess, account_id }) => {
     const { authTokens } = useContext(AuthContext);
     const [amount, setAmount] = useState('');
     const [error, setError] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const theme = useTheme();
 
 
@@ -19,7 +19,7 @@ const SavingsGoalForm = ({ onSuccess, account_id }) => {
             return;
         }
 
-        setIsLoading(true);
+        setIsSubmitting(true);
         setError('');
 
         try {
@@ -36,7 +36,7 @@ const SavingsGoalForm = ({ onSuccess, account_id }) => {
         } catch (err) {
             setError('Failed to create new Savings Goal. Please try again');
         } finally {
-            setIsLoading(false);
+            setIsSubmitting(false);
         }
     };
 
@@ -71,8 +71,8 @@ const SavingsGoalForm = ({ onSuccess, account_id }) => {
                                 required
                             />
                         </FormControl>
-                        <Button variant="contained" type="submit" disabled={isLoading} fullWidth>
-                            {isLoading ? 'Submitting...' : 'Submit'}
+                        <Button variant="contained" type="submit" fullWidth>
+                            {isSubmitting ? 'Submitting...' : 'Submit'}
                         </Button>
                         {error && (
                             <Typography color="error" variant="body2" sx={{marginTop: 2}}>

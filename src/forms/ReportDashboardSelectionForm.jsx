@@ -10,6 +10,7 @@ const ReportDashboardSelectionForm = ({ onSuccess }) => {
     const [ySize, setYSize] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [reports, setReports] = useState([]);
     const theme = useTheme();
 
@@ -48,7 +49,7 @@ const ReportDashboardSelectionForm = ({ onSuccess }) => {
 
         if (!validateForm()) return;
 
-        setIsLoading(true);
+        setIsSubmitting(true);
         setError('');
 
         try {
@@ -67,7 +68,7 @@ const ReportDashboardSelectionForm = ({ onSuccess }) => {
         } catch (err) {
             setError('Failed to add Report to Dashboard. Please try again');
         } finally {
-            setIsLoading(false);
+            setIsSubmitting(false);
         }
     };
 
@@ -142,7 +143,7 @@ const ReportDashboardSelectionForm = ({ onSuccess }) => {
                             </Select>
                         </FormControl>
                         <Button variant="contained" type="submit" disabled={isLoading} fullWidth>
-                            {isLoading ? 'Submitting...' : 'Submit'}
+                            {isSubmitting ? 'Submitting...' : 'Submit'}
                         </Button>
                         {error && (
                             <Typography color="error" variant="body2" sx={{ marginTop: 2 }}>

@@ -74,10 +74,6 @@ export default function BudgetRemainingBudgetBarChart({x_size, y_size}) {
         remaining_budget: parseFloat(budget.remaining_budget),
     }));
 
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-
     if (error) {
         return <div>{error}</div>;
     }

@@ -8,6 +8,7 @@ const FamilyForm = ({ onSuccess }) => {
     const [newFamily, setNewFamily] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [existingFamily, setExistingFamily] = useState([]);
 
     const theme = useTheme();
@@ -60,7 +61,7 @@ const FamilyForm = ({ onSuccess }) => {
 
         if (!validateForm()) return;
 
-        setIsLoading(true);
+        setIsSubmitting(true);
         setError('');
 
         try {
@@ -83,7 +84,7 @@ const FamilyForm = ({ onSuccess }) => {
         } catch (err) {
             setError('Failed to create Family group. Please try again');
         } finally {
-            setIsLoading(false);
+            setIsSubmitting(false);
         }
     };
 
@@ -117,7 +118,7 @@ const FamilyForm = ({ onSuccess }) => {
                             />
                         </FormControl>
                         <Button variant="contained" type="submit" disabled={isLoading} fullWidth>
-                            {isLoading ? 'Submitting...' : 'Submit'}
+                            {isSubmitting ? 'Submitting...' : 'Submit'}
                         </Button>
 
                         {error && (

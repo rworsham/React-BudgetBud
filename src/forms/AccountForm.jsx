@@ -9,6 +9,7 @@ const AccountForm = ({ onSuccess }) => {
     const [newAccountBalance, setNewAccountBalance] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [existingAccounts, setExistingAccounts] = useState([]);
 
     const theme = useTheme();
@@ -62,7 +63,7 @@ const AccountForm = ({ onSuccess }) => {
 
         if (!validateForm()) return;
 
-        setIsLoading(true);
+        setIsSubmitting(true);
         setError('');
 
         try {
@@ -88,7 +89,7 @@ const AccountForm = ({ onSuccess }) => {
         } catch (err) {
             setError('Failed to create new Account. Please try again');
         } finally {
-            setIsLoading(false);
+            setIsSubmitting(false);
         }
     };
 
@@ -133,7 +134,7 @@ const AccountForm = ({ onSuccess }) => {
                             />
                         </FormControl>
                         <Button variant="contained" type="submit" disabled={isLoading} fullWidth>
-                            {isLoading ? 'Submitting...' : 'Submit'}
+                            {isSubmitting ? 'Submitting...' : 'Submit'}
                         </Button>
 
                         {error && (

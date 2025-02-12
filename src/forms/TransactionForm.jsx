@@ -22,6 +22,7 @@ const TransactionForm = ({ onSuccess }) => {
     const [accounts, setAccounts] = useState([]);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const theme = useTheme();
 
@@ -71,7 +72,7 @@ const TransactionForm = ({ onSuccess }) => {
 
         if (!validateForm()) return;
 
-        setIsLoading(true);
+        setIsSubmitting(true);
         setError('');
 
         try {
@@ -100,7 +101,7 @@ const TransactionForm = ({ onSuccess }) => {
         } catch (err) {
             setError('Failed to create transaction. Please try again.');
         } finally {
-            setIsLoading(false);
+            setIsSubmitting(false);
         }
     };
 
@@ -268,7 +269,7 @@ const TransactionForm = ({ onSuccess }) => {
                         )}
 
                         <Button variant="contained" type="submit" disabled={isLoading} fullWidth>
-                            {isLoading ? 'Submitting...' : 'Submit'}
+                            {isSubmitting ? 'Submitting...' : 'Submit'}
                         </Button>
 
                         {error && (

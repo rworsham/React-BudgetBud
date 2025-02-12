@@ -13,7 +13,7 @@ const SignUpForm = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
     const theme = useTheme();
 
@@ -36,7 +36,7 @@ const SignUpForm = () => {
 
         if (!validateForm()) return;
 
-        setIsLoading(true);
+        setIsSubmitting(true);
         setError('');
 
         try {
@@ -57,7 +57,7 @@ const SignUpForm = () => {
             console.error('Error during sign-up:', err);
             setError('Failed to create new account. Please try again.');
         } finally {
-            setIsLoading(false);
+            setIsSubmitting(false);
         }
     };
 
@@ -203,10 +203,9 @@ const SignUpForm = () => {
                         <Button
                             variant="contained"
                             type="submit"
-                            disabled={isLoading}
                             fullWidth
                         >
-                            {isLoading ? 'Submitting...' : 'Sign Up'}
+                            {isSubmitting ? 'Submitting...' : 'Sign Up'}
                         </Button>
                         {error && (
                             <Typography color="error" variant="body2" sx={{marginTop: 2}}>

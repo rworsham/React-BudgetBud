@@ -10,7 +10,7 @@ import {
     Bar, Rectangle
 } from "recharts";
 import { AuthContext, api } from "../context/AuthContext";
-import { TextField, Button, Box, Typography, Paper } from "@mui/material";
+import {TextField, Button, Box, Typography, Paper, CircularProgress} from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -95,10 +95,6 @@ export default function TransactionBarChart() {
         }
     };
 
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-
     if (error) {
         return <div>{error}</div>;
     }
@@ -169,6 +165,18 @@ export default function TransactionBarChart() {
                     </Box>
                 </form>
             </Box>
+            {isLoading && (
+                <Box
+                    sx={{
+                        position: 'fixed',
+                        top: 100,
+                        right: 16,
+                        zIndex: 1300,
+                    }}
+                >
+                    <CircularProgress color="success" />
+                </Box>
+            )}
         </div>
     );
 }

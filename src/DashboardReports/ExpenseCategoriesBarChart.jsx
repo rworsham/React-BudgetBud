@@ -76,10 +76,6 @@ export default function ExpenseCategoriesBarChart({x_size, y_size}) {
         fetchTransactions();
     }, [authTokens, startDate, endDate]);
 
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-
     if (error) {
         return <div>{error}</div>;
     }

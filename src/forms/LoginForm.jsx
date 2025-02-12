@@ -9,13 +9,14 @@ const Login = () => {
     const { loginUser } = useContext(AuthContext);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
     const navigate = useNavigate();
     const theme = useTheme();
 
     const handleLogin = async (event) => {
         event.preventDefault();
-
+        setIsSubmitting(true);
         try {
             await loginUser(username, password);
             console.log('Logged in successfully!');
@@ -105,7 +106,7 @@ const Login = () => {
                                 sx={{ marginBottom: 4, width: '40vh' }}
                             />
                             <Button variant="contained" type="submit" sx={{ marginBottom: 2 }}>
-                                Login
+                                {isSubmitting ? 'Processing...' : 'Login'}
                             </Button>
                             {error && (
                                 <Typography color="error" variant="body2" sx={{ marginTop: 2 }}>

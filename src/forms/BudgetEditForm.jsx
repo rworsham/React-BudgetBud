@@ -11,6 +11,7 @@ const BudgetEditForm = ({ onSuccess }) => {
     const [amount, setAmount] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [existingBudget, setExistingBudget] = useState([]);
     const theme = useTheme();
 
@@ -49,7 +50,7 @@ const BudgetEditForm = ({ onSuccess }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        setIsLoading(true);
+        setIsSubmitting(true);
         setError('');
 
         try {
@@ -67,7 +68,7 @@ const BudgetEditForm = ({ onSuccess }) => {
         } catch (err) {
             setError(`Failed to edit ${newBudget}. Please try again`);
         } finally {
-            setIsLoading(false);
+            setIsSubmitting(false);
         }
     };
 
@@ -132,7 +133,7 @@ const BudgetEditForm = ({ onSuccess }) => {
                             />
                         </FormControl>
                         <Button variant="contained" type="submit" disabled={isLoading} fullWidth>
-                            {isLoading ? 'Submitting...' : 'Submit'}
+                            {isSubmitting ? 'Submitting...' : 'Submit'}
                         </Button>
 
                         {error && (

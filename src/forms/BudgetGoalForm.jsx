@@ -9,6 +9,7 @@ const BudgetGoalForm = ({ onSuccess, budget_id }) => {
     const [amount, setAmount] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const theme = useTheme();
 
 
@@ -19,7 +20,7 @@ const BudgetGoalForm = ({ onSuccess, budget_id }) => {
             return;
         }
 
-        setIsLoading(true);
+        setIsSubmitting(true);
         setError('');
 
         try {
@@ -36,7 +37,7 @@ const BudgetGoalForm = ({ onSuccess, budget_id }) => {
         } catch (err) {
             setError('Failed to create new Budget Goal. Please try again');
         } finally {
-            setIsLoading(false);
+            setIsSubmitting(false);
         }
     };
 
@@ -72,7 +73,7 @@ const BudgetGoalForm = ({ onSuccess, budget_id }) => {
                             />
                         </FormControl>
                         <Button variant="contained" type="submit" disabled={isLoading} fullWidth>
-                            {isLoading ? 'Submitting...' : 'Submit'}
+                            {isSubmitting ? 'Submitting...' : 'Submit'}
                         </Button>
                         {error && (
                             <Typography color="error" variant="body2" sx={{marginTop: 2}}>

@@ -4,7 +4,7 @@ import Paper from '@mui/material/Paper';
 import { AuthContext, api } from "../context/AuthContext";
 import { Download } from '@mui/icons-material';
 import dayjs from 'dayjs';
-import { Box, IconButton } from "@mui/material";
+import {Box, CircularProgress, IconButton} from "@mui/material";
 import Divider from "@mui/material/Divider";
 import DateRangeFilterForm from "../forms/DateRangeFilterForm";
 import ChartDataError from "./ChartDataError";
@@ -82,10 +82,6 @@ export default function BudgetHistory({budget_id}) {
         setEndDate(newValue ? newValue.format('YYYY-MM-DD') : null);
     };
 
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-
     if (error) {
         return <div>{error}</div>;
     }
@@ -124,6 +120,18 @@ export default function BudgetHistory({budget_id}) {
                     <ChartDataError/>
                 )}
             </Paper>
+            {isLoading && (
+                <Box
+                    sx={{
+                        position: 'fixed',
+                        top: 100,
+                        right: 16,
+                        zIndex: 1300,
+                    }}
+                >
+                    <CircularProgress color="success" />
+                </Box>
+            )}
         </div>
     );
 };

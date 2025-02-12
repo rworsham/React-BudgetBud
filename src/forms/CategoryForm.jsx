@@ -8,6 +8,7 @@ const CategoryForm = ({ onSuccess }) => {
     const [newCategory, setNewCategory] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [existingCategory, setExistingCategory] = useState([]);
 
     const theme = useTheme();
@@ -61,7 +62,7 @@ const CategoryForm = ({ onSuccess }) => {
 
         if (!validateForm()) return;
 
-        setIsLoading(true);
+        setIsSubmitting(true);
         setError('');
 
         try {
@@ -84,7 +85,7 @@ const CategoryForm = ({ onSuccess }) => {
         } catch (err) {
             setError('Failed to create new category. Please try again');
         } finally {
-            setIsLoading(false);
+            setIsSubmitting(false);
         }
     };
 
@@ -118,7 +119,7 @@ const CategoryForm = ({ onSuccess }) => {
                             />
                         </FormControl>
                         <Button variant="contained" type="submit" disabled={isLoading} fullWidth>
-                            {isLoading ? 'Submitting...' : 'Submit'}
+                            {isSubmitting ? 'Submitting...' : 'Submit'}
                         </Button>
 
                         {error && (

@@ -62,10 +62,6 @@ export default function TransactionPieChart({ x_size, y_size }) {
         fetchChoices();
     }, [authTokens, startDate, endDate]);
 
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-
     if (error) {
         return <div>{error}</div>;
     }

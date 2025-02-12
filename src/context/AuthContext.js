@@ -7,9 +7,6 @@ export const api = axios.create({
     baseURL: 'https://localhost:8000/api/',
 });
 
-let refreshing = false;
-let refreshSubscribers = [];
-
 const setupAxiosInterceptors = (authTokensRef, refreshToken) => {
     api.interceptors.request.use(
         async (config) => {
@@ -17,17 +14,7 @@ const setupAxiosInterceptors = (authTokensRef, refreshToken) => {
                 const expirationTime = JSON.parse(atob(authTokensRef.current.access.split('.')[1])).exp * 1000;
                 const currentTime = Date.now();
                 if (expirationTime < currentTime) {
-                    if (!refreshing) {
-                        refreshing = true;
-                        await refreshToken();
-                    }
-
-                    return new Promise((resolve) => {
-                        refreshSubscribers.push(() => {
-                            config.headers['Authorization'] = `Bearer ${authTokensRef.current.access}`;
-                            resolve(config);
-                        });
-                    });
+                    await refreshToken();
                 }
                 config.headers['Authorization'] = `Bearer ${authTokensRef.current.access}`;
             }
@@ -40,14 +27,9 @@ const setupAxiosInterceptors = (authTokensRef, refreshToken) => {
         (response) => response,
         async (error) => {
             if (error.response && error.response.status === 401) {
-                if (!refreshing) {
-                    refreshing = true;
-                    await refreshToken();
-                }
-
+                await refreshToken();
                 const newAccessToken = authTokensRef.current.access;
                 error.config.headers['Authorization'] = `Bearer ${newAccessToken}`;
-
                 return api(error.config);
             }
             return Promise.reject(error);
@@ -75,44 +57,27 @@ export const AuthProvider = ({ children }) => {
     };
 
     const refreshToken = useCallback(async () => {
-        const refresh = authTokensRef.current?.refresh;
-        console.log('refresh token found step 1', refresh);
-
-        if (!refresh) {
-            console.log('No refresh token found, skipping refresh.');
-            return;
-        }
-
-        if (refreshingRef.current) {
-            console.log('Already refreshing, skipping this call.');
+        if (refreshingRef.current || !authTokensRef.current?.refresh) {
             return;
         }
 
         refreshingRef.current = true;
-
+        const refresh = authTokensRef.current.refresh;
         try {
-            console.log('attempting refresh api call', refresh);
             const response = await axios.post('https://localhost:8000/api/token/refresh/', { refresh });
-            console.log('refresh token call complete?', response.data);
-
             setAuthTokens({
                 access: response.data.access,
-                refresh: authTokensRef.current.refresh
+                refresh: authTokensRef.current.refresh,
             });
             authTokensRef.current = {
                 access: response.data.access,
-                refresh: authTokensRef.current.refresh
+                refresh: authTokensRef.current.refresh,
             };
-
             await getUserDetails(response.data.access);
-
-            refreshSubscribers.forEach((callback) => callback());
-            refreshSubscribers = [];
         } catch (err) {
             console.error('Error refreshing token:', err);
         } finally {
             refreshingRef.current = false;
-            setLoading(false);
         }
     }, []);
 
