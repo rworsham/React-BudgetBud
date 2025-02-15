@@ -1,7 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
 import Joyride from 'react-joyride';
-import { Box, Button, Typography, Dialog, DialogActions, DialogContent, DialogTitle, SpeedDial, SpeedDialAction, SpeedDialIcon, IconButton, Menu, MenuItem } from '@mui/material';
+import {
+    Box,
+    Button,
+    Typography,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    SpeedDial,
+    SpeedDialAction,
+    SpeedDialIcon,
+    IconButton,
+    Menu,
+    MenuItem,
+    FormGroup, FormControlLabel, Switch, CircularProgress
+} from '@mui/material';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import CategoryIcon from '@mui/icons-material/Category';
@@ -33,6 +48,7 @@ import FamilyForm from "../forms/FamilyForm";
 import AccountOverview from "./AccountOverview";
 import ReportDashboard from "./ReportDashboard";
 import Profile from './Profile';
+import {api, AuthContext} from "../context/AuthContext";
 
 const drawerWidth = 240;
 const actions = [
@@ -138,6 +154,9 @@ const steps = [
 
 const Dashboard = () => {
     const theme = useTheme();
+    const { authTokens } = useContext(AuthContext);
+    const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const [modalType, setModalType] = useState('');
     const [anchorEl, setAnchorEl] = useState(null);
@@ -145,13 +164,41 @@ const Dashboard = () => {
     const [drawerOpen, setDrawerOpen] = useState(true);
     const [successAlertOpen, setSuccessAlertOpen] = useState(false);
     const [runTour, setRunTour] = useState(false);
+    const [isFamily, setIsFamily] = useState([]);
+    const [isFamilyViewChecked, setIsFamilyViewChecked] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
         setRunTour(true);
     }, []);
 
+    useEffect(() => {
+        const fetchFamily = async () => {
+            if (!authTokens || !authTokens.access) {
+                setError('No authorization token found');
+                return;
+            }
+
+            try {
+                setIsLoading(true);
+                const response = await api.get('/family/');
+
+                setIsFamily(response.data);
+                setIsLoading(false);
+            } catch (err) {
+                setError('Failed to fetch data');
+                setIsLoading(false);
+            }
+        };
+
+        fetchFamily();
+    }, [authTokens]);
+
     const navigateToSegment = (segment) => setCurrentSegment(segment);
+
+    const handleFamilyViewChange = (event) => {
+        setIsFamilyViewChecked(event.target.checked);
+    };
 
     const handleActionClick = (actionName) => {
         setModalType(actionName);
@@ -179,18 +226,22 @@ const Dashboard = () => {
         }, 5000);
     };
 
+    if (error) {
+        return <div>{error}</div>;
+    }
+
     const renderContent = () => {
         switch (currentSegment) {
             case 'dashboard':
-                return <DashboardReports />;
+                return <DashboardReports familyView={isFamilyViewChecked}/>;
             case 'budget':
-                return <BudgetTransactionOverview />;
+                return <BudgetTransactionOverview familyView={isFamilyViewChecked}/>;
             case 'reports':
-                return <ReportDashboard />
+                return <ReportDashboard familyView={isFamilyViewChecked}/>
             case 'transactions':
-                return <TransactionTableView />;
+                return <TransactionTableView familyView={isFamilyViewChecked}/>;
             case 'accounts':
-                return <AccountOverview />;
+                return <AccountOverview familyView={isFamilyViewChecked}/>;
             default:
                 return null;
         }
@@ -212,17 +263,30 @@ const Dashboard = () => {
                             background: 'linear-gradient(45deg, #1DB954, #006400)',
                             WebkitBackgroundClip: 'text',
                             color: 'transparent',
+                            position: 'absolute',
+                            left: '50%',
+                            transform: 'translateX(-50%)',
                         }}
                     >
                         BudgetBud
                     </Typography>
-                    <IconButton onClick={handleClick}>
-                        <AccountCircleIcon />
-                    </IconButton>
-                    <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleCloseMenu}>
-                        <MenuItem onClick={() => { handleActionClick('Profile'); }}>Profile</MenuItem>
-                        <MenuItem onClick={() => { handleCloseMenu(); console.log("Logout"); navigate('/login') }}>Logout</MenuItem>
-                    </Menu>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        {isFamily && isFamily.length > 0 && (
+                            <FormGroup>
+                                <FormControlLabel
+                                    control={<Switch checked={isFamilyViewChecked} onChange={handleFamilyViewChange} />}
+                                    label="Family View"
+                                />
+                            </FormGroup>
+                        )}
+                        <IconButton onClick={handleClick}>
+                            <AccountCircleIcon />
+                        </IconButton>
+                        <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleCloseMenu}>
+                            <MenuItem onClick={() => { handleActionClick('Profile'); }}>Profile</MenuItem>
+                            <MenuItem onClick={() => { handleCloseMenu(); console.log("Logout"); navigate('/login') }}>Logout</MenuItem>
+                        </Menu>
+                    </Box>
                 </Toolbar>
             </MuiAppBar>
             <Drawer variant="permanent" open={drawerOpen}>
@@ -326,6 +390,18 @@ const Dashboard = () => {
                     }
                 }}
             />
+            {isLoading && (
+                <Box
+                    sx={{
+                        position: 'fixed',
+                        top: 100,
+                        right: 16,
+                        zIndex: 1300,
+                    }}
+                >
+                    <CircularProgress color="success" />
+                </Box>
+            )}
         </Box>
     );
 };
