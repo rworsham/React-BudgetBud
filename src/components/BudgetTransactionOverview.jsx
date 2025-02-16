@@ -25,7 +25,7 @@ import BudgetEditForm from "../forms/BudgetEditForm";
 import BudgetGoalForm from "../forms/BudgetGoalForm";
 import BudgetHistory from "./BudgetHistory";
 
-export default function BudgetTransactionOverview() {
+export default function BudgetTransactionOverview({ familyView }) {
     const theme = useTheme();
     const { authTokens } = useContext(AuthContext);
     const [reportData, setReportData] = useState(null);
@@ -55,11 +55,14 @@ export default function BudgetTransactionOverview() {
 
                 const response = await api.post('/budget-transaction-overview/', dataPayload, {
                     params: {
-                        start_date: startDate,
-                        end_date: endDate,
+                        familyView: familyView,
                     },
                 });
-                const budgetResponse = await api.get('/budget/');
+                const budgetResponse = await api.get('/budget/', {
+                    params: {
+                        familyView: familyView
+                    }
+                });
                 setExistingBudgets(budgetResponse.data);
                 setReportData(response.data);
                 setIsLoading(false);
@@ -71,7 +74,7 @@ export default function BudgetTransactionOverview() {
         };
 
         fetchTransactions();
-    }, [authTokens, startDate, endDate]);
+    }, [authTokens, startDate, endDate, familyView]);
 
     const handleStartDateChange = (newValue) => {
         setStartDate(newValue ? newValue.format('YYYY-MM-DD') : null);
@@ -159,7 +162,7 @@ export default function BudgetTransactionOverview() {
                                          outerRadius={80} fill="#8884d8"
                                          label={({ name, value }) => `${name}: $${value.toFixed(2)}`}>
                                         {pieChartData.map((entry, index) => (
-                                            <Cell key={`cell-${index}`} fill={entry.value > 100 ? "#1DB954" : "#387908"} />
+                                            <Cell key={`cell-${index}`} fill={entry.value > 100 ? "#8884d8" : "#1DB954"} />
                                         ))}
                                     </Pie>
                                     <Tooltip />

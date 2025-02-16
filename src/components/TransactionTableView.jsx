@@ -23,7 +23,7 @@ import {
 import Divider from "@mui/material/Divider";
 import DateRangeFilterForm from "../forms/DateRangeFilterForm";
 
-export default function DataTable() {
+export default function DataTable({ familyView }) {
     const { authTokens } = useContext(AuthContext);
     const [successType, setSuccessType] = useState('');
     const [successAlertOpen, setSuccessAlertOpen] = useState(false);
@@ -118,8 +118,7 @@ export default function DataTable() {
                 }
                 const response = await api.post('/transaction-table-view/', dataPayload, {
                     params: {
-                        start_date: startDate,
-                        end_date: endDate,
+                        familyView: familyView
                     },
                     responseType: downloadPdf ? 'blob' : 'json',
                 });
@@ -145,7 +144,7 @@ export default function DataTable() {
         };
 
         fetchTransactions();
-    }, [authTokens, startDate, endDate, downloadPdf]);
+    }, [authTokens, startDate, endDate, downloadPdf, familyView]);
 
     const handleStartDateChange = (newValue) => {
         setStartDate(newValue ? newValue.format('YYYY-MM-DD') : null);

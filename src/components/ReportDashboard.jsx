@@ -25,7 +25,7 @@ import AccountBalanceHistoryLineChart from "../DashboardReports/AccountBalanceHi
 import IncomeExpenseBarChart from "../DashboardReports/IncomeExpenseBarChart";
 
 
-export default function ReportDashboard() {
+export default function ReportDashboard({ familyView }) {
     const theme = useTheme();
     const { authTokens } = useContext(AuthContext);
     const [userReports, setUserReports] = useState(null);
@@ -65,6 +65,9 @@ export default function ReportDashboard() {
                     headers: {
                         Authorization: `Bearer ${authTokens.access}`,
                     },
+                    params: {
+                        familyView: familyView,
+                    }
                 });
                 setUserReports(response.data);
                 setIsLoading(false);
@@ -77,7 +80,7 @@ export default function ReportDashboard() {
         };
 
         fetchUserReports();
-    }, [authTokens, isFormSubmitted]);
+    }, [authTokens, isFormSubmitted, familyView]);
 
     if (error) {
         return <div>{error}</div>;

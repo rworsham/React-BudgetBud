@@ -13,7 +13,7 @@ import {useTheme} from "@mui/material/styles";
 import AccountHistory from "./AccountHistory";
 import SavingsGoalForm from "../forms/SavingsGoalForm";
 
-export default function AccountOverview() {
+export default function AccountOverview({ familyView }) {
     const theme = useTheme();
     const { authTokens } = useContext(AuthContext);
     const [accountData, setAccountData] = useState([]);
@@ -58,6 +58,9 @@ export default function AccountOverview() {
                     headers: {
                         Authorization: `Bearer ${authTokens.access}`,
                     },
+                    params: {
+                        familyView: familyView
+                    },
                 });
 
                 setAccountData(response.data);
@@ -81,6 +84,9 @@ export default function AccountOverview() {
                     headers: {
                         Authorization: `Bearer ${authTokens.access}`,
                     },
+                    params : {
+                        familyView: familyView
+                    },
                 });
                 setAccountHistoryData(response.data);
                 setIsHistoryLoading(false);
@@ -93,7 +99,7 @@ export default function AccountOverview() {
 
         fetchAccounts();
         fetchAccountHistory();
-    }, [authTokens]);
+    }, [authTokens, familyView]);
 
     if (error) {
         return <div>{error}</div>;

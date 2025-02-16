@@ -13,7 +13,7 @@ import Divider from "@mui/material/Divider";
 import DateRangeFilterForm from "../forms/DateRangeFilterForm";
 import ChartDataError from "./ChartDataError";
 
-export default function DashboardReports() {
+export default function DashboardReports({ familyView }) {
     const { authTokens } = useContext(AuthContext);
     const [filteredTransactions, setFilteredTransactions] = useState([]);
     const [rows, setRows] = useState([]);
@@ -32,13 +32,21 @@ export default function DashboardReports() {
 
             try {
                 setIsLoading(true);
-                const barChartResponse = await api.post('/transaction-bar-chart/', {
+                const dataPayload = {
                     start_date: startDate,
-                    end_date: endDate
+                    end_date: endDate,
+                };
+
+                const barChartResponse = await api.post('/transaction-bar-chart/', dataPayload,{
+                    params:{
+                        familyView : familyView
+                    }
                 });
-                const tableResponse = await api.post('/transaction-table-view/', {
-                    start_date: startDate,
-                    end_date: endDate
+
+                const tableResponse = await api.post('/transaction-table-view/', dataPayload,{
+                    params:{
+                        familyView : familyView,
+                    }
                 });
 
                 const barChartData = barChartResponse.data.map(item => ({
@@ -56,7 +64,7 @@ export default function DashboardReports() {
         };
 
         fetchData();
-    }, [authTokens, startDate, endDate]);
+    }, [authTokens, startDate, endDate, familyView]);
 
     const handleStartDateChange = (newValue) => {
         setStartDate(newValue ? newValue.format('YYYY-MM-DD') : null);

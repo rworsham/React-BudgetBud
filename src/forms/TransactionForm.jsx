@@ -4,6 +4,7 @@ import { useTheme } from '@mui/material/styles';
 import { AuthContext, api } from '../context/AuthContext';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
 
 const TransactionForm = ({ onSuccess }) => {
     const { authTokens } = useContext(AuthContext);
@@ -76,8 +77,10 @@ const TransactionForm = ({ onSuccess }) => {
         setError('');
 
         try {
+            const formattedDate = dayjs(date).format('YYYY-MM-DD');
+            const formattedNextOccurrence = nextOccurrence ? dayjs(nextOccurrence).format('YYYY-MM-DD') : null;
             const response = await api.post('/transaction/', {
-                date,
+                date: formattedDate,
                 amount,
                 transaction_type: transactionType,
                 description,
@@ -86,7 +89,7 @@ const TransactionForm = ({ onSuccess }) => {
                 account,
                 is_recurring: isRecurring,
                 recurring_type: recurringType,
-                next_occurrence: nextOccurrence,
+                next_occurrence: formattedNextOccurrence,
             }, {
                 headers: {
                     Authorization: `Bearer ${authTokens.access}`,
@@ -128,7 +131,7 @@ const TransactionForm = ({ onSuccess }) => {
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DatePicker
                                     label="Date"
-                                    value={date}
+                                    value={dayjs(date)}
                                     onChange={(newDate) => setDate(newDate)}
                                     renderInput={(params) => (
                                         <TextField
@@ -253,7 +256,7 @@ const TransactionForm = ({ onSuccess }) => {
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DatePicker
                                             label="Next Occurence"
-                                            value={nextOccurrence}
+                                            value={dayjs(nextOccurrence)}
                                             onChange={(newDate) => setNextOccurrence(newDate)}
                                             renderInput={(params) => (
                                                 <TextField
