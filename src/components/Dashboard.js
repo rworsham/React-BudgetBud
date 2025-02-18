@@ -340,7 +340,9 @@ const Dashboard = () => {
                 </SpeedDial>
                 <Dialog open={open && modalType === 'Transaction'} onClose={handleClose}>
                     <DialogTitle sx={{ textAlign: 'center' }}>New Transaction</DialogTitle>
-                    <DialogContent><TransactionForm onSuccess={handleFormSuccess}/></DialogContent>
+                    <DialogContent>
+                        <TransactionForm onSuccess={handleFormSuccess} familyView={isFamilyViewChecked}/>
+                    </DialogContent>
                     <DialogActions><Button onClick={handleClose} color="primary">Close</Button></DialogActions>
                 </Dialog>
                 <Dialog open={open && modalType === 'Budget'} onClose={handleClose}>

@@ -6,7 +6,7 @@ import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 
-const TransactionForm = ({ onSuccess }) => {
+const TransactionForm = ({ onSuccess, familyView }) => {
     const { authTokens } = useContext(AuthContext);
     const [date, setDate] = useState(null);
     const [amount, setAmount] = useState('');
@@ -36,9 +36,9 @@ const TransactionForm = ({ onSuccess }) => {
 
             try {
                 const [Categories, Budgets, Accounts] = await Promise.all([
-                    api.get('/categories/'),
-                    api.get('/budget/'),
-                    api.get('/accounts/')
+                    api.get('/categories/', {params:{familyView: familyView}}),
+                    api.get('/budget/', {params:{familyView: familyView}}),
+                    api.get('/accounts/', {params:{familyView: familyView}})
                 ]);
 
                 setCategories(Categories.data);
@@ -54,7 +54,7 @@ const TransactionForm = ({ onSuccess }) => {
         };
 
         fetchChoices();
-    }, [authTokens]);
+    }, [authTokens, familyView]);
 
     const validateForm = () => {
         if (!date || !amount || !category || !budget || !account) {
@@ -94,6 +94,9 @@ const TransactionForm = ({ onSuccess }) => {
                 headers: {
                     Authorization: `Bearer ${authTokens.access}`,
                 },
+                params: {
+                    familyView: familyView,
+                }
             });
 
             console.log('Transaction created:', response.data);
