@@ -198,7 +198,7 @@ export default function AccountOverview({ familyView }) {
             <Dialog open={open && modalType === 'viewHistory'} onClose={handleClose} maxWidth="lg" fullWidth>
                 <DialogTitle sx={{ textAlign: 'center' }}>Account History</DialogTitle>
                 <DialogContent>
-                    {selectedAccountId && <AccountHistory account_id={selectedAccountId} />}
+                    {selectedAccountId && <AccountHistory account_id={selectedAccountId} familyView={familyView}/>}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">

@@ -337,7 +337,7 @@ export default function BudgetTransactionOverview({ familyView }) {
             <Dialog open={open && modalType === 'viewHistory'} onClose={handleClose} maxWidth="lg" fullWidth>
                 <DialogTitle sx={{ textAlign: 'center' }}>Account History</DialogTitle>
                 <DialogContent>
-                    {selectedBudgetId && <BudgetHistory budget_id={selectedBudgetId} />}
+                    {selectedBudgetId && <BudgetHistory budget_id={selectedBudgetId} familyView={familyView} />}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">

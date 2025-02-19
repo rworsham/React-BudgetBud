@@ -9,7 +9,7 @@ import Divider from "@mui/material/Divider";
 import DateRangeFilterForm from "../forms/DateRangeFilterForm";
 import ChartDataError from "./ChartDataError";
 
-export default function BudgetHistory({budget_id}) {
+export default function BudgetHistory({budget_id, familyView}) {
     const { authTokens } = useContext(AuthContext);
     const [rows, setRows] = useState([]);
     const [error, setError] = useState('');
@@ -49,6 +49,9 @@ export default function BudgetHistory({budget_id}) {
                 }
                 const response = await api.post('/budget-history/', dataPayload, {
                     responseType: downloadPdf ? 'blob' : 'json',
+                    params: {
+                        familyView: familyView
+                    }
                 });
 
                 if (downloadPdf) {
@@ -72,7 +75,7 @@ export default function BudgetHistory({budget_id}) {
         };
 
         fetchTransactions();
-    }, [authTokens, startDate, endDate, budget_id, downloadPdf]);
+    }, [authTokens, startDate, endDate, budget_id, downloadPdf, familyView]);
 
     const handleStartDateChange = (newValue) => {
         setStartDate(newValue ? newValue.format('YYYY-MM-DD') : null);
