@@ -24,7 +24,7 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import BarChartIcon from '@mui/icons-material/BarChart';
-import LayersIcon from '@mui/icons-material/Layers';
+import GroupsIcon from '@mui/icons-material/Groups';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
@@ -49,6 +49,7 @@ import AccountOverview from "./AccountOverview";
 import ReportDashboard from "./ReportDashboard";
 import Profile from './Profile';
 import {api, AuthContext} from "../context/AuthContext";
+import FamilyOverview from "./FamilyOverview";
 
 const drawerWidth = 240;
 const actions = [
@@ -66,7 +67,7 @@ const NAVIGATION = [
     { segment: 'reports', title: 'Reports', icon: <BarChartIcon /> },
     { segment: 'transactions', title: 'Transactions', icon: <ReceiptLongIcon /> },
     { segment: 'accounts', title: 'Accounts', icon: <AccountBalanceIcon /> },
-    { segment: 'integrations', title: 'Integrations', icon: <LayersIcon /> },
+    { segment: 'family', title: 'Family', icon: <GroupsIcon /> },
 ];
 
 const openedMixin = (theme) => ({
@@ -147,6 +148,12 @@ const steps = [
     {
         target: '.nav-accounts',
         content: 'Here you can add, view, and manage your accounts.',
+        placement: 'right-start',
+        offset: 5,
+    },
+    {
+        target: '.nav-family',
+        content: 'Here you can add, view, and manage your family members, as well as view their contributions.',
         placement: 'right-start',
         offset: 5,
     }
@@ -242,6 +249,8 @@ const Dashboard = () => {
                 return <TransactionTableView familyView={isFamilyViewChecked}/>;
             case 'accounts':
                 return <AccountOverview familyView={isFamilyViewChecked}/>;
+            case 'family':
+                return <FamilyOverview/>;
             default:
                 return null;
         }
