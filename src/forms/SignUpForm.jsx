@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import { TextField, Button, FormGroup, FormControl, Box, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { api } from '../context/AuthContext';
@@ -15,6 +15,7 @@ const SignUpForm = () => {
     const [error, setError] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
+    const { token } = useParams();
     const theme = useTheme();
 
     const validateForm = () => {
@@ -48,6 +49,7 @@ const SignUpForm = () => {
                     first_name:firstName,
                     last_name:lastName,
                     password,
+                    ...(token && { token })
                 },
             );
 
