@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import { TextField, Button, FormGroup, FormControl, Box, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import Divider from "@mui/material/Divider";
@@ -12,16 +12,23 @@ const Login = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const { token } = useParams();
     const theme = useTheme();
 
     const handleLogin = async (event) => {
         event.preventDefault();
         setIsSubmitting(true);
         try {
-            await loginUser(username, password);
+            const loginParams = {
+                username,
+                password,
+                ...(token ? { token } : {}),
+            };
+            await loginUser(loginParams);
             console.log('Logged in successfully!');
             navigate('/dashboard');
         } catch (err) {
+            console.log(err);
             setError('Login failed. Please check your credentials.');
         }
     };

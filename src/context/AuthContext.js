@@ -45,9 +45,9 @@ export const AuthProvider = ({ children }) => {
     const authTokensRef = useRef(authTokens);
     const refreshingRef = useRef(false);
 
-    const loginUser = async (username, password) => {
+    const loginUser = async (loginParams) => {
         try {
-            const response = await axios.post('https://localhost:8000/api/token/', { username, password });
+            const response = await axios.post('https://localhost:8000/api/token/', loginParams);
             setAuthTokens(response.data);
             authTokensRef.current = response.data;
             await getUserDetails(response.data.access);

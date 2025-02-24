@@ -32,6 +32,7 @@ const App = () => {
               <Route path="/SignUp" element={<SignUp />} />
               <Route path="/SignUp/Invite/:token" element={<SignUp />} />
               <Route path="/login" element={<Login loginUser={loginUser} />} />
+              <Route path="/login/invite/:token" element={<Login loginUser={loginUser} />} />
               <Route path="/logout" element={<Logout logout={logout} />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/dashboard" element={<PrivateRoute><Dashboard user={user} /></PrivateRoute>} />
