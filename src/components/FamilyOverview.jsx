@@ -5,7 +5,7 @@ import {
     Dialog, DialogTitle, DialogContent, DialogActions, IconButton, CircularProgress
 } from "@mui/material";
 import Grid from '@mui/material/Grid2';
-import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import {LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell} from 'recharts';
 import Divider from "@mui/material/Divider";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import {useTheme} from "@mui/material/styles";
@@ -95,7 +95,7 @@ export default function FamilyOverview() {
                 </Paper>
             </Box>
             <Dialog open={open && modalType === 'addAccount'} onClose={handleClose}>
-                <DialogTitle sx={{ textAlign: 'center' }}>Invite New Memeber</DialogTitle>
+                <DialogTitle sx={{ textAlign: 'center' }}>Invite New Member</DialogTitle>
                 <DialogContent>
                     <FamilyInviteForm onSuccess={handleFormSuccess}/>
                 </DialogContent>
@@ -115,12 +115,12 @@ export default function FamilyOverview() {
                 </DialogActions>
             </Dialog>
             <Grid container spacing={4}>
-                {accountData.map((account) => (
+                {familyData.map((account) => (
                     <Grid item xs={12} sm={4} size={4} key={account.id}>
                         <Card variant="outlined">
                             <CardContent>
                                 <Typography variant="h6" textAlign='center' gutterBottom>
-                                    {account.name}
+                                    {account.username}
                                 </Typography>
                                 <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2}}/>
                                 <Typography variant="body1" textAlign='center'>
@@ -162,7 +162,7 @@ export default function FamilyOverview() {
             <Dialog open={open && modalType === 'viewHistory'} onClose={handleClose} maxWidth="lg" fullWidth>
                 <DialogTitle sx={{ textAlign: 'center' }}>Account History</DialogTitle>
                 <DialogContent>
-                    {selectedAccountId && <AccountHistory account_id={selectedAccountId} familyView={familyView}/>}
+                    {selectedAccountId && <AccountHistory account_id={selectedAccountId}/>}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">
@@ -182,31 +182,39 @@ export default function FamilyOverview() {
                 </DialogActions>
             </Dialog>
             <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2}}/>
-            {accountHistoryData && accountHistoryData.length > 0 && (
-                <Box sx={{ marginTop: 4 }}>
-                    <Typography variant="h6" textAlign='center' gutterBottom>
-                        Account Balance Over Time
-                    </Typography>
-                    <ResponsiveContainer width="100%" height={300}>
-                        <LineChart data={chartData}>
-                            <XAxis dataKey="name" />
-                            <YAxis />
-                            <Tooltip />
-                            <Legend />
-                            {accountData.map((account) => (
-                                <Line
-                                    key={account.id}
-                                    type="monotone"
-                                    dataKey={account.name}
-                                    stroke="#1DB954"
-                                    activeDot={{ r: 8 }}
-                                />
-                            ))}
-                        </LineChart>
-                    </ResponsiveContainer>
-                </Box>
-            )}
-            {isFamilyLoading && (
+            <Grid container spacing={4}>
+                <Grid item xs={12} sm={4} size={4}>
+                    <Box sx={{ marginBottom: 4 }}>
+                        <Typography variant="h6" gutterBottom sx={{ textAlign: 'center' }}>
+                            Expense Categories Breakdown
+                        </Typography>
+                        <ResponsiveContainer width="100%" height={250}>
+
+                        </ResponsiveContainer>
+                    </Box>
+                </Grid>
+                <Grid item xs={12} sm={4} size={4}>
+                    <Box sx={{ marginBottom: 4 }}>
+                        <Typography variant="h6" gutterBottom sx={{ textAlign: 'center' }}>
+                            Expense Categories Breakdown
+                        </Typography>
+                        <ResponsiveContainer width="100%" height={250}>
+
+                        </ResponsiveContainer>
+                    </Box>
+                </Grid>
+                <Grid item xs={12} sm={4} size={4}>
+                    <Box sx={{ marginBottom: 4 }}>
+                        <Typography variant="h6" gutterBottom sx={{ textAlign: 'center' }}>
+                            Expense Categories Breakdown
+                        </Typography>
+                        <ResponsiveContainer width="100%" height={250}>
+
+                        </ResponsiveContainer>
+                    </Box>
+                </Grid>
+            </Grid>
+            {(isFamilyLoading || isHistoryLoading) && (
                 <Box
                     sx={{
                         position: 'fixed',
