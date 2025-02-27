@@ -1,15 +1,14 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
+import { logout } from "../context/AuthContext";
 
-const Logout = () => {
+const Logout = ({setAuthTokens, setUser}) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        Cookies.remove('access_token');
-        Cookies.remove('refresh_token');
+        logout(setAuthTokens, setUser);
         navigate('/');
-    }, [navigate]);
+    }, [setAuthTokens, setUser, navigate]);
 
     return null;
 };

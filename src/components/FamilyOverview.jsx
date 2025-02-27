@@ -5,18 +5,20 @@ import {
     Dialog, DialogTitle, DialogContent, DialogActions, IconButton, CircularProgress
 } from "@mui/material";
 import Grid from '@mui/material/Grid2';
-import {LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell} from 'recharts';
+import {XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, BarChart, CartesianGrid, Bar} from 'recharts';
 import Divider from "@mui/material/Divider";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import {useTheme} from "@mui/material/styles";
 import AccountHistory from "./AccountHistory";
 import SavingsGoalForm from "../forms/SavingsGoalForm";
 import FamilyInviteForm from "../forms/FamilyInviteForm";
+import ChartDataError from "./ChartDataError";
 
 export default function FamilyOverview() {
     const theme = useTheme();
     const { authTokens } = useContext(AuthContext);
     const [familyData, setFamilyData] = useState([]);
+    const [familyOverviewData, setFamilyOverviewData] = useState([]);
     const [error, setError] = useState('');
     const [isFamilyLoading, setIsFamilyLoading] = useState(false);
     const [open, setOpen] = useState(false);
@@ -67,12 +69,46 @@ export default function FamilyOverview() {
             }
         };
 
+        const fetchFamilyOverview = async () => {
+            if (!authTokens || !authTokens.access) {
+                setError('No authorization token found');
+                return;
+            }
+
+            try {
+                setIsFamilyLoading(true);
+                const response = await api.get('/family/overview/', {
+                    headers: {
+                        Authorization: `Bearer ${authTokens.access}`,
+                    },
+                });
+
+                setFamilyOverviewData(response.data);
+                setIsFamilyLoading(false);
+            } catch (err) {
+                console.error('Error fetching account data:', err);
+                setError('Failed to fetch account data');
+                setIsFamilyLoading(false);
+            }
+        };
+
         fetchFamily();
+        fetchFamilyOverview();
     }, [authTokens]);
 
     if (error) {
         return <div>{error}</div>;
     }
+
+    const CategoryData = familyOverviewData.flatMap(member =>
+        member.categories
+            .filter(category => category.category_count > 0)
+            .map(category => ({
+                name: member.name,
+                category: category.category,
+                category_count: category.category_count
+            }))
+    );
 
     return (
         <div style={{ height: '100%', width: '75%', padding: '10px' }}>
@@ -183,38 +219,57 @@ export default function FamilyOverview() {
             </Dialog>
             <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2}}/>
             <Grid container spacing={4}>
-                <Grid item xs={12} sm={4} size={4}>
+                <Grid item xs={12} sm={6} size={6}>
                     <Box sx={{ marginBottom: 4 }}>
                         <Typography variant="h6" gutterBottom sx={{ textAlign: 'center' }}>
-                            Expense Categories Breakdown
+                            Contributions Per User
                         </Typography>
                         <ResponsiveContainer width="100%" height={250}>
-
+                            {familyOverviewData && familyOverviewData.length > 0 ? (
+                                <BarChart data={familyOverviewData}>
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dataKey="name" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Legend />
+                                    <Bar dataKey="transaction_count" name={"Contributions"} fill="#8884d8" />
+                                </BarChart>
+                            ) : (
+                                <ChartDataError/>
+                            )}
                         </ResponsiveContainer>
                     </Box>
                 </Grid>
-                <Grid item xs={12} sm={4} size={4}>
+                <Grid item xs={12} sm={6} size={6}>
                     <Box sx={{ marginBottom: 4 }}>
                         <Typography variant="h6" gutterBottom sx={{ textAlign: 'center' }}>
-                            Expense Categories Breakdown
+                            Category usage per User
                         </Typography>
                         <ResponsiveContainer width="100%" height={250}>
-
-                        </ResponsiveContainer>
-                    </Box>
-                </Grid>
-                <Grid item xs={12} sm={4} size={4}>
-                    <Box sx={{ marginBottom: 4 }}>
-                        <Typography variant="h6" gutterBottom sx={{ textAlign: 'center' }}>
-                            Expense Categories Breakdown
-                        </Typography>
-                        <ResponsiveContainer width="100%" height={250}>
-
+                            {CategoryData && CategoryData.length > 0 ? (
+                                <BarChart data={CategoryData}>
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dataKey="name" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Legend />
+                                    {CategoryData.map((entry, index) => (
+                                        <Bar
+                                            key={`bar-${index}`}
+                                            dataKey="category_count"
+                                            name={entry.category}
+                                            fill="#8884d8"
+                                        />
+                                    ))}
+                                </BarChart>
+                            ) : (
+                                <ChartDataError/>
+                            )}
                         </ResponsiveContainer>
                     </Box>
                 </Grid>
             </Grid>
-            {(isFamilyLoading || isHistoryLoading) && (
+            {isFamilyLoading && (
                 <Box
                     sx={{
                         position: 'fixed',
