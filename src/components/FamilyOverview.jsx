@@ -5,7 +5,7 @@ import {
     Dialog, DialogTitle, DialogContent, DialogActions, IconButton, CircularProgress
 } from "@mui/material";
 import Grid from '@mui/material/Grid2';
-import {XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, BarChart, CartesianGrid, Bar} from 'recharts';
+import {XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, BarChart, CartesianGrid, Bar, LabelList} from 'recharts';
 import Divider from "@mui/material/Divider";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import {useTheme} from "@mui/material/styles";
@@ -18,7 +18,8 @@ export default function FamilyOverview() {
     const theme = useTheme();
     const { authTokens } = useContext(AuthContext);
     const [familyData, setFamilyData] = useState([]);
-    const [familyOverviewData, setFamilyOverviewData] = useState([]);
+    const [familyTransactionOverviewData, setFamilyTransactionOverviewData] = useState([]);
+    const [familyCategoryOverviewData, setFamilyCategoryOverviewData] = useState([]);
     const [error, setError] = useState('');
     const [isFamilyLoading, setIsFamilyLoading] = useState(false);
     const [open, setOpen] = useState(false);
@@ -69,7 +70,7 @@ export default function FamilyOverview() {
             }
         };
 
-        const fetchFamilyOverview = async () => {
+        const fetchFamilyTransactionOverview = async () => {
             if (!authTokens || !authTokens.access) {
                 setError('No authorization token found');
                 return;
@@ -80,10 +81,37 @@ export default function FamilyOverview() {
                 const response = await api.get('/family/overview/', {
                     headers: {
                         Authorization: `Bearer ${authTokens.access}`,
-                    },
+                    },params: {
+                        "Transaction": true
+                }
                 });
 
-                setFamilyOverviewData(response.data);
+                setFamilyTransactionOverviewData(response.data);
+                setIsFamilyLoading(false);
+            } catch (err) {
+                console.error('Error fetching account data:', err);
+                setError('Failed to fetch account data');
+                setIsFamilyLoading(false);
+            }
+        };
+
+        const fetchFamilyCategoryOverview = async () => {
+            if (!authTokens || !authTokens.access) {
+                setError('No authorization token found');
+                return;
+            }
+
+            try {
+                setIsFamilyLoading(true);
+                const response = await api.get('/family/overview/', {
+                    headers: {
+                        Authorization: `Bearer ${authTokens.access}`,
+                    },params: {
+                        "Category": true
+                    }
+                });
+
+                setFamilyCategoryOverviewData(response.data);
                 setIsFamilyLoading(false);
             } catch (err) {
                 console.error('Error fetching account data:', err);
@@ -93,22 +121,13 @@ export default function FamilyOverview() {
         };
 
         fetchFamily();
-        fetchFamilyOverview();
+        fetchFamilyTransactionOverview();
+        fetchFamilyCategoryOverview();
     }, [authTokens]);
 
     if (error) {
         return <div>{error}</div>;
     }
-
-    const CategoryData = familyOverviewData.flatMap(member =>
-        member.categories
-            .filter(category => category.category_count > 0)
-            .map(category => ({
-                name: member.name,
-                category: category.category,
-                category_count: category.category_count
-            }))
-    );
 
     return (
         <div style={{ height: '100%', width: '75%', padding: '10px' }}>
@@ -225,8 +244,8 @@ export default function FamilyOverview() {
                             Contributions Per User
                         </Typography>
                         <ResponsiveContainer width="100%" height={250}>
-                            {familyOverviewData && familyOverviewData.length > 0 ? (
-                                <BarChart data={familyOverviewData}>
+                            {familyTransactionOverviewData && familyTransactionOverviewData.length > 0 ? (
+                                <BarChart data={familyTransactionOverviewData}>
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis dataKey="name" />
                                     <YAxis />
@@ -246,24 +265,21 @@ export default function FamilyOverview() {
                             Category usage per User
                         </Typography>
                         <ResponsiveContainer width="100%" height={250}>
-                            {CategoryData && CategoryData.length > 0 ? (
-                                <BarChart data={CategoryData}>
+                            {familyCategoryOverviewData && familyCategoryOverviewData.length > 0 ? (
+                                <BarChart data={familyCategoryOverviewData}>
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis dataKey="name" />
-                                    <YAxis />
+                                    <YAxis
+                                        domain={['auto', (dataMax) => dataMax * 1.1]}
+                                    />
                                     <Tooltip />
                                     <Legend />
-                                    {CategoryData.map((entry, index) => (
-                                        <Bar
-                                            key={`bar-${index}`}
-                                            dataKey="category_count"
-                                            name={entry.category}
-                                            fill="#8884d8"
-                                        />
-                                    ))}
+                                    <Bar dataKey="category_count" name="" label="" fill="#8884d8">
+                                        <LabelList dataKey="category" position="top" fontSize={14} fill="#1DB954"/>
+                                    </Bar>
                                 </BarChart>
                             ) : (
-                                <ChartDataError/>
+                                <ChartDataError />
                             )}
                         </ResponsiveContainer>
                     </Box>
