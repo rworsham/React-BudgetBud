@@ -9,7 +9,7 @@ import Divider from "@mui/material/Divider";
 import DateRangeFilterForm from "../forms/DateRangeFilterForm";
 import ChartDataError from "./ChartDataError";
 
-export default function AccountHistory({account_id, familyView}) {
+export default function FamilyHistory({ user_id }) {
     const { authTokens } = useContext(AuthContext);
     const [rows, setRows] = useState([]);
     const [error, setError] = useState('');
@@ -20,12 +20,13 @@ export default function AccountHistory({account_id, familyView}) {
 
 
     const columns = [
-        { field: 'id', headerName: 'ID', width: 70 },
+        { field: 'id', headerName: 'ID', width: 30 },
         { field: 'date', headerName: 'Date', width: 100, editable: false },
         { field: 'amount', headerName: 'Amount', width: 70, editable: false },
         { field: 'transaction_type', headerName: 'Type', width: 130, editable: false },
         { field: 'description', headerName: 'Description', width: 200, editable: false },
         { field: 'category', headerName: 'Category', width: 100, editable: false },
+        { field: 'account', headerName: 'Account', width: 100, editable: false },
         { field: 'budget', headerName: 'Budget', width: 100, editable: false },
     ]
 
@@ -41,24 +42,21 @@ export default function AccountHistory({account_id, familyView}) {
                 const dataPayload = {
                     start_date: startDate,
                     end_date: endDate,
-                    account_id: account_id
+                    user_id: user_id
                 };
 
                 if (downloadPdf) {
                     dataPayload.format = 'pdf';
                 }
-                const response = await api.post('/account/history/', dataPayload, {
+                const response = await api.post('/family/history/', dataPayload, {
                     responseType: downloadPdf ? 'blob' : 'json',
-                    params: {
-                        familyView: familyView
-                    }
                 });
 
                 if (downloadPdf) {
                     const blob = response.data;
                     const link = document.createElement('a');
                     link.href = URL.createObjectURL(blob);
-                    link.download = 'account_history_report.pdf';
+                    link.download = 'family_history_report.pdf';
                     link.click();
                     setIsLoading(false);
                     setDownloadPdf(false);
@@ -75,7 +73,7 @@ export default function AccountHistory({account_id, familyView}) {
         };
 
         fetchTransactions();
-    }, [authTokens, startDate, endDate, account_id, downloadPdf, familyView]);
+    }, [authTokens, startDate, endDate, user_id, downloadPdf]);
 
     const handleStartDateChange = (newValue) => {
         setStartDate(newValue ? newValue.format('YYYY-MM-DD') : null);

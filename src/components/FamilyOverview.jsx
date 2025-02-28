@@ -9,10 +9,9 @@ import {XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, BarChart, CartesianG
 import Divider from "@mui/material/Divider";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import {useTheme} from "@mui/material/styles";
-import AccountHistory from "./AccountHistory";
-import SavingsGoalForm from "../forms/SavingsGoalForm";
 import FamilyInviteForm from "../forms/FamilyInviteForm";
 import ChartDataError from "./ChartDataError";
+import FamilyHistory from "./FamilyHistory";
 
 export default function FamilyOverview() {
     const theme = useTheme();
@@ -25,7 +24,7 @@ export default function FamilyOverview() {
     const [open, setOpen] = useState(false);
     const [modalType, setModalType] = useState('');
     const [successAlertOpen, setSuccessAlertOpen] = useState(false);
-    const [selectedAccountId, setSelectedAccountId] = useState(null);
+    const [selectedUserId, setSelectedUserId] = useState(null);
 
     const handleOpen = (type) => {
         setModalType(type);
@@ -36,7 +35,7 @@ export default function FamilyOverview() {
         setOpen(false);
         setModalType('');
         setSuccessAlertOpen(false);
-        setSelectedAccountId(null);
+        setSelectedUserId(null);
     };
 
     const handleFormSuccess = () => {
@@ -170,17 +169,14 @@ export default function FamilyOverview() {
                 </DialogActions>
             </Dialog>
             <Grid container spacing={4}>
-                {familyData.map((account) => (
-                    <Grid item xs={12} sm={4} size={4} key={account.id}>
+                {familyData.map((user) => (
+                    <Grid item xs={12} sm={4} size={4} key={user.id}>
                         <Card variant="outlined">
                             <CardContent>
                                 <Typography variant="h6" textAlign='center' gutterBottom>
-                                    {account.username}
+                                    {user.username}
                                 </Typography>
                                 <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2}}/>
-                                <Typography variant="body1" textAlign='center'>
-                                    Balance: ${parseFloat(account.balance).toFixed(2)}
-                                </Typography>
                                 <Grid container spacing={1} sx={{ marginTop: 2, justifyContent: 'center' }}>
                                     <Grid item>
                                         <Button
@@ -188,24 +184,11 @@ export default function FamilyOverview() {
                                             color="primary"
                                             size="small"
                                             onClick={() => {
-                                                setSelectedAccountId(account.id);
+                                                setSelectedUserId(user.id);
                                                 handleOpen('viewHistory');
                                             }}
                                         >
                                             View History
-                                        </Button>
-                                    </Grid>
-                                    <Grid item>
-                                        <Button
-                                            variant="contained"
-                                            color="secondary"
-                                            size="small"
-                                            onClick={() => {
-                                                setSelectedAccountId(account.id);
-                                                handleOpen('setSavingsGoal');
-                                            }}
-                                        >
-                                            Set Saving Goal
                                         </Button>
                                     </Grid>
                                 </Grid>
@@ -215,20 +198,9 @@ export default function FamilyOverview() {
                 ))}
             </Grid>
             <Dialog open={open && modalType === 'viewHistory'} onClose={handleClose} maxWidth="lg" fullWidth>
-                <DialogTitle sx={{ textAlign: 'center' }}>Account History</DialogTitle>
+                <DialogTitle sx={{ textAlign: 'center' }}>Family History</DialogTitle>
                 <DialogContent>
-                    {selectedAccountId && <AccountHistory account_id={selectedAccountId}/>}
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose} color="primary">
-                        Close
-                    </Button>
-                </DialogActions>
-            </Dialog>
-            <Dialog open={open && modalType === 'setSavingsGoal'} onClose={handleClose} maxWidth="lg" fullWidth>
-                <DialogTitle sx={{ textAlign: 'center' }}>Set Savings Goal</DialogTitle>
-                <DialogContent>
-                    {selectedAccountId && <SavingsGoalForm account_id={selectedAccountId} onSuccess={handleFormSuccess}/>}
+                    {selectedUserId && <FamilyHistory user_id={selectedUserId}/>}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">
