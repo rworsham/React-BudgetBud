@@ -50,6 +50,7 @@ import ReportDashboard from "./ReportDashboard";
 import Profile from './Profile';
 import {api, AuthContext} from "../context/AuthContext";
 import FamilyOverview from "./FamilyOverview";
+import CategoryOverview from "./CategoryOverview";
 
 const drawerWidth = 240;
 const actions = [
@@ -63,6 +64,7 @@ const NAVIGATION = [
     { kind: 'header', title: 'Main items' },
     { segment: 'dashboard', title: 'Dashboard', icon: <DashboardIcon /> },
     { segment: 'budget', title: 'Budget', icon: <ShoppingCartIcon /> },
+    { segment: 'category', title: 'Category', icon: <CategoryIcon /> },
     { kind: 'divider' },
     { segment: 'reports', title: 'Reports', icon: <BarChartIcon /> },
     { segment: 'transactions', title: 'Transactions', icon: <ReceiptLongIcon /> },
@@ -122,6 +124,14 @@ const steps = [
         offset: 5,
     },
     {
+        target: '.family-view',
+        content: 'Here you can toggle this button to view all reports with data from your family/group members.' +
+            ' This also allows the use of other members accounts, budgets, and categories.' +
+            '** This will only be available if you are in a family group **',
+        placement: 'bottom',
+        offset: 5,
+    },
+    {
         target: '.nav-dashboard',
         content: 'This is your dashboard, where you can view a summary of your finances.',
         placement: 'right-start',
@@ -130,6 +140,12 @@ const steps = [
     {
         target: '.nav-budget',
         content: 'Here you can add, view, and manage your budgets.',
+        placement: 'right-start',
+        offset: 5,
+    },
+    {
+        target: '.nav-category',
+        content: 'Here you can add, view, and manage your categories that you have created.',
         placement: 'right-start',
         offset: 5,
     },
@@ -156,7 +172,7 @@ const steps = [
         content: 'Here you can add, view, and manage your family members, as well as view their contributions.',
         placement: 'right-start',
         offset: 5,
-    }
+    },
 ];
 
 const Dashboard = () => {
@@ -243,6 +259,8 @@ const Dashboard = () => {
                 return <DashboardReports familyView={isFamilyViewChecked}/>;
             case 'budget':
                 return <BudgetTransactionOverview familyView={isFamilyViewChecked}/>;
+            case 'category':
+                return <CategoryOverview familyView={isFamilyViewChecked}/>;
             case 'reports':
                 return <ReportDashboard familyView={isFamilyViewChecked}/>
             case 'transactions':
@@ -285,6 +303,7 @@ const Dashboard = () => {
                                 <FormControlLabel
                                     control={<Switch checked={isFamilyViewChecked} onChange={handleFamilyViewChange} />}
                                     label="Family View"
+                                    className="family-view"
                                 />
                             </FormGroup>
                         )}
