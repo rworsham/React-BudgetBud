@@ -1,12 +1,17 @@
-import {useState, useContext} from 'react';
+import React, {useState, useContext} from 'react';
 import { TextField, Button, FormGroup, FormControl, Box, Typography} from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import {AuthContext, api} from "../context/AuthContext";
+import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
 
 
 const SavingsGoalForm = ({ onSuccess, account_id }) => {
     const { authTokens } = useContext(AuthContext);
     const [amount, setAmount] = useState('');
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
     const [error, setError] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const theme = useTheme();
@@ -23,8 +28,15 @@ const SavingsGoalForm = ({ onSuccess, account_id }) => {
         setError('');
 
         try {
+            const formattedStartDate = dayjs(startDate).format('YYYY-MM-DD');
+            const formattedEndDate = dayjs(endDate).format('YYYY-MM-DD');
             const response = await api.post('/account/savings-goal/',
-                { account: account_id, target_balance: amount }
+                {
+                    account: account_id,
+                    target_balance: amount,
+                    start_date: formattedStartDate,
+                    end_date: formattedEndDate
+                },
             );
 
             console.log('New Savings Goal created:', response.data);
@@ -63,13 +75,45 @@ const SavingsGoalForm = ({ onSuccess, account_id }) => {
                         <FormControl sx={{marginBottom: 2}}>
                             <TextField
                                 type="number"
-                                label="Amount"
+                                label="Goal Amount"
                                 variant="outlined"
                                 value={amount}
                                 onChange={(e) => setAmount(e.target.value)}
                                 fullWidth
                                 required
                             />
+                        </FormControl>
+                        <FormControl sx={{ marginBottom: 2 }}>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePicker
+                                    label="Start Date"
+                                    value={dayjs(startDate)}
+                                    onChange={(startDate) => setStartDate(startDate)}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            variant="outlined"
+                                            required
+                                        />
+                                    )}
+                                />
+                            </LocalizationProvider>
+                        </FormControl>
+                        <FormControl sx={{ marginBottom: 2 }}>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePicker
+                                    label="End Date"
+                                    value={dayjs(endDate)}
+                                    onChange={(newEndDate) => setEndDate(newEndDate)}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            variant="outlined"
+                                            required
+                                        />
+                                    )}
+                                />
+                            </LocalizationProvider>
                         </FormControl>
                         <Button variant="contained" type="submit" fullWidth>
                             {isSubmitting ? 'Submitting...' : 'Submit'}

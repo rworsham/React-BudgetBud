@@ -1,13 +1,18 @@
-import {useState, useContext} from 'react';
+import React, {useState, useContext} from 'react';
 import { TextField, Button, FormGroup, FormControl, Box, Typography} from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import {AuthContext, api} from "../context/AuthContext";
+import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
 
 
 const BudgetGoalForm = ({ onSuccess, budget_id }) => {
     const { authTokens } = useContext(AuthContext);
     const [amount, setAmount] = useState('');
     const [error, setError] = useState('');
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const theme = useTheme();
@@ -24,8 +29,15 @@ const BudgetGoalForm = ({ onSuccess, budget_id }) => {
         setError('');
 
         try {
-            const response = await api.post('/budget/savings-goal/',
-                { budget: budget_id, target_balance: amount }
+            const formattedStartDate = dayjs(startDate).format('YYYY-MM-DD');
+            const formattedEndDate = dayjs(endDate).format('YYYY-MM-DD');
+            const response = await api.post('/budget-goal/',
+                {
+                    budget: budget_id,
+                    target_balance: amount,
+                    start_date: formattedStartDate,
+                    end_date: formattedEndDate
+                },
             );
 
             console.log('New Budget Goal created:', response.data);
@@ -64,13 +76,45 @@ const BudgetGoalForm = ({ onSuccess, budget_id }) => {
                         <FormControl sx={{marginBottom: 2}}>
                             <TextField
                                 type="number"
-                                label="Amount"
+                                label="Goal Amount"
                                 variant="outlined"
                                 value={amount}
                                 onChange={(e) => setAmount(e.target.value)}
                                 fullWidth
                                 required
                             />
+                        </FormControl>
+                        <FormControl sx={{ marginBottom: 2 }}>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePicker
+                                    label="Start Date"
+                                    value={dayjs(startDate)}
+                                    onChange={(startDate) => setStartDate(startDate)}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            variant="outlined"
+                                            required
+                                        />
+                                    )}
+                                />
+                            </LocalizationProvider>
+                        </FormControl>
+                        <FormControl sx={{ marginBottom: 2 }}>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePicker
+                                    label="End Date"
+                                    value={dayjs(endDate)}
+                                    onChange={(endDate) => setEndDate(endDate)}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            variant="outlined"
+                                            required
+                                        />
+                                    )}
+                                />
+                            </LocalizationProvider>
                         </FormControl>
                         <Button variant="contained" type="submit" disabled={isLoading} fullWidth>
                             {isSubmitting ? 'Submitting...' : 'Submit'}
