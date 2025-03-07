@@ -4,7 +4,7 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } f
 import ChartDataError from "../components/ChartDataError";
 import {Box, CircularProgress} from "@mui/material";
 
-export default function AccountOverview({x_size, y_size}) {
+export default function AccountOverview({x_size, y_size, familyView}) {
     const { authTokens } = useContext(AuthContext);
     const [accountData, setAccountData] = useState([]);
     const [accountHistoryData, setAccountHistoryData] = useState(null);
@@ -47,6 +47,9 @@ export default function AccountOverview({x_size, y_size}) {
                     headers: {
                         Authorization: `Bearer ${authTokens.access}`,
                     },
+                    params : {
+                        familyView: familyView,
+                    }
                 });
 
                 setAccountData(response.data);
@@ -70,6 +73,9 @@ export default function AccountOverview({x_size, y_size}) {
                     headers: {
                         Authorization: `Bearer ${authTokens.access}`,
                     },
+                    params: {
+                        familyView: familyView,
+                    }
                 });
                 setAccountHistoryData(response.data);
                 setIsHistoryLoading(false);
@@ -82,7 +88,7 @@ export default function AccountOverview({x_size, y_size}) {
 
         fetchAccounts();
         fetchAccountHistory();
-    }, [authTokens]);
+    }, [authTokens, familyView]);
 
     if (error) {
         return <div>{error}</div>;
@@ -112,6 +118,7 @@ export default function AccountOverview({x_size, y_size}) {
                         <Legend verticalAlign="top" height={36}/>
                         {accountData.map((account) => (
                             <Line
+                                connectNulls
                                 key={account.id}
                                 type="monotone"
                                 dataKey={account.name}

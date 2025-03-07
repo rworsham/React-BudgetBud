@@ -158,30 +158,35 @@ return (
                                 <ExpenseCategoriesPieChart
                                     x_size={report.x_size}
                                     y_size={report.y_size}
+                                    familyView={familyView}
                                 />
                             )}
                             {report.display_name === "Budget Vs Remaining Budget" && (
                                 <BudgetRemainingBudgetBarChart
                                     x_size={report.x_size}
                                     y_size={report.y_size}
+                                    familyView={familyView}
                                 />
                             )}
                             {report.display_name === "Expense Categories Bar Chart" && (
                                 <ExpenseCategoriesBarChart
                                     x_size={report.x_size}
                                     y_size={report.y_size}
+                                    familyView={familyView}
                                 />
                             )}
                             {report.display_name === "Account Balance History Line Chart" && (
                                 <AccountBalanceHistoryLineChart
                                     x_size={report.x_size}
                                     y_size={report.y_size}
+                                    familyView={familyView}
                                 />
                             )}
                             {report.display_name === "Income vs. Expense Bar Chart" && (
                                 <IncomeExpenseBarChart
                                     x_size={report.x_size}
                                     y_size={report.y_size}
+                                    familyView={familyView}
                                 />
                             )}
                         </div>

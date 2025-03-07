@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import ChartDataError from "../components/ChartDataError";
 import {Box, CircularProgress} from "@mui/material";
 
-export default function TransactionPieChart({ x_size, y_size }) {
+export default function TransactionPieChart({ x_size, y_size, familyView}) {
     const { authTokens } = useContext(AuthContext);
     const [filteredTransactions, setFilteredTransactions] = useState([]);
     const [error, setError] = useState('');
@@ -44,11 +44,16 @@ export default function TransactionPieChart({ x_size, y_size }) {
 
             try {
                 setIsLoading(true);
-                const response = await api.post('/transaction-pie-chart/', {
+
+                const dataPayload = {
+                    start_date: startDate,
+                    end_date: endDate,
+                };
+
+                const response = await api.post('/transaction-pie-chart/', dataPayload, {
                     params: {
-                        start_date: startDate,
-                        end_date: endDate,
-                    },
+                        familyView: familyView,
+                    }
                 });
                 setFilteredTransactions(response.data);
                 setIsLoading(false);
@@ -60,7 +65,7 @@ export default function TransactionPieChart({ x_size, y_size }) {
         };
 
         fetchChoices();
-    }, [authTokens, startDate, endDate]);
+    }, [authTokens, startDate, endDate, familyView]);
 
     if (error) {
         return <div>{error}</div>;

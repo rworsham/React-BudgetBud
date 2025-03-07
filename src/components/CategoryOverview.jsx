@@ -215,6 +215,7 @@ export default function CategoryOverview({ familyView }) {
                             <Legend />
                             {categoryData.map((category) => (
                                 <Line
+                                    connectNulls
                                     key={category.id}
                                     type="monotone"
                                     dataKey={category.name}

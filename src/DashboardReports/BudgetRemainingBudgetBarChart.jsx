@@ -5,7 +5,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 import ChartDataError from "../components/ChartDataError";
 import {Box, CircularProgress} from "@mui/material";
 
-export default function BudgetRemainingBudgetBarChart({x_size, y_size}) {
+export default function BudgetRemainingBudgetBarChart({x_size, y_size, familyView}) {
     const { authTokens } = useContext(AuthContext);
     const [reportData, setReportData] = useState(null);
     const [error, setError] = useState('');
@@ -51,8 +51,7 @@ export default function BudgetRemainingBudgetBarChart({x_size, y_size}) {
 
                 const response = await api.post('/budget-transaction-overview/', dataPayload, {
                     params: {
-                        start_date: startDate,
-                        end_date: endDate,
+                        familyView: familyView,
                     },
                 });
 
@@ -66,7 +65,7 @@ export default function BudgetRemainingBudgetBarChart({x_size, y_size}) {
         };
 
         fetchTransactions();
-    }, [authTokens, startDate, endDate]);
+    }, [authTokens, startDate, endDate, familyView]);
 
     const budgetData = reportData?.budgets_remaining?.map(budget => ({
         name: budget.budget_name,

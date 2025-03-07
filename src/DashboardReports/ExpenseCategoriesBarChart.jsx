@@ -15,7 +15,7 @@ import ChartDataError from "../components/ChartDataError";
 import {Box, CircularProgress} from "@mui/material";
 
 
-export default function ExpenseCategoriesBarChart({x_size, y_size}) {
+export default function ExpenseCategoriesBarChart({x_size, y_size, familyView}) {
     const { authTokens } = useContext(AuthContext);
     const [filteredTransactions, setFilteredTransactions] = useState([]);
     const [error, setError] = useState('');
@@ -54,10 +54,15 @@ export default function ExpenseCategoriesBarChart({x_size, y_size}) {
 
             try {
                 setIsLoading(true);
-                const response = await api.post('/transaction-bar-chart/', {
+
+                const dataPayload = {
+                    start_date: startDate,
+                    end_date: endDate,
+                };
+
+                const response = await api.post('/transaction-bar-chart/', dataPayload,{
                     params: {
-                        start_date: startDate,
-                        end_date: endDate,
+                        familyView: familyView
                     },
                 });
                 const formattedData = response.data.map(item => ({
@@ -74,7 +79,7 @@ export default function ExpenseCategoriesBarChart({x_size, y_size}) {
         };
 
         fetchTransactions();
-    }, [authTokens, startDate, endDate]);
+    }, [authTokens, startDate, endDate, familyView]);
 
     if (error) {
         return <div>{error}</div>;

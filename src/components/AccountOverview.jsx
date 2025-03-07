@@ -240,6 +240,7 @@ export default function AccountOverview({ familyView }) {
                             <Legend />
                             {accountData.map((account) => (
                                 <Line
+                                    connectNulls
                                     key={account.id}
                                     type="monotone"
                                     dataKey={account.name}
