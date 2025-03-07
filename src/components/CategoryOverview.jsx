@@ -5,7 +5,7 @@ import {
     Dialog, DialogTitle, DialogContent, DialogActions, IconButton, CircularProgress
 } from "@mui/material";
 import Grid from '@mui/material/Grid2';
-import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import {LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, LabelList} from 'recharts';
 import Divider from "@mui/material/Divider";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import {useTheme} from "@mui/material/styles";
@@ -79,7 +79,7 @@ export default function CategoryOverview({ familyView }) {
 
             try {
                 setIsHistoryLoading(true);
-                const response = await api.get(`/accounts/overview-report/`, {
+                const response = await api.get(`/category/history/line-chart/`, {
                     headers: {
                         Authorization: `Bearer ${authTokens.access}`,
                     },
@@ -220,7 +220,9 @@ export default function CategoryOverview({ familyView }) {
                                     dataKey={category.name}
                                     stroke="#1DB954"
                                     activeDot={{ r: 8 }}
-                                />
+                                >
+                                    <LabelList dataKey="name" position="top" />
+                                </Line>
                             ))}
                         </LineChart>
                     </ResponsiveContainer>
