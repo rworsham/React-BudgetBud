@@ -111,7 +111,7 @@ export default function DashboardReports({ familyView }) {
     const columns = [
         { field: 'id', headerName: 'ID' },
         { field: 'date', headerName: 'Date', editable: true },
-        { field: 'amount', headerName: 'Amount', editable: true },
+        { field: 'amount', headerName: 'Amount', editable: true, valueFormatter: (value) => `$${value}`},
         { field: 'transaction_type', headerName: 'Type', editable: true },
         { field: 'description', headerName: 'Description', editable: true },
         { field: 'category', headerName: 'Category', editable: true },

@@ -39,7 +39,7 @@ export default function DataTable({ familyView }) {
     const columns = [
         { field: 'id', headerName: 'ID', width: 70 },
         { field: 'date', headerName: 'Date', width: 100, editable: true },
-        { field: 'amount', headerName: 'Amount', width: 70, editable: true },
+        { field: 'amount', headerName: 'Amount', width: 70, editable: true, valueFormatter: (value) => `$${value}`},
         { field: 'transaction_type', headerName: 'Type', width: 130, editable: true },
         { field: 'description', headerName: 'Description', width: 200, editable: true },
         { field: 'category', headerName: 'Category', width: 100, editable: true },

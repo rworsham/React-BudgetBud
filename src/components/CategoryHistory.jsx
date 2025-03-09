@@ -22,7 +22,7 @@ export default function AccountHistory({category_id, familyView}) {
     const columns = [
         { field: 'id', headerName: 'ID', width: 70 },
         { field: 'date', headerName: 'Date', width: 100, editable: false },
-        { field: 'amount', headerName: 'Amount', width: 70, editable: false },
+        { field: 'amount', headerName: 'Amount', width: 70, editable: false, valueFormatter: (value) => `$${value}`},
         { field: 'transaction_type', headerName: 'Type', width: 130, editable: false },
         { field: 'description', headerName: 'Description', width: 200, editable: false },
         { field: 'category', headerName: 'Category', width: 100, editable: false },
