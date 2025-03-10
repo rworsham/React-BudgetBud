@@ -55,7 +55,13 @@ export default function TransactionPieChart({ x_size, y_size, familyView}) {
                         familyView: familyView,
                     }
                 });
-                setFilteredTransactions(response.data);
+
+                const parsedData = response.data.map(item => ({
+                    name: item.name,
+                    value: parseFloat(item.value),
+                }));
+
+                setFilteredTransactions(parsedData);
                 setIsLoading(false);
             } catch (err) {
                 console.error('Error fetching data:', err);
@@ -92,7 +98,7 @@ export default function TransactionPieChart({ x_size, y_size, familyView}) {
                             endAngle={0}
                             cx="50%"
                             cy="50%"
-                            outerRadius={'80%'}
+                            outerRadius={'60%'}
                             fill="#1DB954"
                             label={({ name, value }) => `${name}: $${value.toFixed(2)}`}
                         />
