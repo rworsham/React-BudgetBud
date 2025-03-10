@@ -45,7 +45,7 @@ export default function TransactionBarChart() {
                 });
                 const formattedData = response.data.map(item => ({
                     name: item.category,
-                    totalAmount: parseFloat(item.total_amount),
+                    totalAmount: item.total_amount,
                 }));
                 setFilteredTransactions(formattedData);
                 setIsLoading(false);

@@ -114,7 +114,9 @@ export default function AccountOverview({x_size, y_size, familyView}) {
                     <LineChart data={chartData}>
                         <XAxis dataKey="name" />
                         <YAxis />
-                        <Tooltip />
+                        <Tooltip
+                            formatter={(value) => `$${value}`}
+                        />
                         <Legend verticalAlign="top" height={36}/>
                         {accountData.map((account) => (
                             <Line

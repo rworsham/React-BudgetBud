@@ -15,7 +15,8 @@ import ChartDataError from "./ChartDataError";
 
 export default function DashboardReports({ familyView }) {
     const { authTokens } = useContext(AuthContext);
-    const [filteredTransactions, setFilteredTransactions] = useState([]);
+    const [filteredBarTransactions, setFilteredBarTransactions] = useState([]);
+    const [filteredPieTransactions, setFilteredPieTransactions] = useState([]);
     const [rows, setRows] = useState([]);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -51,10 +52,16 @@ export default function DashboardReports({ familyView }) {
 
                 const barChartData = barChartResponse.data.map(item => ({
                     name: item.category,
-                    totalAmount: parseFloat(item.total_amount),
+                    totalAmount: item.total_amount,
                 }));
 
-                setFilteredTransactions(barChartData);
+                const pieChartData = barChartResponse.data.map(item => ({
+                    name: item.category,
+                    value: parseFloat(item.total_amount),
+                }));
+
+                setFilteredBarTransactions(barChartData);
+                setFilteredPieTransactions(pieChartData);
                 setRows(tableResponse.data);
                 setIsLoading(false);
             } catch (err) {
@@ -160,13 +167,14 @@ export default function DashboardReports({ familyView }) {
                         Transaction Bar Chart
                     </Typography>
                         <ResponsiveContainer width="100%" height={250}>
-                            {filteredTransactions && filteredTransactions.length > 0 ? (
-                                <BarChart data={filteredTransactions} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                            {filteredBarTransactions && filteredBarTransactions.length > 0 ? (
+                                <BarChart data={filteredBarTransactions} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis dataKey="name" />
                                     <YAxis />
-                                    <Tooltip />
-                                    <Legend formatter={(value) => "Total"} />
+                                    <Tooltip
+                                        formatter={(value) => `$${value}`}
+                                    />
                                     <Bar dataKey="totalAmount" fill="#1DB954" activeBar={<Rectangle stroke="#1DB954" />} />
                                 </BarChart>
                             ) : (
@@ -179,16 +187,16 @@ export default function DashboardReports({ familyView }) {
                         Expense Pie Chart
                     </Typography>
                         <ResponsiveContainer width="100%" height={250}>
-                            {filteredTransactions && filteredTransactions.length > 0 ? (
+                            {filteredPieTransactions && filteredPieTransactions.length > 0 ? (
                                 <PieChart>
                                     <Pie
-                                        dataKey="totalAmount"
-                                        data={filteredTransactions}
+                                        dataKey="value"
+                                        data={filteredPieTransactions}
                                         startAngle={180}
                                         endAngle={0}
                                         cx="50%"
                                         cy="70%"
-                                        outerRadius="80%"
+                                        outerRadius="60%"
                                         fill="#1DB954"
                                         label={({ name, value }) => `${name}: $${value.toFixed(2)}`}
                                     />

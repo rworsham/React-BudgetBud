@@ -71,11 +71,11 @@ export default function IncomeExpenseBarChart({x_size, y_size, familyView}) {
     const incomeExpenseData = [
         {
             name: "Income",
-            value: reportData?.transactions.filter(t => t.transaction_type === "income").reduce((sum, t) => sum + parseFloat(t.amount), 0)
+            value: reportData?.transactions.filter(t => t.transaction_type === "income").reduce((sum, t) => sum + parseFloat(t.amount), 0).toFixed(2)
         },
         {
             name: "Expense",
-            value: reportData?.transactions.filter(t => t.transaction_type === "expense").reduce((sum, t) => sum + parseFloat(t.amount), 0)
+            value: reportData?.transactions.filter(t => t.transaction_type === "expense").reduce((sum, t) => sum + parseFloat(t.amount), 0).toFixed(2)
         },
     ];
 
@@ -99,7 +99,9 @@ export default function IncomeExpenseBarChart({x_size, y_size, familyView}) {
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="name" />
                         <YAxis />
-                        <Tooltip />
+                        <Tooltip
+                            formatter={(value) => `$${value}`}
+                        />
                         <Legend verticalAlign="top" height={36}/>
                         <Bar dataKey="value" fill="#8884d8" />
                     </BarChart>

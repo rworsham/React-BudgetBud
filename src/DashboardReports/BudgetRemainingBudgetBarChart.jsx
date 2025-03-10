@@ -69,8 +69,8 @@ export default function BudgetRemainingBudgetBarChart({x_size, y_size, familyVie
 
     const budgetData = reportData?.budgets_remaining?.map(budget => ({
         name: budget.budget_name,
-        starting_budget: parseFloat(budget.starting_budget),
-        remaining_budget: parseFloat(budget.remaining_budget),
+        starting_budget: budget.starting_budget,
+        remaining_budget: budget.remaining_budget,
     }));
 
     if (error) {
@@ -93,7 +93,9 @@ export default function BudgetRemainingBudgetBarChart({x_size, y_size, familyVie
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="name" />
                         <YAxis />
-                        <Tooltip />
+                        <Tooltip
+                            formatter={(value) => `$${value}`}
+                        />
                         <Legend verticalAlign="top" height={36}/>
                         <Bar dataKey="starting_budget" fill="#8884d8" />
                         <Bar dataKey="remaining_budget" fill="#82ca9d" />

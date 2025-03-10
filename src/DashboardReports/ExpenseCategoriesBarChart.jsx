@@ -67,7 +67,7 @@ export default function ExpenseCategoriesBarChart({x_size, y_size, familyView}) 
                 });
                 const formattedData = response.data.map(item => ({
                     name: item.category,
-                    totalAmount: parseFloat(item.total_amount),
+                    totalAmount: item.total_amount,
                 }));
                 setFilteredTransactions(formattedData);
                 setIsLoading(false);
@@ -109,7 +109,9 @@ export default function ExpenseCategoriesBarChart({x_size, y_size, familyView}) 
                         <CartesianGrid strokeDasharray="3 3"/>
                         <XAxis dataKey="name"/>
                         <YAxis/>
-                        <Tooltip/>
+                        <Tooltip
+                            formatter={(value) => `$${value}`}
+                        />
                         <Legend dataKey="name" verticalAlign="top" height={36}/>
                         <Bar dataKey="totalAmount" fill="#1DB954" activeBar={<Rectangle  stroke="#1DB954" />}/>
                     </BarChart>
