@@ -211,7 +211,9 @@ export default function CategoryOverview({ familyView }) {
                         <LineChart data={chartData}>
                             <XAxis dataKey="name" />
                             <YAxis />
-                            <Tooltip />
+                            <Tooltip
+                                formatter={(value) => `$${value}`}
+                            />
                             <Legend />
                             {categoryData.map((category) => (
                                 <Line

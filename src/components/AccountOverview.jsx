@@ -236,7 +236,9 @@ export default function AccountOverview({ familyView }) {
                         <LineChart data={chartData}>
                             <XAxis dataKey="name" />
                             <YAxis />
-                            <Tooltip />
+                            <Tooltip
+                                formatter={(value) => `$${value}`}
+                            />
                             <Legend />
                             {accountData.map((account) => (
                                 <Line

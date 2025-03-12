@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import dayjs from 'dayjs';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie } from 'recharts';
 import Divider from "@mui/material/Divider";
 import ChartDataError from "./ChartDataError";
 import {useTheme} from "@mui/material/styles";
@@ -29,6 +29,7 @@ export default function BudgetTransactionOverview({ familyView }) {
     const theme = useTheme();
     const { authTokens } = useContext(AuthContext);
     const [reportData, setReportData] = useState(null);
+    const [pieChartData, setPieChartData] = useState(null);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [existingBudgets, setExistingBudgets] = useState([]);
@@ -63,6 +64,18 @@ export default function BudgetTransactionOverview({ familyView }) {
                         familyView: familyView
                     }
                 });
+                const expenseResponse = await api.post('/transaction-pie-chart/', dataPayload, {
+                    params: {
+                        familyView: familyView,
+                    }
+                });
+
+                const parsedData = expenseResponse.data.map(item => ({
+                    name: item.name,
+                    value: parseFloat(item.value),
+                }));
+
+                setPieChartData(parsedData);
                 setExistingBudgets(budgetResponse.data);
                 setReportData(response.data);
                 setIsLoading(false);
@@ -105,35 +118,18 @@ export default function BudgetTransactionOverview({ familyView }) {
     const incomeExpenseData = [
         {
             name: "Income",
-            value: reportData?.transactions.filter(t => t.transaction_type === "income").reduce((sum, t) => sum + parseFloat(t.amount), 0)
+            value: reportData?.transactions.filter(t => t.transaction_type === "income").reduce((sum, t) => sum + parseFloat(t.amount), 0).toFixed(2)
         },
         {
             name: "Expense",
-            value: reportData?.transactions.filter(t => t.transaction_type === "expense").reduce((sum, t) => sum + parseFloat(t.amount), 0)
+            value: reportData?.transactions.filter(t => t.transaction_type === "expense").reduce((sum, t) => sum + parseFloat(t.amount), 0).toFixed(2)
         },
     ];
 
-    const expenseCategoriesData = reportData?.transactions
-        .filter(t => t.transaction_type === "expense")
-        .reduce((acc, t) => {
-            const categoryName = t.category;
-            if (acc[categoryName]) {
-                acc[categoryName] += parseFloat(t.amount);
-            } else {
-                acc[categoryName] = parseFloat(t.amount);
-            }
-            return acc;
-        }, {});
-
-    const pieChartData = Object.keys(expenseCategoriesData || {}).map(category => ({
-        name: category,
-        value: expenseCategoriesData[category],
-    }));
-
     const budgetData = reportData?.budgets_remaining?.map(budget => ({
         name: budget.budget_name,
-        starting_budget: parseFloat(budget.starting_budget),
-        remaining_budget: parseFloat(budget.remaining_budget),
+        starting_budget: parseFloat(budget.starting_budget).toFixed(2),
+        remaining_budget: parseFloat(budget.remaining_budget).toFixed(2),
     }));
 
     if (error) {
@@ -158,13 +154,15 @@ export default function BudgetTransactionOverview({ familyView }) {
                         <ResponsiveContainer width="100%" height={250}>
                             {pieChartData && pieChartData.length > 0 ? (
                                 <PieChart>
-                                    <Pie data={pieChartData} dataKey="value" nameKey="name" cx="50%" cy="50%"
-                                         outerRadius={80} fill="#8884d8"
-                                         label={({ name, value }) => `${name}: $${value.toFixed(2)}`}>
-                                        {pieChartData.map((entry, index) => (
-                                            <Cell key={`cell-${index}`} fill={entry.value > 100 ? "#8884d8" : "#1DB954"} />
-                                        ))}
-                                    </Pie>
+                                    <Pie
+                                        dataKey="value"
+                                        data={pieChartData}
+                                        cx="50%"
+                                        cy="50%"
+                                        outerRadius={'60%'}
+                                        fill="#1DB954"
+                                        label={({ name, value }) => `${name}: $${value.toFixed(2)}`}
+                                    />
                                     <Tooltip />
                                 </PieChart>
                             ) : (
@@ -184,7 +182,9 @@ export default function BudgetTransactionOverview({ familyView }) {
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis dataKey="name" />
                                     <YAxis />
-                                    <Tooltip />
+                                    <Tooltip
+                                        formatter={(value) => `$${value}`}
+                                    />
                                     <Legend />
                                     <Bar dataKey="value" fill="#8884d8" />
                                 </BarChart>
@@ -205,7 +205,9 @@ export default function BudgetTransactionOverview({ familyView }) {
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis dataKey="name" />
                                     <YAxis />
-                                    <Tooltip />
+                                    <Tooltip
+                                        formatter={(value) => `$${value}`}
+                                    />
                                     <Legend />
                                     <Bar dataKey="starting_budget" fill="#8884d8" />
                                     <Bar dataKey="remaining_budget" fill="#82ca9d" />
@@ -310,17 +312,17 @@ export default function BudgetTransactionOverview({ familyView }) {
                         {dayjs(startDate).format('MMM D, YYYY')} - {dayjs(endDate).format('MMM D, YYYY')}
                     </Typography>
                     <Typography variant="body1" sx={{ fontWeight: 'bold', marginBottom: 1 }}>
-                        Total Income: ${incomeExpenseData[0]?.value ? incomeExpenseData[0].value.toFixed(2) : '0.00'}
+                        Total Income: ${incomeExpenseData[0]?.value ? incomeExpenseData[0].value : '0.00'}
                     </Typography>
                     <Typography variant="body1" sx={{ fontWeight: 'bold', marginBottom: 1 }}>
-                        Total Expenses: ${incomeExpenseData[1]?.value ? incomeExpenseData[1].value.toFixed(2) : '0.00'}
+                        Total Expenses: ${incomeExpenseData[1]?.value ? incomeExpenseData[1].value : '0.00'}
                     </Typography>
                     <Typography variant="body1" sx={{
                         fontWeight: 'bold',
                         color: '#1DB954',
                         marginBottom: 1
                     }}>
-                        Remaining Budget: ${budgetData?.reduce((acc, b) => acc + b.remaining_budget, 0).toFixed(2)}
+                        Remaining Budget: ${budgetData?.reduce((acc, b) => acc + parseFloat(b.remaining_budget), 0).toFixed(2)}
                     </Typography>
                 </Paper>
             </Box>
