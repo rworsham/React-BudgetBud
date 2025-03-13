@@ -19,9 +19,8 @@ const Advertisement = () => {
             </Typography>
             <Box sx={{ width: '100%', marginTop: 2 }}>
                 <img
-                    src="https://via.placeholder.com/1200x200"
+                    src={`${process.env.PUBLIC_URL}/pexels-pixabay-47344.jpg`}
                     alt="placeholder"
-                    style={{ width: '100%', height: 'auto' }}
                 />
             </Box>
         </Box>

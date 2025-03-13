@@ -17,10 +17,13 @@ const FeatureCards = () => {
                     </CardContent>
                     <CardMedia
                         component="img"
-                        height="140"
-                        image="https://via.placeholder.com/300x140?text=Family+Group"
+                        image={`${process.env.PUBLIC_URL}/TransactionDisplay.jpg`}
                         alt="Family Group"
-                        sx={{ objectFit: 'cover', width: '50%' }}
+                        sx={{
+                            objectFit: 'cover',
+                            width: '50%',
+                            height: { xs: 'auto', md: '500px' },
+                        }}
                     />
                 </Card>
             </Box>
@@ -28,10 +31,13 @@ const FeatureCards = () => {
                 <Card sx={{ width: '100%', display: 'flex', flexDirection: 'row', boxSizing: 'border-box' }}>
                     <CardMedia
                         component="img"
-                        height="140"
-                        image="https://via.placeholder.com/300x140?text=Budgeting"
-                        alt="Budgeting"
-                        sx={{ objectFit: 'cover', width: '50%' }}
+                        image={`${process.env.PUBLIC_URL}/TransactionDisplay.jpg`}
+                        alt="Family Group"
+                        sx={{
+                            objectFit: 'cover',
+                            width: '50%',
+                            height: { xs: 'auto', md: '500px' },
+                        }}
                     />
                     <CardContent sx={{ width: '50%' }}>
                         <Typography variant="h6" component="div">
@@ -60,10 +66,13 @@ const FeatureCards = () => {
                     </CardContent>
                     <CardMedia
                         component="img"
-                        height="140"
-                        image="https://via.placeholder.com/300x140?text=Transactions"
-                        alt="Transactions"
-                        sx={{ objectFit: 'cover', width: '50%' }}
+                        image={`${process.env.PUBLIC_URL}/TransactionDisplay.jpg`}
+                        alt="Family Group"
+                        sx={{
+                            objectFit: 'cover',
+                            width: '50%',
+                            height: { xs: 'auto', md: '500px' },
+                        }}
                     />
                 </Card>
             </Box>
