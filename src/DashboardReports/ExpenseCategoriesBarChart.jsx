@@ -108,7 +108,15 @@ export default function ExpenseCategoriesBarChart({x_size, y_size, familyView}) 
                     >
                         <CartesianGrid strokeDasharray="3 3"/>
                         <XAxis dataKey="name"/>
-                        <YAxis/>
+                        <YAxis
+                            type="number"
+                            domain={([dataMin, dataMax]) => {
+                                const roundedMax = Math.ceil(dataMax / 1000) * 2000;
+                                return [0, roundedMax];
+                            }}
+                            tickCount={10}
+                            tickFormatter={(value) => `$${value}`}
+                        />
                         <Tooltip
                             formatter={(value) => `$${value}`}
                         />

@@ -15,6 +15,7 @@ import ChartDataError from "./ChartDataError";
 
 export default function DashboardReports({ familyView }) {
     const { authTokens } = useContext(AuthContext);
+    const [dataMax, setDataMax] = useState(1000);
     const [filteredBarTransactions, setFilteredBarTransactions] = useState([]);
     const [filteredPieTransactions, setFilteredPieTransactions] = useState([]);
     const [rows, setRows] = useState([]);
@@ -50,6 +51,13 @@ export default function DashboardReports({ familyView }) {
                     }
                 });
 
+                const processedData = barChartResponse.data.map(item => ({
+                    ...item,
+                    total_amount: parseFloat(item.total_amount)
+                }));
+
+                const newDataMax = Math.max(...processedData.map(item => item.total_amount));
+
                 const barChartData = barChartResponse.data.map(item => ({
                     name: item.category,
                     totalAmount: item.total_amount,
@@ -60,6 +68,7 @@ export default function DashboardReports({ familyView }) {
                     value: parseFloat(item.total_amount),
                 }));
 
+                setDataMax(newDataMax);
                 setFilteredBarTransactions(barChartData);
                 setFilteredPieTransactions(pieChartData);
                 setRows(tableResponse.data);
@@ -171,7 +180,12 @@ export default function DashboardReports({ familyView }) {
                                 <BarChart data={filteredBarTransactions} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis dataKey="name" />
-                                    <YAxis />
+                                    <YAxis
+                                        type="number"
+                                        domain={[0, Math.ceil(dataMax / 1000) * 1000]}
+                                        tickCount={10}
+                                        tickFormatter={(value) => `$${value.toFixed(0)}`}
+                                    />
                                     <Tooltip
                                         formatter={(value) => `$${value}`}
                                     />

@@ -16,6 +16,7 @@ import SavingsGoalForm from "../forms/SavingsGoalForm";
 export default function AccountOverview({ familyView }) {
     const theme = useTheme();
     const { authTokens } = useContext(AuthContext);
+    const [dataMax, setDataMax] = useState(1000);
     const [accountData, setAccountData] = useState([]);
     const [accountHistoryData, setAccountHistoryData] = useState(null);
     const [error, setError] = useState('');
@@ -88,6 +89,10 @@ export default function AccountOverview({ familyView }) {
                         familyView: familyView
                     },
                 });
+
+                const newDataMax = Math.max(...response.data.map(item => item.checking));
+
+                setDataMax(newDataMax);
                 setAccountHistoryData(response.data);
                 setIsHistoryLoading(false);
             } catch (err) {
@@ -235,7 +240,12 @@ export default function AccountOverview({ familyView }) {
                     <ResponsiveContainer width="100%" height={300}>
                         <LineChart data={chartData}>
                             <XAxis dataKey="name" />
-                            <YAxis />
+                            <YAxis
+                                type="number"
+                                domain={[0, Math.ceil(dataMax / 1000) * 1000]}
+                                tickCount={10}
+                                tickFormatter={(value) => `$${value.toFixed(0)}`}
+                            />
                             <Tooltip
                                 formatter={(value) => `$${value}`}
                             />
