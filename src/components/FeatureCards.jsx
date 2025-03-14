@@ -6,7 +6,7 @@ const FeatureCards = () => {
         <Box sx={{ width: '80%', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <Box sx={{ width: '100%', marginBottom: 4, display: 'flex', flexDirection: { xs: 'column', md: 'row-reverse' } }}>
                 <Card sx={{ width: '100%', display: 'flex', flexDirection: 'row', boxSizing: 'border-box' }}>
-                    <CardContent sx={{ width: '50%' }}>
+                    <CardContent sx={{ width: '30%' }}>
                         <Typography variant="h6" component="div">
                             Family Group
                         </Typography>
@@ -17,11 +17,11 @@ const FeatureCards = () => {
                     </CardContent>
                     <CardMedia
                         component="img"
-                        image={`${process.env.PUBLIC_URL}/TransactionDisplay.jpg`}
+                        image={`${process.env.PUBLIC_URL}/FamilyDisplay.jpg`}
                         alt="Family Group"
                         sx={{
                             objectFit: 'cover',
-                            width: '50%',
+                            width: '70%',
                             height: { xs: 'auto', md: '500px' },
                         }}
                     />
@@ -31,15 +31,15 @@ const FeatureCards = () => {
                 <Card sx={{ width: '100%', display: 'flex', flexDirection: 'row', boxSizing: 'border-box' }}>
                     <CardMedia
                         component="img"
-                        image={`${process.env.PUBLIC_URL}/TransactionDisplay.jpg`}
-                        alt="Family Group"
+                        image={`${process.env.PUBLIC_URL}/BudgetDisplay.jpg`}
+                        alt="Budget Group"
                         sx={{
                             objectFit: 'cover',
-                            width: '50%',
+                            width: '70%',
                             height: { xs: 'auto', md: '500px' },
                         }}
                     />
-                    <CardContent sx={{ width: '50%' }}>
+                    <CardContent sx={{ width: '30%' }}>
                         <Typography variant="h6" component="div">
                             Budgeting
                         </Typography>
@@ -53,7 +53,7 @@ const FeatureCards = () => {
             </Box>
             <Box sx={{ width: '100%', marginBottom: 4, display: 'flex', flexDirection: { xs: 'column', md: 'row-reverse' } }}>
                 <Card sx={{ width: '100%', display: 'flex', flexDirection: 'row', boxSizing: 'border-box' }}>
-                    <CardContent sx={{ width: '50%' }}>
+                    <CardContent sx={{ width: '30%' }}>
                         <Typography variant="h6" component="div">
                             Transactions
                         </Typography>
@@ -67,10 +67,10 @@ const FeatureCards = () => {
                     <CardMedia
                         component="img"
                         image={`${process.env.PUBLIC_URL}/TransactionDisplay.jpg`}
-                        alt="Family Group"
+                        alt="Transaction Group"
                         sx={{
                             objectFit: 'cover',
-                            width: '50%',
+                            width: '70%',
                             height: { xs: 'auto', md: '500px' },
                         }}
                     />
