@@ -51,6 +51,17 @@ export default function DashboardReports({ familyView }) {
                     }
                 });
 
+                const expenseResponse = await api.post('/transaction-pie-chart/', dataPayload, {
+                    params: {
+                        familyView: familyView,
+                    }
+                });
+
+                const pieChartData = expenseResponse.data.map(item => ({
+                    name: item.name,
+                    value: parseFloat(item.value),
+                }));
+
                 const processedData = barChartResponse.data.map(item => ({
                     ...item,
                     total_amount: parseFloat(item.total_amount)
@@ -61,11 +72,6 @@ export default function DashboardReports({ familyView }) {
                 const barChartData = barChartResponse.data.map(item => ({
                     name: item.category,
                     totalAmount: item.total_amount,
-                }));
-
-                const pieChartData = barChartResponse.data.map(item => ({
-                    name: item.category,
-                    value: parseFloat(item.total_amount),
                 }));
 
                 setDataMax(newDataMax);

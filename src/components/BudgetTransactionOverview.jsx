@@ -132,6 +132,9 @@ export default function BudgetTransactionOverview({ familyView }) {
         remaining_budget: parseFloat(budget.remaining_budget).toFixed(2),
     }));
 
+    const maxValue = budgetData ? Math.max(...budgetData.map(budget => Math.max(budget.starting_budget, budget.remaining_budget))) : 0;
+    const dataMax = Math.ceil(maxValue / 1000) * 1000;
+
     if (error) {
         return <div>{error}</div>;
     }
@@ -204,7 +207,12 @@ export default function BudgetTransactionOverview({ familyView }) {
                                 <BarChart data={budgetData}>
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis dataKey="name" />
-                                    <YAxis />
+                                    <YAxis
+                                        type="number"
+                                        domain={[0, dataMax]}
+                                        tickCount={10}
+                                        tickFormatter={(value) => `$${value}`}
+                                    />
                                     <Tooltip
                                         formatter={(value) => `$${value}`}
                                     />
