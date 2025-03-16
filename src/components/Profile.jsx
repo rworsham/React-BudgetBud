@@ -90,18 +90,18 @@ export default function Profile() {
                                 </Grid>
                                 <Grid item xs={4} textAlign="center">
                                     <Typography variant="body1">
-                                        Savings Goals Met
+                                        Date Joined
                                     </Typography>
                                     <Typography variant="h6">
-                                        {userStats.savings_goals_met}
+                                        {userStats.joined_date}
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={4} textAlign="center">
                                     <Typography variant="body1">
-                                        Lifetime Transaction Balance
+                                        Savings Goals Met
                                     </Typography>
                                     <Typography variant="h6">
-                                        ${userStats.net_balance}
+                                        {userStats.savings_goals_met}
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -116,18 +116,18 @@ export default function Profile() {
                             <Grid container spacing={2} justifyContent="space-between">
                                 <Grid item xs={4} textAlign="center">
                                     <Typography variant="body1">
-                                        Transactions Submitted
+                                        Income Total
                                     </Typography>
                                     <Typography variant="h6">
-                                        3
+                                        ${userStats.net_income}
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={4} textAlign="center">
                                     <Typography variant="body1">
-                                        Savings Goals Met
+                                        Expense Total
                                     </Typography>
                                     <Typography variant="h6">
-                                        4
+                                        ${userStats.net_expense}
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={4} textAlign="center">
@@ -135,7 +135,7 @@ export default function Profile() {
                                         Lifetime Balance
                                     </Typography>
                                     <Typography variant="h6">
-                                        $1,000,000
+                                        ${userStats.net_balance}
                                     </Typography>
                                 </Grid>
                             </Grid>

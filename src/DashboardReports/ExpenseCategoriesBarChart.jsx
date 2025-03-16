@@ -17,6 +17,7 @@ import {Box, CircularProgress} from "@mui/material";
 
 export default function ExpenseCategoriesBarChart({x_size, y_size, familyView}) {
     const { authTokens } = useContext(AuthContext);
+    const [dataMax, setDataMax] = useState(1000);
     const [filteredTransactions, setFilteredTransactions] = useState([]);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -65,11 +66,21 @@ export default function ExpenseCategoriesBarChart({x_size, y_size, familyView}) 
                         familyView: familyView
                     },
                 });
-                const formattedData = response.data.map(item => ({
+
+                const processedData = response.data.map(item => ({
+                    ...item,
+                    total_amount: parseFloat(item.total_amount)
+                }));
+
+                const newDataMax = Math.max(...processedData.map(item => item.total_amount));
+
+                const barChartData = response.data.map(item => ({
                     name: item.category,
                     totalAmount: item.total_amount,
                 }));
-                setFilteredTransactions(formattedData);
+
+                setDataMax(newDataMax);
+                setFilteredTransactions(barChartData);
                 setIsLoading(false);
             } catch (err) {
                 console.error('Error fetching data:', err);
@@ -110,12 +121,9 @@ export default function ExpenseCategoriesBarChart({x_size, y_size, familyView}) 
                         <XAxis dataKey="name"/>
                         <YAxis
                             type="number"
-                            domain={([dataMin, dataMax]) => {
-                                const roundedMax = Math.ceil(dataMax / 1000) * 2000;
-                                return [0, roundedMax];
-                            }}
+                            domain={[0, Math.ceil(dataMax / 1000) * 1000]}
                             tickCount={10}
-                            tickFormatter={(value) => `$${value}`}
+                            tickFormatter={(value) => `$${value.toFixed(0)}`}
                         />
                         <Tooltip
                             formatter={(value) => `$${value}`}
