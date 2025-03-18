@@ -90,7 +90,7 @@ export default function AccountOverview({ familyView }) {
                     },
                 });
 
-                const newDataMax = Math.max(...response.data.map(item => item.checking));
+                const newDataMax = Math.max(...response.data.map(item => item.Checking));
 
                 setDataMax(newDataMax);
                 setAccountHistoryData(response.data);

@@ -23,6 +23,7 @@ import BudgetRemainingBudgetBarChart from "../DashboardReports/BudgetRemainingBu
 import ExpenseCategoriesBarChart from "../DashboardReports/ExpenseCategoriesBarChart";
 import AccountBalanceHistoryLineChart from "../DashboardReports/AccountBalanceHistoryLineChart";
 import IncomeExpenseBarChart from "../DashboardReports/IncomeExpenseBarChart";
+import CategoryExpenseLineChart from "../DashboardReports/CategoryExpenseLineChart";
 
 
 export default function ReportDashboard({ familyView }) {
@@ -184,6 +185,13 @@ return (
                             )}
                             {report.display_name === "Income vs. Expense Bar Chart" && (
                                 <IncomeExpenseBarChart
+                                    x_size={report.x_size}
+                                    y_size={report.y_size}
+                                    familyView={familyView}
+                                />
+                            )}
+                            {report.display_name === "Category Expense Line Chart" && (
+                                <CategoryExpenseLineChart
                                     x_size={report.x_size}
                                     y_size={report.y_size}
                                     familyView={familyView}
