@@ -24,6 +24,8 @@ import ExpenseCategoriesBarChart from "../DashboardReports/ExpenseCategoriesBarC
 import AccountBalanceHistoryLineChart from "../DashboardReports/AccountBalanceHistoryLineChart";
 import IncomeExpenseBarChart from "../DashboardReports/IncomeExpenseBarChart";
 import CategoryExpenseLineChart from "../DashboardReports/CategoryExpenseLineChart";
+import FamilyContributionsBarChart from "../DashboardReports/FamilyContributionsBarChart";
+import CategoryUsagePerUserBarChart from "../DashboardReports/CategoryUsagePerUserBarChart";
 
 
 export default function ReportDashboard({ familyView }) {
@@ -192,6 +194,20 @@ return (
                             )}
                             {report.display_name === "Category Expense Line Chart" && (
                                 <CategoryExpenseLineChart
+                                    x_size={report.x_size}
+                                    y_size={report.y_size}
+                                    familyView={familyView}
+                                />
+                            )}
+                            {report.display_name === "Family Contributions Bar Chart" && (
+                                <FamilyContributionsBarChart
+                                    x_size={report.x_size}
+                                    y_size={report.y_size}
+                                    familyView={familyView}
+                                />
+                            )}
+                            {report.display_name === "Family Category Usage Bar Chart" && (
+                                <CategoryUsagePerUserBarChart
                                     x_size={report.x_size}
                                     y_size={report.y_size}
                                     familyView={familyView}

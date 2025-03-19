@@ -82,7 +82,7 @@ export default function Profile() {
                             <Grid container spacing={2} justifyContent="space-between">
                                 <Grid item xs={4} textAlign="center">
                                     <Typography variant="body1">
-                                        Transactions Submitted
+                                        Transaction Count
                                     </Typography>
                                     <Typography variant="h6">
                                         {userStats.total_transactions}
@@ -111,7 +111,7 @@ export default function Profile() {
                 <Divider sx={{ marginY: 3 }} />
                 <Box>
                     <Card sx={{ width: '100%', boxShadow: 3 }}>
-                        <CardHeader title="User Stats" sx={{ textAlign: 'center' }}/>
+                        <CardHeader sx={{ textAlign: 'center' }}/>
                         <CardContent>
                             <Grid container spacing={2} justifyContent="space-between">
                                 <Grid item xs={4} textAlign="center">
