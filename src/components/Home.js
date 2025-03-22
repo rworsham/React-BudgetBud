@@ -1,6 +1,5 @@
 import React from 'react';
 import Divider from '@mui/material/Divider';
-import Paper from '@mui/material/Paper';
 import FeatureCards from "./FeatureCards";
 import { Box, Typography, Button } from '@mui/material';
 import {Link} from "react-router-dom";
@@ -19,6 +18,7 @@ function Home() {
                     alignItems: 'center',
                     position: 'relative',
                     width: '100%',
+                    flexDirection: { xs: 'column', md: 'row' },
                 }}
             >
                 <Typography
@@ -31,11 +31,12 @@ function Home() {
                         color: 'transparent',
                         display: 'inline-block',
                         position: 'relative',
+                        textAlign: { xs: 'center', md: 'left' },
                     }}
                 >
                     BudgetBud
                 </Typography>
-                <Link to="/login" style={{textDecoration: 'none', position: 'absolute', right: '20px'}}>
+                <Link to="/login" style={{ textDecoration: 'none' }}>
                     <Button
                         variant="contained"
                         sx={{
@@ -48,6 +49,12 @@ function Home() {
                             },
                             padding: '10px 20px',
                             borderRadius: '5px',
+                            position: { xs: 'absolute', md: 'absolute' },
+                            top: { xs: '100%', md: '50%' },
+                            left: { xs: '50%', md: 'auto' },
+                            transform: { xs: 'translateX(-50%)', md: 'translateY(-50%)' },
+                            right: { xs: 'auto', md: '20px' },
+                            marginTop: { xs: '20px', md: '0' },
                         }}
                     >
                         Login

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Box, List, ListItem, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
+import CircleIcon from '@mui/icons-material/Circle';
 
 const ReportingAd = () => {
     return (
@@ -11,6 +12,8 @@ const ReportingAd = () => {
                 padding: { xs: '2rem', md: '4rem' },
                 backgroundColor: '#121212',
                 borderRadius: 2,
+                alignItems: 'center',
+                justifyContent: 'center',
             }}
         >
             <Box
@@ -19,29 +22,97 @@ const ReportingAd = () => {
                     height: '100%',
                     padding: 2,
                     display: 'flex',
-                    justifyContent: 'flex-end',
-                    alignItems: 'center',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: { xs: 'center', md: 'flex-start' },
                     marginBottom: { xs: '2rem', md: 0 },
                 }}
             >
-                <Box sx={{ maxWidth: { xs: '100%', md: '50%' } }}>
-                    <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold', color: '#1DB954', marginBottom: '1rem' }}>
-                        Powerful and Customizable Reports
+                <Typography
+                    variant="h3"
+                    sx={{
+                        fontWeight: 'bold',
+                        color: '#1DB954',
+                        textAlign: { xs: 'center', md: 'left' },
+                    }}
+                >
+                    Customizable Reports
+                </Typography>
+                <Box
+                    sx={{
+                        marginTop: { xs: '1rem', md: '0' },
+                        textAlign: { xs: 'center', md: 'left' },
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'flex-start',
+                    }}
+                >
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            marginBottom: '1rem',
+                        }}
+                    >
+                        <CircleIcon sx={{ color: '#1DB954', fontSize: 'medium', marginRight: 1 }} />
+                        <Typography
+                            sx={{
+                                fontWeight: 'bold',
+                                color: '#1DB954',
+                            }}
+                        >
+                            Detailed Expense Breakdown
+                        </Typography>
+                    </Box>
+                    <Typography
+                        sx={{ color: '#B3B3B3', marginBottom: '1rem', textAlign: { xs: 'center', md: 'left' } }}
+                    >
+                        Dive into your spending categories and identify trends for smarter budgeting.
                     </Typography>
-                    <List sx={{ paddingLeft: { xs: 0, md: 2 }, marginTop: { xs: '1rem', md: 0 } }}>
-                        <ListItem sx={{ color: '#B3B3B3', marginBottom: '1rem' }}>
-                            • <span style={{ color: '#1DB954' }}>Customizable Reports</span>: Generate reports based on categories, dates, and more, tailored to your specific needs.
-                        </ListItem>
-                        <ListItem sx={{ color: '#B3B3B3', marginBottom: '1rem' }}>
-                            • <span style={{ color: '#1DB954' }}>Detailed Expense Breakdown</span>: Dive into your spending categories and identify trends for smarter budgeting.
-                        </ListItem>
-                        <ListItem sx={{ color: '#B3B3B3', marginBottom: '1rem' }}>
-                            • <span style={{ color: '#1DB954' }}>Comparative Insights</span>: Compare your financial progress across different periods to see where you can improve.
-                        </ListItem>
-                        <ListItem sx={{ color: '#B3B3B3' }}>
-                            • <span style={{ color: '#1DB954' }}>Exportable Data</span>: Export your reports to PDF formats for offline review and sharing.
-                        </ListItem>
-                    </List>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            marginBottom: '1rem',
+                        }}
+                    >
+                        <CircleIcon sx={{ color: '#1DB954', fontSize: 'medium', marginRight: 1 }} />
+                        <Typography
+                            sx={{
+                                fontWeight: 'bold',
+                                color: '#1DB954',
+                            }}
+                        >
+                            Comparative Insights
+                        </Typography>
+                    </Box>
+                    <Typography
+                        sx={{ color: '#B3B3B3', marginBottom: '1rem', textAlign: { xs: 'center', md: 'left' } }}
+                    >
+                        Compare your financial progress across different periods to see where you can improve.
+                    </Typography>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            marginBottom: '1rem',
+                        }}
+                    >
+                        <CircleIcon sx={{ color: '#1DB954', fontSize: 'medium', marginRight: 1 }} />
+                        <Typography
+                            sx={{
+                                fontWeight: 'bold',
+                                color: '#1DB954',
+                            }}
+                        >
+                            Exportable Data
+                        </Typography>
+                    </Box>
+                    <Typography
+                        sx={{ color: '#B3B3B3', textAlign: { xs: 'center', md: 'left' } }}
+                    >
+                        Export your reports to PDF formats for offline review and sharing.
+                    </Typography>
                 </Box>
             </Box>
             <Box
@@ -50,6 +121,9 @@ const ReportingAd = () => {
                     height: '100%',
                     overflow: 'hidden',
                     boxShadow: 3,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
                 }}
             >
                 <img
@@ -57,7 +131,7 @@ const ReportingAd = () => {
                     alt="Placeholder for report/stat pic"
                     style={{
                         width: '100%',
-                        height: '100%',
+                        height: 'auto',
                         objectFit: 'cover',
                         borderRadius: 8,
                     }}

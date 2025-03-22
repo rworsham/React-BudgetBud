@@ -5,6 +5,7 @@ const Advertisement = () => {
     return (
         <Box
             sx={{
+                paddingTop: { xs: '80px', md: '0' },
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'center',
