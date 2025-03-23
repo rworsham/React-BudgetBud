@@ -1,5 +1,6 @@
 import React from 'react';
-import { Box, Typography} from '@mui/material';
+import {Box, Button, Typography} from '@mui/material';
+import {Link} from "react-router-dom";
 
 const Advertisement = () => {
     return (
@@ -23,12 +24,12 @@ const Advertisement = () => {
             <Typography variant="body2" color="text.secondary" sx={{ fontSize: '1rem', marginTop: 2 }}>
                 Whether you're budgeting for family trips, managing personal expenses, or saving for big purchases, our intuitive system helps you stay organized and financially empowered.
             </Typography>
-            <Box sx={{ width: '100%', marginTop: 2 }}>
-                <img
-                    src={`${process.env.PUBLIC_URL}/pexels-pixabay-47344.jpg`}
-                    alt="placeholder"
-                    style={{ width: '100%', height: 'auto', borderRadius: '8px' }}
-                />
+            <Box sx={{ textAlign: 'center', padding: '20px', marginBottom: 4 }}>
+                <Link to="/SignUp" style={{ textDecoration: 'none' }}>
+                    <Button variant="contained" color="primary">
+                        Create Free Account
+                    </Button>
+                </Link>
             </Box>
         </Box>
     );

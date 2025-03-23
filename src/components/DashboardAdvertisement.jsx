@@ -24,7 +24,7 @@ const DashboardAd = () => {
                 }}
             >
                 <img
-                    src="https://via.placeholder.com/150"
+                    src={`${process.env.PUBLIC_URL}/ReportsDashboard.jpg`}
                     alt="Placeholder for dashboard pic"
                     style={{
                         width: '100%',

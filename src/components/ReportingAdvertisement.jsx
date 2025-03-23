@@ -127,7 +127,7 @@ const ReportingAd = () => {
                 }}
             >
                 <img
-                    src="https://via.placeholder.com/150"
+                    src={`${process.env.PUBLIC_URL}/ReportsCustomizable.jpg`}
                     alt="Placeholder for report/stat pic"
                     style={{
                         width: '100%',
