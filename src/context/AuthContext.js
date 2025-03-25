@@ -52,6 +52,29 @@ export const AuthProvider = ({ children }) => {
     const authTokensRef = useRef(authTokens);
     const refreshingRef = useRef(false);
 
+    useEffect(() => {
+        authTokensRef.current = authTokens;
+    }, [authTokens]);
+
+    useEffect(() => {
+        const storedAuthTokens = localStorage.getItem('authTokens');
+        const storedUser = localStorage.getItem('user');
+        if (storedAuthTokens && storedUser) {
+            const parsedAuthTokens = JSON.parse(storedAuthTokens);
+            const parsedUser = JSON.parse(storedUser);
+
+            setAuthTokens({
+                access: parsedAuthTokens.access,
+                refresh: parsedAuthTokens.refresh,
+            });
+
+            setUser(parsedUser);
+            refreshToken();
+        } else {
+            setLoading(false);
+        }
+    }, []);
+
     const loginUser = async (loginParams) => {
         try {
             const response = await axios.post('https://localhost:8000/api/token/', loginParams);
