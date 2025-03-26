@@ -12,6 +12,7 @@ import AccountForm from "../forms/AccountForm";
 import {useTheme} from "@mui/material/styles";
 import AccountHistory from "./AccountHistory";
 import SavingsGoalForm from "../forms/SavingsGoalForm";
+import AlertHandler from "./AlertHandler";
 
 export default function AccountOverview({ familyView }) {
     const theme = useTheme();
@@ -105,10 +106,6 @@ export default function AccountOverview({ familyView }) {
         fetchAccounts();
         fetchAccountHistory();
     }, [authTokens, familyView]);
-
-    if (error) {
-        return <div>{error}</div>;
-    }
 
     const chartData = accountHistoryData ? accountHistoryData.map((entry) => ({
         date: entry.date,
@@ -275,6 +272,9 @@ export default function AccountOverview({ familyView }) {
                 >
                     <CircularProgress color="success" />
                 </Box>
+            )}
+            {error && (
+                <AlertHandler alertMessage={error} />
             )}
         </div>
     );

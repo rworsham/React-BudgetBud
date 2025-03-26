@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts';
 import ChartDataError from "../components/ChartDataError";
 import {Box, CircularProgress} from "@mui/material";
+import AlertHandler from "../components/AlertHandler";
 
 export default function BudgetRemainingBudgetBarChart({x_size, y_size, familyView}) {
     const { authTokens } = useContext(AuthContext);
@@ -76,10 +77,6 @@ export default function BudgetRemainingBudgetBarChart({x_size, y_size, familyVie
     const maxValue = budgetData ? Math.max(...budgetData.map(budget => Math.max(budget.starting_budget, budget.remaining_budget))) : 0;
     const dataMax = Math.ceil(maxValue / 1000) * 1000;
 
-    if (error) {
-        return <div>{error}</div>;
-    }
-
     return (
         <div
             style={{
@@ -120,6 +117,9 @@ export default function BudgetRemainingBudgetBarChart({x_size, y_size, familyVie
                 >
                     <CircularProgress color="success" />
                 </Box>
+            )}
+            {error && (
+                <AlertHandler alertMessage={error} />
             )}
         </div>
     );

@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import {BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LabelList} from 'recharts';
 import ChartDataError from "../components/ChartDataError";
 import {Box, CircularProgress} from "@mui/material";
+import AlertHandler from "../components/AlertHandler";
 
 export default function CategoryUsagePerUserBarChart({x_size, y_size, familyView}) {
     const { authTokens } = useContext(AuthContext);
@@ -64,10 +65,6 @@ export default function CategoryUsagePerUserBarChart({x_size, y_size, familyView
         fetchFamilyCategoryOverview();
     }, [authTokens]);
 
-    if (error) {
-        return <div>{error}</div>;
-    }
-
     return (
         <div
             style={{
@@ -104,6 +101,9 @@ export default function CategoryUsagePerUserBarChart({x_size, y_size, familyView
                 >
                     <CircularProgress color="success" />
                 </Box>
+            )}
+            {error && (
+                <AlertHandler alertMessage={error} />
             )}
         </div>
     );

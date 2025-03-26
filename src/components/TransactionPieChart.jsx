@@ -6,6 +6,7 @@ import {Box, Button, CircularProgress, Paper, TextField, Typography} from "@mui/
 import Grid from '@mui/material/Grid2';
 import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import AlertHandler from "./AlertHandler";
 
 export default function TransactionPieChart() {
     const { authTokens } = useContext(AuthContext);
@@ -42,10 +43,6 @@ export default function TransactionPieChart() {
 
         fetchChoices();
     }, [authTokens, startDate, endDate]);
-
-    if (error) {
-        return <div>{error}</div>;
-    }
 
     const handleStartDateChange = (newValue) => {
         setStartDate(newValue ? newValue.format('YYYY-MM-DD') : null);
@@ -151,6 +148,9 @@ export default function TransactionPieChart() {
                     >
                         <CircularProgress color="success" />
                     </Box>
+                )}
+                {error && (
+                    <AlertHandler alertMessage={error} />
                 )}
             </div>
         );

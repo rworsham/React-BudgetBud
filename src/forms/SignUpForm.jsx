@@ -4,6 +4,7 @@ import { TextField, Button, FormGroup, FormControl, Box, Typography } from '@mui
 import { useTheme } from '@mui/material/styles';
 import { api } from '../context/AuthContext';
 import Divider from "@mui/material/Divider";
+import AlertHandler from "../components/AlertHandler";
 
 const SignUpForm = () => {
     const [email, setEmail] = useState('');
@@ -210,9 +211,7 @@ const SignUpForm = () => {
                             {isSubmitting ? 'Submitting...' : 'Sign Up'}
                         </Button>
                         {error && (
-                            <Typography color="error" variant="body2" sx={{marginTop: 2}}>
-                                {error}
-                            </Typography>
+                            <AlertHandler alertMessage={error} />
                         )}
                     </FormGroup>
                     <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2, width: '100%'}}/>

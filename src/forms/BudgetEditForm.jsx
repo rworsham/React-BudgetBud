@@ -1,7 +1,8 @@
-import { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { TextField, Button, FormGroup, FormControl, Box, Typography, InputLabel, Select, MenuItem } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { AuthContext, api } from "../context/AuthContext";
+import AlertHandler from "../components/AlertHandler";
 
 const BudgetEditForm = ({ onSuccess }) => {
     const { authTokens } = useContext(AuthContext);
@@ -137,9 +138,7 @@ const BudgetEditForm = ({ onSuccess }) => {
                         </Button>
 
                         {error && (
-                            <Typography color="error" variant="body2" sx={{ marginTop: 2 }}>
-                                {error}
-                            </Typography>
+                            <AlertHandler alertMessage={error} />
                         )}
                     </FormGroup>
                 </Box>

@@ -26,6 +26,7 @@ import IncomeExpenseBarChart from "../DashboardReports/IncomeExpenseBarChart";
 import CategoryExpenseLineChart from "../DashboardReports/CategoryExpenseLineChart";
 import FamilyContributionsBarChart from "../DashboardReports/FamilyContributionsBarChart";
 import CategoryUsagePerUserBarChart from "../DashboardReports/CategoryUsagePerUserBarChart";
+import AlertHandler from "./AlertHandler";
 
 
 export default function ReportDashboard({ familyView }) {
@@ -84,10 +85,6 @@ export default function ReportDashboard({ familyView }) {
 
         fetchUserReports();
     }, [authTokens, isFormSubmitted, familyView]);
-
-    if (error) {
-        return <div>{error}</div>;
-    }
 
 return (
     <div style={{ height: '100%', width: '75%', padding: '10px' }}>
@@ -229,6 +226,9 @@ return (
             >
                 <CircularProgress color="success" />
             </Box>
+        )}
+        {error && (
+            <AlertHandler alertMessage={error} />
         )}
     </div>
     );

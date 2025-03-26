@@ -5,6 +5,7 @@ import { AuthContext, api } from '../context/AuthContext';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
+import AlertHandler from "../components/AlertHandler";
 
 const TransactionForm = ({ onSuccess, familyView }) => {
     const { authTokens } = useContext(AuthContext);
@@ -279,9 +280,7 @@ const TransactionForm = ({ onSuccess, familyView }) => {
                         </Button>
 
                         {error && (
-                            <Typography color="error" variant="body2" sx={{marginTop: 2}}>
-                                {error}
-                            </Typography>
+                            <AlertHandler alertMessage={error} />
                         )}
                     </FormGroup>
                 </Box>

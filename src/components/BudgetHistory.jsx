@@ -8,6 +8,7 @@ import {Box, CircularProgress, IconButton} from "@mui/material";
 import Divider from "@mui/material/Divider";
 import DateRangeFilterForm from "../forms/DateRangeFilterForm";
 import ChartDataError from "./ChartDataError";
+import AlertHandler from "./AlertHandler";
 
 export default function BudgetHistory({budget_id, familyView}) {
     const { authTokens } = useContext(AuthContext);
@@ -85,10 +86,6 @@ export default function BudgetHistory({budget_id, familyView}) {
         setEndDate(newValue ? newValue.format('YYYY-MM-DD') : null);
     };
 
-    if (error) {
-        return <div>{error}</div>;
-    }
-
     return (
         <div style={{ height: 'auto', width: 'auto', padding: '10px'}}>
             <DateRangeFilterForm
@@ -134,6 +131,9 @@ export default function BudgetHistory({budget_id, familyView}) {
                 >
                     <CircularProgress color="success" />
                 </Box>
+            )}
+            {error && (
+                <AlertHandler alertMessage={error} />
             )}
         </div>
     );

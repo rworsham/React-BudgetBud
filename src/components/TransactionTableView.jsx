@@ -22,6 +22,7 @@ import {
 } from '@mui/material';
 import Divider from "@mui/material/Divider";
 import DateRangeFilterForm from "../forms/DateRangeFilterForm";
+import AlertHandler from "./AlertHandler";
 
 export default function DataTable({ familyView }) {
     const { authTokens } = useContext(AuthContext);
@@ -191,10 +192,6 @@ export default function DataTable({ familyView }) {
         }
     };
 
-    if (error) {
-        return <div>{error}</div>;
-    }
-
     return (
         <div style={{ height: '100%', width: '75%', padding: '10px'}}>
             <DateRangeFilterForm
@@ -247,6 +244,9 @@ export default function DataTable({ familyView }) {
                 >
                     <CircularProgress color="success" />
                 </Box>
+            )}
+            {error && (
+                <AlertHandler alertMessage={error} />
             )}
         </div>
     );

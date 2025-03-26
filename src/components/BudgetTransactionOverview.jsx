@@ -24,6 +24,7 @@ import BudgetForm from "../forms/BudgetForm";
 import BudgetEditForm from "../forms/BudgetEditForm";
 import BudgetGoalForm from "../forms/BudgetGoalForm";
 import BudgetHistory from "./BudgetHistory";
+import AlertHandler from "./AlertHandler";
 
 export default function BudgetTransactionOverview({ familyView }) {
     const theme = useTheme();
@@ -134,10 +135,6 @@ export default function BudgetTransactionOverview({ familyView }) {
 
     const maxValue = budgetData ? Math.max(...budgetData.map(budget => Math.max(budget.starting_budget, budget.remaining_budget))) : 0;
     const dataMax = Math.ceil(maxValue / 1000) * 1000;
-
-    if (error) {
-        return <div>{error}</div>;
-    }
 
     return (
         <div style={{ height: '100%', width: '75%', padding: '10px' }}>
@@ -386,6 +383,9 @@ export default function BudgetTransactionOverview({ familyView }) {
                 >
                     <CircularProgress color="success" />
                 </Box>
+            )}
+            {error && (
+                <AlertHandler alertMessage={error} />
             )}
         </div>
     );

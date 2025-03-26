@@ -4,6 +4,7 @@ import {useNavigate, useParams} from 'react-router-dom';
 import { TextField, Button, FormGroup, FormControl, Box, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import Divider from "@mui/material/Divider";
+import AlertHandler from "../components/AlertHandler";
 
 const Login = () => {
     const { loginUser } = useContext(AuthContext);
@@ -116,9 +117,7 @@ const Login = () => {
                                 {isSubmitting ? 'Processing...' : 'Login'}
                             </Button>
                             {error && (
-                                <Typography color="error" variant="body2" sx={{ marginTop: 2 }}>
-                                    {error}
-                                </Typography>
+                                <AlertHandler alertMessage={error} />
                             )}
                         </FormControl>
                     </FormGroup>

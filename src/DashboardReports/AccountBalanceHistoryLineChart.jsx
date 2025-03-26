@@ -3,6 +3,7 @@ import { AuthContext, api } from "../context/AuthContext";
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import ChartDataError from "../components/ChartDataError";
 import {Box, CircularProgress} from "@mui/material";
+import AlertHandler from "../components/AlertHandler";
 
 export default function AccountBalanceLineChart({x_size, y_size, familyView}) {
     const { authTokens } = useContext(AuthContext);
@@ -94,10 +95,6 @@ export default function AccountBalanceLineChart({x_size, y_size, familyView}) {
         fetchAccountHistory();
     }, [authTokens, familyView]);
 
-    if (error) {
-        return <div>{error}</div>;
-    }
-
     const chartData = accountHistoryData ? accountHistoryData.map((entry) => ({
         date: entry.date,
         ...entry
@@ -150,6 +147,9 @@ export default function AccountBalanceLineChart({x_size, y_size, familyView}) {
                 >
                     <CircularProgress color="success" />
                 </Box>
+            )}
+            {error && (
+                <AlertHandler alertMessage={error} />
             )}
         </div>
     );

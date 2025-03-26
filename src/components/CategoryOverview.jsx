@@ -11,6 +11,7 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 import {useTheme} from "@mui/material/styles";
 import CategoryHistory from "./CategoryHistory";
 import CategoryForm from "../forms/CategoryForm";
+import AlertHandler from "./AlertHandler";
 
 export default function CategoryOverview({ familyView }) {
     const theme = useTheme();
@@ -99,10 +100,6 @@ export default function CategoryOverview({ familyView }) {
         fetchCategories();
         fetchCategoryHistory();
     }, [authTokens, familyView]);
-
-    if (error) {
-        return <div>{error}</div>;
-    }
 
     const chartData = categoryHistoryData ? categoryHistoryData.map((entry) => ({
         date: entry.date,
@@ -242,6 +239,9 @@ export default function CategoryOverview({ familyView }) {
                 >
                     <CircularProgress color="success" />
                 </Box>
+            )}
+            {error && (
+                <AlertHandler alertMessage={error} />
             )}
         </div>
     );

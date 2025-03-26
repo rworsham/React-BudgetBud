@@ -2,8 +2,9 @@ import React, { useState, useEffect, useContext } from "react";
 import {api, AuthContext} from "../context/AuthContext";
 import Divider from "@mui/material/Divider";
 import Paper from "@mui/material/Paper";
-import {Avatar, Box, Card, CardContent, CardHeader, Typography} from "@mui/material";
+import {Avatar, Box, Card, CardContent, CardHeader, CircularProgress, Typography} from "@mui/material";
 import Grid from "@mui/material/Grid2";
+import AlertHandler from "./AlertHandler";
 
 export default function Profile() {
     const { authTokens } = useContext(AuthContext);
@@ -46,14 +47,6 @@ export default function Profile() {
 
         fetchUserDetails();
     }, [authTokens]);
-
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-
-    if (error) {
-        return <div>{error}</div>;
-    }
 
     return (
         <div style={{ height: 'auto', width: 'auto', padding: '10px'}}>
@@ -142,6 +135,21 @@ export default function Profile() {
                         </CardContent>
                     </Card>
                 </Box>
+                {isLoading && (
+                    <Box
+                        sx={{
+                            position: 'fixed',
+                            top: 100,
+                            right: 16,
+                            zIndex: 1300,
+                        }}
+                    >
+                        <CircularProgress color="success" />
+                    </Box>
+                )}
+                {error && (
+                    <AlertHandler alertMessage={error} />
+                )}
             </Paper>
         </div>
     );

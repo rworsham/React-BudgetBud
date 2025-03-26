@@ -12,6 +12,7 @@ import {useTheme} from "@mui/material/styles";
 import FamilyInviteForm from "../forms/FamilyInviteForm";
 import ChartDataError from "./ChartDataError";
 import FamilyHistory from "./FamilyHistory";
+import AlertHandler from "./AlertHandler";
 
 export default function FamilyOverview() {
     const theme = useTheme();
@@ -123,10 +124,6 @@ export default function FamilyOverview() {
         fetchFamilyTransactionOverview();
         fetchFamilyCategoryOverview();
     }, [authTokens]);
-
-    if (error) {
-        return <div>{error}</div>;
-    }
 
     return (
         <div style={{ height: '100%', width: '75%', padding: '10px' }}>
@@ -268,6 +265,9 @@ export default function FamilyOverview() {
                 >
                     <CircularProgress color="success" />
                 </Box>
+            )}
+            {error && (
+                <AlertHandler alertMessage={error} />
             )}
         </div>
     );

@@ -70,6 +70,7 @@ function Home() {
             <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2}}/>
             <DashboardAd/>
             <ReportingAd/>
+            <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2}}/>
         </div>
     );
 }

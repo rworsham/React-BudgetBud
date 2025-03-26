@@ -8,6 +8,7 @@ import {Box, CircularProgress, IconButton} from "@mui/material";
 import Divider from "@mui/material/Divider";
 import DateRangeFilterForm from "../forms/DateRangeFilterForm";
 import ChartDataError from "./ChartDataError";
+import AlertHandler from "./AlertHandler";
 
 export default function FamilyHistory({ user_id }) {
     const { authTokens } = useContext(AuthContext);
@@ -83,11 +84,6 @@ export default function FamilyHistory({ user_id }) {
         setEndDate(newValue ? newValue.format('YYYY-MM-DD') : null);
     };
 
-
-    if (error) {
-        return <div>{error}</div>;
-    }
-
     return (
         <div style={{ height: 'auto', width: 'auto', padding: '10px'}}>
             <DateRangeFilterForm
@@ -132,6 +128,9 @@ export default function FamilyHistory({ user_id }) {
                     >
                         <CircularProgress color="success" />
                     </Box>
+                )}
+                {error && (
+                    <AlertHandler alertMessage={error} />
                 )}
             </Paper>
         </div>

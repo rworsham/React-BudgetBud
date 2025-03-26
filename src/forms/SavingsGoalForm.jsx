@@ -5,6 +5,7 @@ import {AuthContext, api} from "../context/AuthContext";
 import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
+import AlertHandler from "../components/AlertHandler";
 
 
 const SavingsGoalForm = ({ onSuccess, account_id }) => {
@@ -119,9 +120,7 @@ const SavingsGoalForm = ({ onSuccess, account_id }) => {
                             {isSubmitting ? 'Submitting...' : 'Submit'}
                         </Button>
                         {error && (
-                            <Typography color="error" variant="body2" sx={{marginTop: 2}}>
-                                {error}
-                            </Typography>
+                            <AlertHandler alertMessage={error} />
                         )}
                     </FormGroup>
                 </Box>

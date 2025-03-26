@@ -13,6 +13,7 @@ import { AuthContext, api } from "../context/AuthContext";
 import dayjs from 'dayjs';
 import ChartDataError from "../components/ChartDataError";
 import {Box, CircularProgress} from "@mui/material";
+import AlertHandler from "../components/AlertHandler";
 
 
 export default function ExpenseCategoriesBarChart({x_size, y_size, familyView}) {
@@ -92,10 +93,6 @@ export default function ExpenseCategoriesBarChart({x_size, y_size, familyView}) 
         fetchTransactions();
     }, [authTokens, startDate, endDate, familyView]);
 
-    if (error) {
-        return <div>{error}</div>;
-    }
-
     return (
         <div
             style={{
@@ -146,6 +143,9 @@ export default function ExpenseCategoriesBarChart({x_size, y_size, familyView}) 
                 >
                     <CircularProgress color="success" />
                 </Box>
+            )}
+            {error && (
+                <AlertHandler alertMessage={error} />
             )}
         </div>
     );

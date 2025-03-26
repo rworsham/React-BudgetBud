@@ -51,6 +51,7 @@ import Profile from './Profile';
 import {api, AuthContext} from "../context/AuthContext";
 import FamilyOverview from "./FamilyOverview";
 import CategoryOverview from "./CategoryOverview";
+import AlertHandler from "./AlertHandler";
 
 const drawerWidth = 240;
 const actions = [
@@ -249,10 +250,6 @@ const Dashboard = () => {
         }, 5000);
     };
 
-    if (error) {
-        return <div>{error}</div>;
-    }
-
     const renderContent = () => {
         switch (currentSegment) {
             case 'dashboard':
@@ -431,6 +428,9 @@ const Dashboard = () => {
                 >
                     <CircularProgress color="success" />
                 </Box>
+            )}
+            {error && (
+                <AlertHandler alertMessage={error} />
             )}
         </Box>
     );

@@ -3,6 +3,7 @@ import { AuthContext, api } from "../context/AuthContext";
 import {LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, LabelList} from 'recharts';
 import ChartDataError from "../components/ChartDataError";
 import {Box, CircularProgress} from "@mui/material";
+import AlertHandler from "../components/AlertHandler";
 
 export default function CategoryExpenseLineChart({x_size, y_size, familyView}) {
     const { authTokens } = useContext(AuthContext);
@@ -90,10 +91,6 @@ export default function CategoryExpenseLineChart({x_size, y_size, familyView}) {
         fetchCategoryHistory();
     }, [authTokens, familyView]);
 
-    if (error) {
-        return <div>{error}</div>;
-    }
-
     const chartData = categoryHistoryData ? categoryHistoryData.map((entry) => ({
         date: entry.date,
         ...entry
@@ -143,6 +140,9 @@ export default function CategoryExpenseLineChart({x_size, y_size, familyView}) {
                 >
                     <CircularProgress color="success" />
                 </Box>
+            )}
+            {error && (
+                <AlertHandler alertMessage={error} />
             )}
         </div>
     );

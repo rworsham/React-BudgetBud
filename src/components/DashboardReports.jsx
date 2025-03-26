@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import {Box, CircularProgress, Paper, Typography} from "@mui/material";
-import { BarChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Bar, Rectangle } from "recharts";
+import { BarChart, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Bar, Rectangle } from "recharts";
 import { PieChart, Pie } from "recharts";
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import dayjs from "dayjs";
@@ -12,6 +12,7 @@ import CancelIcon from '@mui/icons-material/Close';
 import Divider from "@mui/material/Divider";
 import DateRangeFilterForm from "../forms/DateRangeFilterForm";
 import ChartDataError from "./ChartDataError";
+import AlertHandler from "./AlertHandler";
 
 export default function DashboardReports({ familyView }) {
     const { authTokens } = useContext(AuthContext);
@@ -28,7 +29,6 @@ export default function DashboardReports({ familyView }) {
     useEffect(() => {
         const fetchData = async () => {
             if (!authTokens || !authTokens.access) {
-                setError('No authorization token found');
                 return;
             }
 
@@ -80,7 +80,6 @@ export default function DashboardReports({ familyView }) {
                 setRows(tableResponse.data);
                 setIsLoading(false);
             } catch (err) {
-                setError('Failed to fetch data');
                 setIsLoading(false);
             }
         };
@@ -112,7 +111,7 @@ export default function DashboardReports({ familyView }) {
 
     const handleDeleteClick = async (id) => {
         try {
-            await api.delete(`/transaction-table-view/${id}`);
+            await api.delete(`/transaction/${id}`);
             setRows(rows.filter((row) => row.id !== id));
         } catch (err) {
             console.error('Error deleting row:', err);
@@ -122,7 +121,7 @@ export default function DashboardReports({ familyView }) {
 
     const updateRow = async (row) => {
         try {
-            await api.put(`/transaction-table-view/${row.id}`, row);
+            await api.put(`/transaction/${row.id}`, row);
             setRows(rows.map((existingRow) => (existingRow.id === row.id ? row : existingRow)));
         } catch (err) {
             console.error('Error updating row:', err);
@@ -162,10 +161,6 @@ export default function DashboardReports({ familyView }) {
             },
         },
     ];
-
-    if (error) {
-        return <div>{error}</div>;
-    }
 
     return (
         <div style={{ height: '100%', width: '75%', padding: '10px' }}>
@@ -256,6 +251,9 @@ export default function DashboardReports({ familyView }) {
                 >
                     <CircularProgress color="success" />
                 </Box>
+            )}
+            {error && (
+                <AlertHandler alertMessage={error} />
             )}
         </div>
     );

@@ -1,7 +1,8 @@
-import { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Button, FormGroup, FormControl, Box, Typography, Select, MenuItem, InputLabel } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { AuthContext, api } from "../context/AuthContext";
+import AlertHandler from "../components/AlertHandler";
 
 const ReportDashboardEditForm = ({ onSuccess }) => {
     const { authTokens } = useContext(AuthContext);
@@ -154,9 +155,7 @@ const ReportDashboardEditForm = ({ onSuccess }) => {
                             {isSubmitting ? 'Submitting...' : 'Submit'}
                         </Button>
                         {error && (
-                            <Typography color="error" variant="body2" sx={{ marginTop: 2 }}>
-                                {error}
-                            </Typography>
+                            <AlertHandler alertMessage={error} />
                         )}
                     </FormGroup>
                 </Box>
