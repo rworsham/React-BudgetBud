@@ -25,6 +25,11 @@ const SignUpForm = () => {
             return false;
         }
 
+        if (!email.includes('@')) {
+            setError('Please enter a valid email address');
+            return false;
+        }
+
         if (password !== confirmPassword) {
             setError('Passwords do not match');
             return false;
@@ -58,7 +63,7 @@ const SignUpForm = () => {
             navigate('/login')
         } catch (err) {
             console.error('Error during sign-up:', err);
-            setError('Failed to create new account. Please try again.');
+            setError('Failed to create new account. Please verify your information and try again.');
         } finally {
             setIsSubmitting(false);
         }

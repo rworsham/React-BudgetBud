@@ -31,6 +31,7 @@ const Login = () => {
         } catch (err) {
             console.log(err);
             setError('Login failed. Please check your credentials.');
+            setIsSubmitting(false);
         }
     };
 

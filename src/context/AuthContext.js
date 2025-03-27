@@ -7,13 +7,6 @@ export const api = axios.create({
     baseURL: 'https://localhost:8000/api/',
 });
 
-export const logout = (setAuthTokens, setUser) => {
-    setAuthTokens(null);
-    setUser(null);
-    localStorage.removeItem('authTokens');
-    localStorage.removeItem('user');
-};
-
 const setupAxiosInterceptors = (authTokensRef, refreshToken) => {
     api.interceptors.request.use(
         async (config) => {
@@ -83,6 +76,7 @@ export const AuthProvider = ({ children }) => {
             await getUserDetails(response.data.access);
         } catch (err) {
             console.error('Error during login:', err);
+            throw Error();
         }
     };
 

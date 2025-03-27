@@ -309,7 +309,7 @@ const Dashboard = () => {
                         </IconButton>
                         <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleCloseMenu}>
                             <MenuItem onClick={() => { handleActionClick('Profile'); }}>Profile</MenuItem>
-                            <MenuItem onClick={() => { handleCloseMenu(); console.log("Logout"); navigate('/login') }}>Logout</MenuItem>
+                            <MenuItem onClick={() => { handleCloseMenu(); console.log("Logout"); navigate('/logout') }}>Logout</MenuItem>
                         </Menu>
                     </Box>
                 </Toolbar>
