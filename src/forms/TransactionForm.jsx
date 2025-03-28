@@ -1,5 +1,18 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { TextField, Button, FormGroup, FormControl, MenuItem, Select, InputLabel, Box, Typography, Checkbox, FormControlLabel } from '@mui/material';
+import {
+    TextField,
+    Button,
+    FormGroup,
+    FormControl,
+    MenuItem,
+    Select,
+    InputLabel,
+    Box,
+    Typography,
+    Checkbox,
+    FormControlLabel,
+    InputAdornment
+} from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { AuthContext, api } from '../context/AuthContext';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
@@ -154,6 +167,11 @@ const TransactionForm = ({ onSuccess, familyView }) => {
                                 variant="outlined"
                                 value={amount}
                                 onChange={(e) => setAmount(e.target.value)}
+                                slotProps={{
+                                    input: {
+                                        startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                    },
+                                }}
                                 fullWidth
                                 required
                             />

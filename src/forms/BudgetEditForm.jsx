@@ -1,5 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { TextField, Button, FormGroup, FormControl, Box, Typography, InputLabel, Select, MenuItem } from '@mui/material';
+import {
+    TextField,
+    Button,
+    FormGroup,
+    FormControl,
+    Box,
+    Typography,
+    InputLabel,
+    Select,
+    MenuItem,
+    InputAdornment
+} from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { AuthContext, api } from "../context/AuthContext";
 import AlertHandler from "../components/AlertHandler";
@@ -129,6 +140,11 @@ const BudgetEditForm = ({ onSuccess }) => {
                                 variant="outlined"
                                 value={amount}
                                 onChange={(e) => setAmount(e.target.value)}
+                                slotProps={{
+                                    input: {
+                                        startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                    },
+                                }}
                                 fullWidth
                                 required
                             />
