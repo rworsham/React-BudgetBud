@@ -146,9 +146,9 @@ export default function CategoryOverview({ familyView }) {
                     <Button onClick={handleClose} color="primary">Close</Button>
                 </DialogActions>
             </Dialog>
-            <Grid container spacing={4}>
+            <Grid display="flex" direction={{ xs: 'column', sm: 'row' }} justifyContent="center" alignItems="center" container spacing={4}>
                 {categoryData.map((category) => (
-                    <Grid item xs={12} sm={4} size={4} key={category.id}>
+                    <Grid item xs={12} sm={4} size="grow" key={category.id}>
                         <Card variant="outlined">
                             <CardContent>
                                 <Typography variant="h6" textAlign='center' gutterBottom>

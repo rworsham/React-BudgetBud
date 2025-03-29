@@ -145,8 +145,8 @@ export default function BudgetTransactionOverview({ familyView }) {
             handleEndDateChange={handleEndDateChange}
             />
             <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 5}}/>
-            <Grid container spacing={4}>
-                <Grid item xs={12} sm={4} size={4}>
+            <Grid display="flex" direction={{ xs: 'column', sm: 'row' }} justifyContent="center" alignItems="center" container spacing={4}>
+                <Grid item xs={12} sm={4} size="grow">
                     <Box sx={{ marginBottom: 4 }}>
                         <Typography variant="h6" gutterBottom sx={{ textAlign: 'center' }}>
                             Expense Categories Breakdown
@@ -171,7 +171,7 @@ export default function BudgetTransactionOverview({ familyView }) {
                         </ResponsiveContainer>
                     </Box>
                 </Grid>
-                <Grid item xs={12} sm={4} size={4}>
+                <Grid item xs={12} sm={4} size="grow">
                     <Box sx={{ marginBottom: 4 }}>
                         <Typography variant="h6" gutterBottom sx={{ textAlign: 'center' }}>
                             Income vs Expense
@@ -194,7 +194,7 @@ export default function BudgetTransactionOverview({ familyView }) {
                         </ResponsiveContainer>
                     </Box>
                 </Grid>
-                <Grid item xs={12} sm={4} size={4}>
+                <Grid item xs={12} sm={4} size="grow">
                     <Box sx={{ marginBottom: 4 }}>
                         <Typography variant="h6" gutterBottom sx={{ textAlign: 'center' }}>
                             Budget vs Remaining Budget
@@ -251,9 +251,9 @@ export default function BudgetTransactionOverview({ familyView }) {
                     </Typography>
                 </Paper>
             </Box>
-            <Grid container spacing={4}>
+            <Grid display="flex" direction={{ xs: 'column', sm: 'row' }} justifyContent="center" alignItems="center" container spacing={4}>
                 {existingBudgets.map((budget) => (
-                    <Grid item xs={12} sm={4} size={4} key={budget.id}>
+                    <Grid item xs={12} sm={4} size="grow" key={budget.id}>
                         <Card variant="outlined">
                             <CardContent>
                                 <Typography variant="h6" textAlign='center' gutterBottom>

@@ -165,9 +165,9 @@ export default function FamilyOverview() {
                     <Button onClick={handleClose} color="primary">Close</Button>
                 </DialogActions>
             </Dialog>
-            <Grid container spacing={4}>
+            <Grid display="flex" direction={{ xs: 'column', sm: 'row' }} justifyContent="center" alignItems="center" container spacing={4}>
                 {familyData.map((user) => (
-                    <Grid item xs={12} sm={4} size={4} key={user.id}>
+                    <Grid item xs={12} sm={4} size="grow" key={user.id}>
                         <Card variant="outlined">
                             <CardContent>
                                 <Typography variant="h6" textAlign='center' gutterBottom>
