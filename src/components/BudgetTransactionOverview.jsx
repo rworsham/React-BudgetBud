@@ -146,7 +146,7 @@ export default function BudgetTransactionOverview({ familyView }) {
             />
             <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 5}}/>
             <Grid display="flex" direction={{ xs: 'column', sm: 'row' }} justifyContent="center" alignItems="center" container spacing={4}>
-                <Grid item xs={12} sm={4} size="grow">
+                <Grid item size={{ xs: 'full', sm: 'grow'}}>
                     <Box sx={{ marginBottom: 4 }}>
                         <Typography variant="h6" gutterBottom sx={{ textAlign: 'center' }}>
                             Expense Categories Breakdown
@@ -253,7 +253,7 @@ export default function BudgetTransactionOverview({ familyView }) {
             </Box>
             <Grid display="flex" direction={{ xs: 'column', sm: 'row' }} justifyContent="center" alignItems="center" container spacing={4}>
                 {existingBudgets.map((budget) => (
-                    <Grid item xs={12} sm={4} size="grow" key={budget.id}>
+                    <Grid item size={{ xs: 'full', sm: 'grow'}} key={budget.id}>
                         <Card variant="outlined">
                             <CardContent>
                                 <Typography variant="h6" textAlign='center' gutterBottom>

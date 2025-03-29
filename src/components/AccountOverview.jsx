@@ -154,7 +154,7 @@ export default function AccountOverview({ familyView }) {
             </Dialog>
             <Grid display="flex" direction={{ xs: 'column', sm: 'row' }} justifyContent="center" alignItems="center" container spacing={4}>
                 {accountData.map((account) => (
-                    <Grid item xs={12} sm={4} size="grow" key={account.id}>
+                    <Grid item size={{ xs: 'full', sm: 'grow'}} key={account.id}>
                         <Card variant="outlined">
                             <CardContent>
                                 <Typography variant="h6" textAlign='center' gutterBottom>

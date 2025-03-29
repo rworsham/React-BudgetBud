@@ -148,7 +148,7 @@ export default function CategoryOverview({ familyView }) {
             </Dialog>
             <Grid display="flex" direction={{ xs: 'column', sm: 'row' }} justifyContent="center" alignItems="center" container spacing={4}>
                 {categoryData.map((category) => (
-                    <Grid item xs={12} sm={4} size="grow" key={category.id}>
+                    <Grid item size={{ xs: 'full', sm: 'grow'}} key={category.id}>
                         <Card variant="outlined">
                             <CardContent>
                                 <Typography variant="h6" textAlign='center' gutterBottom>
@@ -169,7 +169,7 @@ export default function CategoryOverview({ familyView }) {
                                                 handleOpen('viewHistory');
                                             }}
                                         >
-                                            View History
+                                            View Category History
                                         </Button>
                                     </Grid>
                                 </Grid>
