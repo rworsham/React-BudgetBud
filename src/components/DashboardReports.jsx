@@ -232,7 +232,8 @@ export default function DashboardReports({ familyView }) {
                         rows={rows}
                         columns={columns}
                         pageSize={5}
-                        checkboxSelection
+                        autosizeOnMount={true}
+                        checkboxSelection={false}
                         className="GridColumn-hover"
                         sx={{ border: 0 }}
                     />

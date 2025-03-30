@@ -217,8 +217,8 @@ export default function DataTable({ familyView }) {
                     columns={columns}
                     pageSize={5}
                     rowsPerPageOptions={[5, 10]}
-                    checkboxSelection
-                    className="GridColumn-hover"
+                    checkboxSelection={false}
+                    autosizeOnMount={true}
                     sx={{ border: 0 }}
                 />
             </Paper>

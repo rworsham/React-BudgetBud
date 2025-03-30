@@ -110,8 +110,8 @@ export default function FamilyHistory({ user_id }) {
                         columns={columns}
                         pageSize={5}
                         rowsPerPageOptions={[5, 10]}
-                        checkboxSelection
-                        className="GridColumn-hover"
+                        checkboxSelection={false}
+                        autosizeOnMount={true}
                         sx={{ border: 0 }}
                     />
                 ) : (

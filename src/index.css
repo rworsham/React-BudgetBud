@@ -19,18 +19,19 @@ code {
   color: #B3B3B3 !important;
 }
 
-.GridColumn-hover .MuiDataGrid-columnHeader:hover {
-  color: #1DB954
-}
-
-.GridColumn-hover .MuiDataGrid-columnHeaderTitle .MuiDataGrid-sortIcon,
-.GridColumn-hover .MuiDataGrid-columnHeaderTitle .MuiDataGrid-filterIcon,
-.GridColumn-hover .MuiDataGrid-columnHeaderTitle .MuiIconButton-root {
+.MuiDataGrid-columnHeader .MuiDataGrid-menuIcon,
+.MuiDataGrid-columnHeader .MuiDataGrid-sortIcon,
+.MuiDataGrid-columnHeader .MuiDataGrid-filterIcon,
+.MuiDataGrid-columnHeader .MuiIconButton-root {
   color: #B3B3B3 !important;
+  visibility: visible !important;
+  padding: 0 !important;
+  margin-right: 8px !important;
 }
 
-.GridColumn-hover .MuiDataGrid-columnHeaderTitle .MuiDataGrid-sortIcon:hover,
-.GridColumn-hover .MuiDataGrid-columnHeaderTitle .MuiDataGrid-filterIcon:hover,
-.GridColumn-hover .MuiDataGrid-columnHeaderTitle .MuiIconButton-root:hover {
+.MuiDataGrid-columnHeader:hover .MuiDataGrid-menuIcon,
+.MuiDataGrid-columnHeader:hover .MuiDataGrid-sortIcon,
+.MuiDataGrid-columnHeader:hover .MuiDataGrid-filterIcon,
+.MuiDataGrid-columnHeader:hover .MuiIconButton-root {
   color: #1DB954 !important;
 }
