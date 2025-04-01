@@ -20,7 +20,6 @@ import {
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import CategoryIcon from '@mui/icons-material/Category';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import BarChartIcon from '@mui/icons-material/BarChart';
@@ -44,7 +43,6 @@ import TransactionTableView from './TransactionTableView';
 import TransactionForm from '../forms/TransactionForm';
 import CategoryForm from '../forms/CategoryForm';
 import BudgetForm from '../forms/BudgetForm';
-import FamilyForm from "../forms/FamilyForm";
 import AccountOverview from "./AccountOverview";
 import ReportDashboard from "./ReportDashboard";
 import Profile from './Profile';
@@ -58,7 +56,6 @@ const actions = [
     { icon: <ReceiptLongIcon />, name: 'Transaction' },
     { icon: <CurrencyExchangeIcon />, name: 'Budget' },
     { icon: <CategoryIcon />, name: 'Category' },
-    { icon: <PersonAddIcon />, name: 'Family' },
 ];
 
 const NAVIGATION = [
@@ -120,7 +117,7 @@ const steps = [
     },
     {
         target: '.speed-dial',
-        content: 'Use this button to quickly create new transactions, budgets, categories, or family members.',
+        content: 'Use this button to quickly create new transactions, budgets, and categories.',
         placement: 'left',
         offset: 5,
     },
@@ -350,7 +347,7 @@ const Dashboard = () => {
                 </List>
             </Drawer>
             <Box sx={{ flexGrow: 1, padding: 3, marginTop: 10 }}>
-                <Box sx={{ display: "flex", justifyContent: "center", height: "90vh", alignItems: "center" }}>
+                <Box sx={{ display: "flex", justifyContent: "center", height: "90vh", alignItems: "center", marginBottom: 10 }}>
                     {renderContent()}
                 </Box>
                 <SpeedDial
@@ -378,11 +375,6 @@ const Dashboard = () => {
                 <Dialog open={open && modalType === 'Category'} onClose={handleClose}>
                     <DialogTitle sx={{ textAlign: 'center' }}>New Category</DialogTitle>
                     <DialogContent><CategoryForm onSuccess={handleFormSuccess}/></DialogContent>
-                    <DialogActions><Button onClick={handleClose} color="primary">Close</Button></DialogActions>
-                </Dialog>
-                <Dialog open={open && modalType === 'Family'} onClose={handleClose}>
-                    <DialogTitle sx={{ textAlign: 'center' }}>New Family</DialogTitle>
-                    <DialogContent><FamilyForm onSuccess={handleFormSuccess}/></DialogContent>
                     <DialogActions><Button onClick={handleClose} color="primary">Close</Button></DialogActions>
                 </Dialog>
                 <Dialog open={open && modalType === 'Profile'} onClose={handleClose} maxWidth="lg" fullWidth>

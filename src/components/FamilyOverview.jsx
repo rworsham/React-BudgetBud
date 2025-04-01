@@ -10,6 +10,7 @@ import Divider from "@mui/material/Divider";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import {useTheme} from "@mui/material/styles";
 import FamilyInviteForm from "../forms/FamilyInviteForm";
+import FamilyCreateForm from "../forms/FamilyCreateForm";
 import ChartDataError from "./ChartDataError";
 import FamilyHistory from "./FamilyHistory";
 import AlertHandler from "./AlertHandler";
@@ -131,24 +132,143 @@ export default function FamilyOverview() {
                 Family Overview
             </Typography>
             <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2}}/>
-            <Box display="flex" justifyContent="center" alignItems="center" sx={{padding: 2}}>
-                <Paper
-                    elevation={3}
-                    sx={{display: 'flex', alignItems: 'center', padding: '10px 20px',cursor: 'pointer', backgroundColor: '#333333'}}
-                    onClick={() => handleOpen('addAccount')}
-                >
-                    <IconButton edge="start" color="inherit">
-                        <AddBoxIcon sx={{ color: theme.palette.primary.main }}/>
-                    </IconButton>
-                    <Typography variant="button" sx={{ ml: 1 , color: theme.palette.primary.main}}>
-                        Invite New Member
-                    </Typography>
-                </Paper>
-            </Box>
+            {familyData && familyData.length > 0 ? (
+                <>
+                <Box display="flex" justifyContent="center" alignItems="center" sx={{padding: 2}}>
+                    <Paper
+                        elevation={3}
+                        sx={{display: 'flex', alignItems: 'center', padding: '10px 20px',cursor: 'pointer', backgroundColor: '#333333'}}
+                        onClick={() => handleOpen('addAccount')}
+                    >
+                        <IconButton edge="start" color="inherit">
+                            <AddBoxIcon sx={{ color: theme.palette.primary.main }}/>
+                        </IconButton>
+                        <Typography variant="button" sx={{ ml: 1 , color: theme.palette.primary.main}}>
+                            Invite New Member
+                        </Typography>
+                    </Paper>
+                </Box>
+                <Grid display="flex" direction={{ xs: 'column', sm: 'row' }} justifyContent="center" alignItems="center" container spacing={4}>
+                    {familyData.map((user) => (
+                        <Grid item size={{ xs: 'full', sm: 'grow'}} key={user.id}>
+                            <Card variant="outlined">
+                                <CardContent>
+                                    <Typography variant="h6" textAlign='center' gutterBottom>
+                                        {user.username}
+                                    </Typography>
+                                    <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2}}/>
+                                    <Grid container spacing={1} sx={{ marginTop: 2, justifyContent: 'center' }}>
+                                        <Grid item>
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                size="small"
+                                                onClick={() => {
+                                                    setSelectedUserId(user.id);
+                                                    handleOpen('viewHistory');
+                                                }}
+                                            >
+                                                View User History
+                                            </Button>
+                                        </Grid>
+                                    </Grid>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                    ))}
+                </Grid>
+                <Dialog open={open && modalType === 'viewHistory'} onClose={handleClose} maxWidth="lg" fullWidth>
+                    <DialogTitle sx={{ textAlign: 'center' }}>Family History</DialogTitle>
+                    <DialogContent>
+                        {selectedUserId && <FamilyHistory user_id={selectedUserId}/>}
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose} color="primary">
+                            Close
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+                <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2}}/>
+                <Grid display="flex" direction={{ xs: 'column', sm: 'row' }} justifyContent="center" alignItems="center" container spacing={4}>
+                    <Grid item size={{ xs: 'full', sm: 'grow'}}>
+                        <Box sx={{ marginBottom: 4 }}>
+                            <Typography variant="h6" gutterBottom sx={{ textAlign: 'center' }}>
+                                Contributions Per User
+                            </Typography>
+                            <ResponsiveContainer width="100%" height={250}>
+                                {familyTransactionOverviewData && familyTransactionOverviewData.length > 0 ? (
+                                    <BarChart data={familyTransactionOverviewData}>
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <XAxis dataKey="name" />
+                                        <YAxis />
+                                        <Tooltip />
+                                        <Legend />
+                                        <Bar dataKey="transaction_count" name={"Contributions"} fill="#8884d8" />
+                                    </BarChart>
+                                ) : (
+                                    <ChartDataError/>
+                                )}
+                            </ResponsiveContainer>
+                        </Box>
+                    </Grid>
+                    <Grid item size={{ xs: 'full', sm: 'grow'}}>
+                        <Box sx={{ marginBottom: 4 }}>
+                            <Typography variant="h6" gutterBottom sx={{ textAlign: 'center' }}>
+                                Category usage per User
+                            </Typography>
+                            <ResponsiveContainer width="100%" height={250}>
+                                {familyCategoryOverviewData && familyCategoryOverviewData.length > 0 ? (
+                                    <BarChart data={familyCategoryOverviewData}>
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <XAxis dataKey="name" />
+                                        <YAxis
+                                            domain={['auto', (dataMax) => dataMax * 1.1]}
+                                        />
+                                        <Tooltip />
+                                        <Legend />
+                                        <Bar dataKey="category_count" name="" label="" fill="#8884d8">
+                                            <LabelList dataKey="category" position="top" fontSize={14} fill="#1DB954"/>
+                                        </Bar>
+                                    </BarChart>
+                                ) : (
+                                    <ChartDataError />
+                                )}
+                            </ResponsiveContainer>
+                        </Box>
+                    </Grid>
+                </Grid>
+                </>
+            ) : (
+                <Box display="flex" justifyContent="center" alignItems="center" sx={{padding: 2}}>
+                    <Paper
+                        elevation={3}
+                        sx={{display: 'flex', alignItems: 'center', padding: '10px 20px',cursor: 'pointer', backgroundColor: '#333333'}}
+                        onClick={() => handleOpen('createFamily')}
+                    >
+                        <IconButton edge="start" color="inherit">
+                            <AddBoxIcon sx={{ color: theme.palette.primary.main }}/>
+                        </IconButton>
+                        <Typography variant="button" sx={{ ml: 1 , color: theme.palette.primary.main}}>
+                            Create Family Group
+                        </Typography>
+                    </Paper>
+                </Box>
+            )}
             <Dialog open={open && modalType === 'addAccount'} onClose={handleClose}>
                 <DialogTitle sx={{ textAlign: 'center' }}>Invite New Member</DialogTitle>
                 <DialogContent>
                     <FamilyInviteForm onSuccess={handleFormSuccess}/>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                        Close
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog open={open && modalType === 'createFamily'} onClose={handleClose}>
+                <DialogTitle sx={{ textAlign: 'center' }}>Create Family Group</DialogTitle>
+                <DialogContent>
+                    <FamilyCreateForm onSuccess={handleFormSuccess}/>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">
@@ -165,95 +285,6 @@ export default function FamilyOverview() {
                     <Button onClick={handleClose} color="primary">Close</Button>
                 </DialogActions>
             </Dialog>
-            <Grid display="flex" direction={{ xs: 'column', sm: 'row' }} justifyContent="center" alignItems="center" container spacing={4}>
-                {familyData.map((user) => (
-                    <Grid item xs={12} sm={4} size="grow" key={user.id}>
-                        <Card variant="outlined">
-                            <CardContent>
-                                <Typography variant="h6" textAlign='center' gutterBottom>
-                                    {user.username}
-                                </Typography>
-                                <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2}}/>
-                                <Grid container spacing={1} sx={{ marginTop: 2, justifyContent: 'center' }}>
-                                    <Grid item>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            size="small"
-                                            onClick={() => {
-                                                setSelectedUserId(user.id);
-                                                handleOpen('viewHistory');
-                                            }}
-                                        >
-                                            View History
-                                        </Button>
-                                    </Grid>
-                                </Grid>
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                ))}
-            </Grid>
-            <Dialog open={open && modalType === 'viewHistory'} onClose={handleClose} maxWidth="lg" fullWidth>
-                <DialogTitle sx={{ textAlign: 'center' }}>Family History</DialogTitle>
-                <DialogContent>
-                    {selectedUserId && <FamilyHistory user_id={selectedUserId}/>}
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose} color="primary">
-                        Close
-                    </Button>
-                </DialogActions>
-            </Dialog>
-            <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2}}/>
-            <Grid container spacing={4}>
-                <Grid item xs={12} sm={6} size={6}>
-                    <Box sx={{ marginBottom: 4 }}>
-                        <Typography variant="h6" gutterBottom sx={{ textAlign: 'center' }}>
-                            Contributions Per User
-                        </Typography>
-                        <ResponsiveContainer width="100%" height={250}>
-                            {familyTransactionOverviewData && familyTransactionOverviewData.length > 0 ? (
-                                <BarChart data={familyTransactionOverviewData}>
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="name" />
-                                    <YAxis />
-                                    <Tooltip />
-                                    <Legend />
-                                    <Bar dataKey="transaction_count" name={"Contributions"} fill="#8884d8" />
-                                </BarChart>
-                            ) : (
-                                <ChartDataError/>
-                            )}
-                        </ResponsiveContainer>
-                    </Box>
-                </Grid>
-                <Grid item xs={12} sm={6} size={6}>
-                    <Box sx={{ marginBottom: 4 }}>
-                        <Typography variant="h6" gutterBottom sx={{ textAlign: 'center' }}>
-                            Category usage per User
-                        </Typography>
-                        <ResponsiveContainer width="100%" height={250}>
-                            {familyCategoryOverviewData && familyCategoryOverviewData.length > 0 ? (
-                                <BarChart data={familyCategoryOverviewData}>
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="name" />
-                                    <YAxis
-                                        domain={['auto', (dataMax) => dataMax * 1.1]}
-                                    />
-                                    <Tooltip />
-                                    <Legend />
-                                    <Bar dataKey="category_count" name="" label="" fill="#8884d8">
-                                        <LabelList dataKey="category" position="top" fontSize={14} fill="#1DB954"/>
-                                    </Bar>
-                                </BarChart>
-                            ) : (
-                                <ChartDataError />
-                            )}
-                        </ResponsiveContainer>
-                    </Box>
-                </Grid>
-            </Grid>
             {isFamilyLoading && (
                 <Box
                     sx={{

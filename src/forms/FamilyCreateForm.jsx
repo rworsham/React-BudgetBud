@@ -1,10 +1,10 @@
 import React, {useState, useEffect, useContext} from 'react';
-import { TextField, Button, FormGroup, FormControl, Box, Typography} from '@mui/material';
+import { TextField, Button, FormGroup, FormControl, Box} from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import {AuthContext, api} from "../context/AuthContext";
 import AlertHandler from "../components/AlertHandler";
 
-const FamilyForm = ({ onSuccess }) => {
+const FamilyCreateForm = ({ onSuccess }) => {
     const { authTokens } = useContext(AuthContext);
     const [newFamily, setNewFamily] = useState('');
     const [error, setError] = useState('');
@@ -132,4 +132,4 @@ const FamilyForm = ({ onSuccess }) => {
     );
 };
 
-export default FamilyForm;
+export default FamilyCreateForm;
