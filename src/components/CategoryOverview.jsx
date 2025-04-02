@@ -97,9 +97,19 @@ export default function CategoryOverview({ familyView }) {
             }
         };
 
-        fetchCategories();
-        fetchCategoryHistory();
-    }, [authTokens, familyView]);
+        const fetchData = async () => {
+            await Promise.all([
+                fetchCategories(),
+                fetchCategoryHistory(),
+            ]);
+        };
+
+        if (successAlertOpen) {
+            fetchData();
+        }
+
+        fetchData();
+    }, [authTokens, familyView, successAlertOpen]);
 
     const chartData = categoryHistoryData ? categoryHistoryData.map((entry) => ({
         date: entry.date,

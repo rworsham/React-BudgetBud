@@ -121,10 +121,20 @@ export default function FamilyOverview() {
             }
         };
 
-        fetchFamily();
-        fetchFamilyTransactionOverview();
-        fetchFamilyCategoryOverview();
-    }, [authTokens]);
+        const fetchData = async () => {
+            await Promise.all([
+                fetchFamily(),
+                fetchFamilyTransactionOverview(),
+                fetchFamilyCategoryOverview(),
+            ]);
+        };
+
+        if (successAlertOpen) {
+            fetchData();
+        }
+
+        fetchData();
+    }, [authTokens, successAlertOpen]);
 
     return (
         <div style={{ height: '100%', width: '75%', padding: '10px' }}>

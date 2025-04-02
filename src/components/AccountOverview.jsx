@@ -103,9 +103,19 @@ export default function AccountOverview({ familyView }) {
             }
         };
 
-        fetchAccounts();
-        fetchAccountHistory();
-    }, [authTokens, familyView]);
+        const fetchData = async () => {
+            await Promise.all([
+                fetchAccounts(),
+                fetchAccountHistory(),
+            ]);
+        };
+
+        if (successAlertOpen) {
+            fetchData();
+        }
+
+        fetchData();
+    }, [authTokens, familyView, successAlertOpen]);
 
     const chartData = accountHistoryData ? accountHistoryData.map((entry) => ({
         date: entry.date,

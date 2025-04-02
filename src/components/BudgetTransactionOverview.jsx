@@ -87,8 +87,19 @@ export default function BudgetTransactionOverview({ familyView }) {
             }
         };
 
-        fetchTransactions();
-    }, [authTokens, startDate, endDate, familyView]);
+        const fetchData = async () => {
+            await Promise.all([
+                fetchTransactions(),
+            ]);
+        };
+
+        if (successAlertOpen) {
+            fetchTransactions();
+        }
+
+        fetchData();
+
+    }, [authTokens, startDate, endDate, familyView, successAlertOpen]);
 
     const handleStartDateChange = (newValue) => {
         setStartDate(newValue ? newValue.format('YYYY-MM-DD') : null);

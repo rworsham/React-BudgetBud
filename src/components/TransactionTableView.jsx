@@ -144,8 +144,18 @@ export default function DataTable({ familyView }) {
             }
         };
 
-        fetchTransactions();
-    }, [authTokens, startDate, endDate, downloadPdf, familyView]);
+        const fetchData = async () => {
+            await Promise.all([
+                fetchTransactions(),
+            ]);
+        };
+
+        if (successAlertOpen) {
+            fetchData();
+        }
+
+        fetchData();
+    }, [authTokens, startDate, endDate, downloadPdf, familyView, successType, successAlertOpen]);
 
     const handleStartDateChange = (newValue) => {
         setStartDate(newValue ? newValue.format('YYYY-MM-DD') : null);

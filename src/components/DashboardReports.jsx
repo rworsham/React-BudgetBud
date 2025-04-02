@@ -1,5 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
-import {Box, CircularProgress, Paper, Typography} from "@mui/material";
+import {
+    Box, Button,
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    Paper,
+    Typography
+} from "@mui/material";
 import { BarChart, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Bar, Rectangle } from "recharts";
 import { PieChart, Pie } from "recharts";
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
@@ -22,12 +31,13 @@ export default function DashboardReports({ familyView }) {
     const [rows, setRows] = useState([]);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [successAlertOpen, setSuccessAlertOpen] = useState(false);
     const [rowModesModel, setRowModesModel] = useState({});
     const [startDate, setStartDate] = useState(dayjs().startOf('month').format('YYYY-MM-DD'));
     const [endDate, setEndDate] = useState(dayjs().endOf('month').format('YYYY-MM-DD'));
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchTransactions = async () => {
             if (!authTokens || !authTokens.access) {
                 return;
             }
@@ -84,8 +94,18 @@ export default function DashboardReports({ familyView }) {
             }
         };
 
+        const fetchData = async () => {
+            await Promise.all([
+                fetchTransactions(),
+            ])
+        }
+
+        if (successAlertOpen) {
+            fetchData();
+        }
+
         fetchData();
-    }, [authTokens, startDate, endDate, familyView]);
+    }, [authTokens, startDate, endDate, familyView, successAlertOpen]);
 
     const handleStartDateChange = (newValue) => {
         setStartDate(newValue ? newValue.format('YYYY-MM-DD') : null);
@@ -113,6 +133,7 @@ export default function DashboardReports({ familyView }) {
         try {
             await api.delete(`/transaction/${id}`);
             setRows(rows.filter((row) => row.id !== id));
+            handleSuccess()
         } catch (err) {
             console.error('Error deleting row:', err);
             setError('Failed to delete row');
@@ -123,10 +144,22 @@ export default function DashboardReports({ familyView }) {
         try {
             await api.put(`/transaction/${row.id}`, row);
             setRows(rows.map((existingRow) => (existingRow.id === row.id ? row : existingRow)));
+            handleSuccess()
         } catch (err) {
             console.error('Error updating row:', err);
             setError('Failed to update row');
         }
+    };
+
+    const handleClose = () => {
+        setSuccessAlertOpen(false);
+    };
+
+    const handleSuccess = () => {
+        setSuccessAlertOpen(true);
+        setTimeout(() => {
+            handleClose();
+        }, 5000);
     };
 
     const columns = [
@@ -241,6 +274,15 @@ export default function DashboardReports({ familyView }) {
             ) : (
                 <ChartDataError height={350}/>
             )}
+            <Dialog open={successAlertOpen} onClose={handleClose}>
+                <DialogTitle>Success</DialogTitle>
+                <DialogContent>
+                    <Typography>Success!</Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">Close</Button>
+                </DialogActions>
+            </Dialog>
             {isLoading && (
                 <Box
                     sx={{
