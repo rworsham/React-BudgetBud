@@ -19,8 +19,7 @@ export default function CategoryOverview({ familyView }) {
     const [categoryData, setCategoryData] = useState([]);
     const [categoryHistoryData, setCategoryHistoryData] = useState(null);
     const [error, setError] = useState('');
-    const [isCategoriesLoading, setIsCategoriesLoading] = useState(false);
-    const [isHistoryLoading, setIsHistoryLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const [modalType, setModalType] = useState('');
     const [successAlertOpen, setSuccessAlertOpen] = useState(false);
@@ -47,61 +46,45 @@ export default function CategoryOverview({ familyView }) {
 
     useEffect(() => {
         const fetchCategories = async () => {
-            if (!authTokens || !authTokens.access) {
-                setError('No authorization token found');
-                return;
-            }
-
             try {
-                setIsCategoriesLoading(true);
                 const response = await api.get('/category/data/', {
-                    headers: {
-                        Authorization: `Bearer ${authTokens.access}`,
-                    },
                     params: {
                         familyView: familyView
                     },
                 });
 
                 setCategoryData(response.data);
-                setIsCategoriesLoading(false);
             } catch (err) {
-                console.error('Error fetching account data:', err);
                 setError('Failed to fetch account data');
-                setIsCategoriesLoading(false);
             }
         };
 
         const fetchCategoryHistory = async () => {
+            try {
+                const response = await api.get(`/category/history/line-chart/`, {
+                    params : {
+                        familyView: familyView
+                    },
+                });
+
+                setCategoryHistoryData(response.data);
+            } catch (err) {
+                setError('Failed to fetch account history');
+            }
+        };
+
+        const fetchData = async () => {
+            setIsLoading(true);
             if (!authTokens || !authTokens.access) {
                 setError('No authorization token found');
                 return;
             }
 
-            try {
-                setIsHistoryLoading(true);
-                const response = await api.get(`/category/history/line-chart/`, {
-                    headers: {
-                        Authorization: `Bearer ${authTokens.access}`,
-                    },
-                    params : {
-                        familyView: familyView
-                    },
-                });
-                setCategoryHistoryData(response.data);
-                setIsHistoryLoading(false);
-            } catch (err) {
-                console.error('Error fetching account history:', err);
-                setError('Failed to fetch account history');
-                setIsHistoryLoading(false);
-            }
-        };
-
-        const fetchData = async () => {
             await Promise.all([
                 fetchCategories(),
                 fetchCategoryHistory(),
             ]);
+            setIsLoading(false);
         };
 
         if (successAlertOpen) {
@@ -238,7 +221,7 @@ export default function CategoryOverview({ familyView }) {
                     </ResponsiveContainer>
                 </Box>
             )}
-            {(isCategoriesLoading || isHistoryLoading) && (
+            {isLoading && (
                 <Box
                     sx={{
                         position: 'fixed',

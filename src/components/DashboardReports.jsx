@@ -37,40 +37,31 @@ export default function DashboardReports({ familyView }) {
     const [endDate, setEndDate] = useState(dayjs().endOf('month').format('YYYY-MM-DD'));
 
     useEffect(() => {
+        const dataPayload = {
+            start_date: startDate,
+            end_date: endDate,
+        };
+
         const fetchTransactions = async () => {
-            if (!authTokens || !authTokens.access) {
-                return;
-            }
-
             try {
-                setIsLoading(true);
-                const dataPayload = {
-                    start_date: startDate,
-                    end_date: endDate,
-                };
-
-                const barChartResponse = await api.post('/transaction-bar-chart/', dataPayload,{
-                    params:{
-                        familyView : familyView
-                    }
-                });
-
                 const tableResponse = await api.post('/transaction-table-view/', dataPayload,{
                     params:{
                         familyView : familyView,
                     }
                 });
+                setRows(tableResponse.data);
+            } catch (err) {
+                setError('Failed to fetch transactions');
+            }
+        };
 
-                const expenseResponse = await api.post('/transaction-pie-chart/', dataPayload, {
-                    params: {
-                        familyView: familyView,
+        const fetchBarChartData = async () => {
+            try {
+                const barChartResponse = await api.post('/transaction-bar-chart/', dataPayload,{
+                    params:{
+                        familyView : familyView
                     }
                 });
-
-                const pieChartData = expenseResponse.data.map(item => ({
-                    name: item.name,
-                    value: parseFloat(item.value),
-                }));
 
                 const processedData = barChartResponse.data.map(item => ({
                     ...item,
@@ -86,18 +77,42 @@ export default function DashboardReports({ familyView }) {
 
                 setDataMax(newDataMax);
                 setFilteredBarTransactions(barChartData);
-                setFilteredPieTransactions(pieChartData);
-                setRows(tableResponse.data);
-                setIsLoading(false);
             } catch (err) {
-                setIsLoading(false);
+                setError('Failed to fetch Bar Chart Data');
+            }
+        };
+
+        const fetchPieChartData = async () => {
+            try {
+                const expenseResponse = await api.post('/transaction-pie-chart/', dataPayload, {
+                    params: {
+                        familyView: familyView,
+                    }
+                });
+
+                const pieChartData = expenseResponse.data.map(item => ({
+                    name: item.name,
+                    value: parseFloat(item.value),
+                }));
+
+                setFilteredPieTransactions(pieChartData);
+            } catch (err) {
+                setError('Failed to fetch Pie Chart Data');
             }
         };
 
         const fetchData = async () => {
+            setIsLoading(true);
+            if (!authTokens || !authTokens.access) {
+                return;
+            }
+
             await Promise.all([
                 fetchTransactions(),
+                fetchBarChartData(),
+                fetchPieChartData(),
             ])
+            setIsLoading(false);
         }
 
         if (successAlertOpen) {

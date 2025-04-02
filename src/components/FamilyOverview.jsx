@@ -22,7 +22,7 @@ export default function FamilyOverview() {
     const [familyTransactionOverviewData, setFamilyTransactionOverviewData] = useState([]);
     const [familyCategoryOverviewData, setFamilyCategoryOverviewData] = useState([]);
     const [error, setError] = useState('');
-    const [isFamilyLoading, setIsFamilyLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const [modalType, setModalType] = useState('');
     const [successAlertOpen, setSuccessAlertOpen] = useState(false);
@@ -49,84 +49,55 @@ export default function FamilyOverview() {
 
     useEffect(() => {
         const fetchFamily = async () => {
-            if (!authTokens || !authTokens.access) {
-                setError('No authorization token found');
-                return;
-            }
-
             try {
-                setIsFamilyLoading(true);
-                const response = await api.get('/family/', {
-                    headers: {
-                        Authorization: `Bearer ${authTokens.access}`,
-                    },
-                });
-
+                const response = await api.get('/family/');
                 setFamilyData(response.data);
-                setIsFamilyLoading(false);
             } catch (err) {
-                console.error('Error fetching account data:', err);
                 setError('Failed to fetch account data');
-                setIsFamilyLoading(false);
             }
         };
 
         const fetchFamilyTransactionOverview = async () => {
-            if (!authTokens || !authTokens.access) {
-                setError('No authorization token found');
-                return;
-            }
-
             try {
-                setIsFamilyLoading(true);
                 const response = await api.get('/family/overview/', {
-                    headers: {
-                        Authorization: `Bearer ${authTokens.access}`,
-                    },params: {
+                    params: {
                         "Transaction": true
-                }
+                    }
                 });
 
                 setFamilyTransactionOverviewData(response.data);
-                setIsFamilyLoading(false);
             } catch (err) {
-                console.error('Error fetching account data:', err);
                 setError('Failed to fetch account data');
-                setIsFamilyLoading(false);
             }
         };
 
         const fetchFamilyCategoryOverview = async () => {
-            if (!authTokens || !authTokens.access) {
-                setError('No authorization token found');
-                return;
-            }
-
             try {
-                setIsFamilyLoading(true);
                 const response = await api.get('/family/overview/', {
-                    headers: {
-                        Authorization: `Bearer ${authTokens.access}`,
-                    },params: {
+                    params: {
                         "Category": true
                     }
                 });
 
                 setFamilyCategoryOverviewData(response.data);
-                setIsFamilyLoading(false);
             } catch (err) {
-                console.error('Error fetching account data:', err);
                 setError('Failed to fetch account data');
-                setIsFamilyLoading(false);
             }
         };
 
         const fetchData = async () => {
+            setIsLoading(true);
+            if (!authTokens || !authTokens.access) {
+                setError('No authorization token found');
+                return;
+            }
+
             await Promise.all([
                 fetchFamily(),
                 fetchFamilyTransactionOverview(),
                 fetchFamilyCategoryOverview(),
             ]);
+            setIsLoading(false);
         };
 
         if (successAlertOpen) {
@@ -295,7 +266,7 @@ export default function FamilyOverview() {
                     <Button onClick={handleClose} color="primary">Close</Button>
                 </DialogActions>
             </Dialog>
-            {isFamilyLoading && (
+            {isLoading && (
                 <Box
                     sx={{
                         position: 'fixed',

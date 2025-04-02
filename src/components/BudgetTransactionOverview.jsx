@@ -42,29 +42,41 @@ export default function BudgetTransactionOverview({ familyView }) {
     const [endDate, setEndDate] = useState(dayjs().endOf('month').format('YYYY-MM-DD'));
 
     useEffect(() => {
+        const dataPayload = {
+            start_date: startDate,
+            end_date: endDate,
+        };
+
         const fetchTransactions = async () => {
-            if (!authTokens || !authTokens.access) {
-                setError('No authorization token found');
-                return;
-            }
-
             try {
-                setIsLoading(true);
-                const dataPayload = {
-                    start_date: startDate,
-                    end_date: endDate,
-                };
-
                 const response = await api.post('/budget-transaction-overview/', dataPayload, {
                     params: {
                         familyView: familyView,
                     },
                 });
+
+                setReportData(response.data);
+            } catch (err) {
+                setError('Failed to fetch data');
+            }
+        };
+
+        const fetchBudgets = async () => {
+            try {
                 const budgetResponse = await api.get('/budget/', {
                     params: {
                         familyView: familyView
                     }
                 });
+
+                setExistingBudgets(budgetResponse.data);
+            } catch (err) {
+                setError('Failed to fetch data');
+            }
+        };
+
+        const fetchPieChartData = async () => {
+            try{
                 const expenseResponse = await api.post('/transaction-pie-chart/', dataPayload, {
                     params: {
                         familyView: familyView,
@@ -77,24 +89,27 @@ export default function BudgetTransactionOverview({ familyView }) {
                 }));
 
                 setPieChartData(parsedData);
-                setExistingBudgets(budgetResponse.data);
-                setReportData(response.data);
-                setIsLoading(false);
             } catch (err) {
-                console.error('Error fetching data:', err);
                 setError('Failed to fetch data');
-                setIsLoading(false);
             }
         };
 
         const fetchData = async () => {
+            setIsLoading(true);
+            if (!authTokens || !authTokens.access) {
+                return;
+            }
+
             await Promise.all([
                 fetchTransactions(),
+                fetchBudgets(),
+                fetchPieChartData(),
             ]);
+            setIsLoading(false);
         };
 
         if (successAlertOpen) {
-            fetchTransactions();
+            fetchData();
         }
 
         fetchData();
