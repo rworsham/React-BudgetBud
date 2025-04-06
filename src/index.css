@@ -19,6 +19,10 @@ code {
   color: #B3B3B3 !important;
 }
 
+.family-view .MuiFormControlLabel-label {
+  color: #1DB954 !important;
+}
+
 .MuiDataGrid-columnHeader .MuiDataGrid-menuIcon,
 .MuiDataGrid-columnHeader .MuiDataGrid-sortIcon,
 .MuiDataGrid-columnHeader .MuiDataGrid-filterIcon,

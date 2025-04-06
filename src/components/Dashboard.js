@@ -274,7 +274,7 @@ const Dashboard = () => {
             <MuiAppBar position="fixed" sx={{ zIndex: theme.zIndex.drawer + 1, backgroundColor: theme.palette.background.paper }} className={"profile-icon"}>
                 <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <IconButton edge="start" color="inherit" aria-label="open drawer" onClick={() => setDrawerOpen(!drawerOpen)}>
-                        <MenuIcon />
+                        <MenuIcon sx={{ color: theme.palette.primary.main }}/>
                     </IconButton>
                     <Typography
                         variant="h4"
@@ -287,6 +287,13 @@ const Dashboard = () => {
                             position: 'absolute',
                             left: '50%',
                             transform: 'translateX(-50%)',
+                            '@media (max-width:600px)': {
+                                position: 'relative',
+                                left: 'auto',
+                                transform: 'none',
+                                marginBottom: '0.5rem',
+                                marginTop: '0.5rem',
+                            },
                         }}
                     >
                         BudgetBud
@@ -302,7 +309,7 @@ const Dashboard = () => {
                             </FormGroup>
                         )}
                         <IconButton onClick={handleClick}>
-                            <AccountCircleIcon />
+                            <AccountCircleIcon sx={{ color: theme.palette.primary.main }}/>
                         </IconButton>
                         <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleCloseMenu}>
                             <MenuItem onClick={() => { handleActionClick('Profile'); }}>Profile</MenuItem>
