@@ -13,6 +13,8 @@ import {useTheme} from "@mui/material/styles";
 import AccountHistory from "./AccountHistory";
 import SavingsGoalForm from "../forms/SavingsGoalForm";
 import AlertHandler from "./AlertHandler";
+import dayjs from "dayjs";
+import DateRangeFilterForm from "../forms/DateRangeFilterForm";
 
 export default function AccountOverview({ familyView }) {
     const theme = useTheme();
@@ -26,6 +28,9 @@ export default function AccountOverview({ familyView }) {
     const [modalType, setModalType] = useState('');
     const [successAlertOpen, setSuccessAlertOpen] = useState(false);
     const [selectedAccountId, setSelectedAccountId] = useState(null);
+    const [startDate, setStartDate] = useState(dayjs().startOf('month').format('YYYY-MM-DD'));
+    const [endDate, setEndDate] = useState(dayjs().endOf('month').format('YYYY-MM-DD'));
+
 
     const handleOpen = (type) => {
         setModalType(type);
@@ -47,6 +52,11 @@ export default function AccountOverview({ familyView }) {
     };
 
     useEffect(() => {
+        const dataPayload = {
+            start_date: startDate,
+            end_date: endDate,
+        };
+
         const fetchAccounts = async () => {
             if (!authTokens || !authTokens.access) {
                 setError('No authorization token found');
@@ -54,10 +64,7 @@ export default function AccountOverview({ familyView }) {
             }
 
             try {
-                const response = await api.get('/accounts/', {
-                    headers: {
-                        Authorization: `Bearer ${authTokens.access}`,
-                    },
+                const response = await api.get('/accounts/',{
                     params: {
                         familyView: familyView
                     },
@@ -76,10 +83,7 @@ export default function AccountOverview({ familyView }) {
             }
 
             try {
-                const response = await api.get(`/accounts/overview-report/`, {
-                    headers: {
-                        Authorization: `Bearer ${authTokens.access}`,
-                    },
+                const response = await api.post(`/accounts/overview-report/`, dataPayload, {
                     params : {
                         familyView: familyView
                     },
@@ -113,7 +117,15 @@ export default function AccountOverview({ familyView }) {
         }
 
         fetchData();
-    }, [authTokens, familyView, successAlertOpen]);
+    }, [authTokens, startDate, endDate, familyView, successAlertOpen]);
+
+    const handleStartDateChange = (newValue) => {
+        setStartDate(newValue ? newValue.format('YYYY-MM-DD') : null);
+    };
+
+    const handleEndDateChange = (newValue) => {
+        setEndDate(newValue ? newValue.format('YYYY-MM-DD') : null);
+    };
 
     const chartData = accountHistoryData ? accountHistoryData.map((entry) => ({
         date: entry.date,
@@ -122,10 +134,13 @@ export default function AccountOverview({ familyView }) {
 
     return (
         <div style={{ height: '100%', width: '75%', padding: '10px' }}>
-            <Typography variant="h4" textAlign='center' gutterBottom>
-                Account Overview
-            </Typography>
-            <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2}}/>
+            <DateRangeFilterForm
+                startDate={startDate}
+                endDate={endDate}
+                handleStartDateChange={handleStartDateChange}
+                handleEndDateChange={handleEndDateChange}
+            />
+            <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 5}}/>
             <Box display="flex" justifyContent="center" alignItems="center" sx={{padding: 2}}>
                 <Paper
                     elevation={3}
