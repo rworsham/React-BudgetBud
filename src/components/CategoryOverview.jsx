@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { AuthContext, api } from "../context/AuthContext";
 import {
     Box, Button, Paper, Typography, Card, CardContent,
@@ -14,6 +14,8 @@ import CategoryForm from "../forms/CategoryForm";
 import AlertHandler from "./AlertHandler";
 import dayjs from "dayjs";
 import DateRangeFilterForm from "../forms/DateRangeFilterForm";
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 export default function CategoryOverview({ familyView }) {
     const theme = useTheme();
@@ -28,6 +30,7 @@ export default function CategoryOverview({ familyView }) {
     const [selectedCategoryId, setSelectedCategoryId] = useState(null);
     const [startDate, setStartDate] = useState(dayjs().startOf('month').format('YYYY-MM-DD'));
     const [endDate, setEndDate] = useState(dayjs().endOf('month').format('YYYY-MM-DD'));
+    const chartRef = useRef(null);
 
 
     const handleOpen = (type) => {
@@ -117,6 +120,27 @@ export default function CategoryOverview({ familyView }) {
         date: entry.date,
         ...entry
     })) : [];
+
+    const downloadAsPDF = () => {
+        if (chartRef.current) {
+            html2canvas(chartRef.current).then((canvas) => {
+                const pdf = new jsPDF('landscape');
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
+                const imgData = canvas.toDataURL('image/png');
+                const imgWidth = pageWidth - 20;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                const chartTopPosition = 10;
+                if (chartTopPosition + imgHeight > pageHeight) {
+                    pdf.addPage();
+                }
+                pdf.addImage(imgData, 'PNG', 10, chartTopPosition, imgWidth, imgHeight);
+                pdf.save('chart.pdf');
+            });
+        } else {
+            console.error("Chart element not found!");
+        }
+    };
 
     return (
         <div style={{ height: '100%', width: '75%', padding: '10px' }}>
@@ -215,7 +239,7 @@ export default function CategoryOverview({ familyView }) {
             </Dialog>
             <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2}}/>
             {categoryHistoryData && categoryHistoryData.length > 0 && (
-                <Box sx={{ marginTop: 4 }}>
+                <Box sx={{ marginTop: 4 }} ref={chartRef}>
                     <Typography variant="h6" textAlign='center' gutterBottom>
                         Category Expense Over Time
                     </Typography>
@@ -243,6 +267,16 @@ export default function CategoryOverview({ familyView }) {
                     </ResponsiveContainer>
                 </Box>
             )}
+            <Box display="flex" justifyContent="center" alignItems="center" sx={{padding: 2}}>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    onClick={downloadAsPDF}
+                >
+                    Download as PDF
+                </Button>
+            </Box>
             {isLoading && (
                 <Box
                     sx={{
