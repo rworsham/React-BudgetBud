@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { AuthContext, api } from "../context/AuthContext";
 import {
     Box, Button, Paper, Typography, Card, CardContent,
@@ -15,6 +15,8 @@ import SavingsGoalForm from "../forms/SavingsGoalForm";
 import AlertHandler from "./AlertHandler";
 import dayjs from "dayjs";
 import DateRangeFilterForm from "../forms/DateRangeFilterForm";
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 export default function AccountOverview({ familyView }) {
     const theme = useTheme();
@@ -30,7 +32,7 @@ export default function AccountOverview({ familyView }) {
     const [selectedAccountId, setSelectedAccountId] = useState(null);
     const [startDate, setStartDate] = useState(dayjs().startOf('month').format('YYYY-MM-DD'));
     const [endDate, setEndDate] = useState(dayjs().endOf('month').format('YYYY-MM-DD'));
-
+    const chartRef = useRef(null);
 
     const handleOpen = (type) => {
         setModalType(type);
@@ -131,6 +133,34 @@ export default function AccountOverview({ familyView }) {
         date: entry.date,
         ...entry
     })) : [];
+
+    const downloadAsPDF = () => {
+        if (chartRef.current) {
+            html2canvas(chartRef.current).then((canvas) => {
+                const pdf = new jsPDF('landscape');
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
+                const headerText = `Account Overview ${startDate} - ${endDate}`;
+                const headerFontSize = 16;
+                pdf.setFontSize(headerFontSize);
+                const textWidth = pdf.getStringUnitWidth(headerText) * headerFontSize / pdf.internal.scaleFactor;
+                const textX = (pageWidth - textWidth) / 2;
+                const textY = 15;
+                pdf.text(headerText, textX, textY);
+                const imgData = canvas.toDataURL('image/png');
+                const imgWidth = pageWidth - 20;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                const chartTopPosition = textY + 10;
+                if (chartTopPosition + imgHeight > pageHeight) {
+                    pdf.addPage();
+                }
+                pdf.addImage(imgData, 'PNG', 10, chartTopPosition, imgWidth, imgHeight);
+                pdf.save(`Account_Overview_Report_${endDate}.pdf`);
+            });
+        } else {
+            console.error("Chart element not found!");
+        }
+    };
 
     return (
         <div style={{ height: '100%', width: '75%', padding: '10px' }}>
@@ -253,7 +283,7 @@ export default function AccountOverview({ familyView }) {
             </Dialog>
             <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2}}/>
             {accountHistoryData && accountHistoryData.length > 0 && (
-                <Box sx={{ marginTop: 4 }}>
+                <Box sx={{ marginTop: 4 }} ref={chartRef}>
                     <Typography variant="h6" textAlign='center' gutterBottom>
                         Account Balance Over Time
                     </Typography>
@@ -284,6 +314,16 @@ export default function AccountOverview({ familyView }) {
                     </ResponsiveContainer>
                 </Box>
             )}
+            <Box display="flex" justifyContent="center" alignItems="center" sx={{padding: 2}}>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    onClick={downloadAsPDF}
+                >
+                    Download as PDF
+                </Button>
+            </Box>
             {isLoading && (
                 <Box
                     sx={{

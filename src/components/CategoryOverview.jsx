@@ -127,15 +127,22 @@ export default function CategoryOverview({ familyView }) {
                 const pdf = new jsPDF('landscape');
                 const pageWidth = pdf.internal.pageSize.getWidth();
                 const pageHeight = pdf.internal.pageSize.getHeight();
+                const headerText = `Category Expense ${startDate} - ${endDate}`;
+                const headerFontSize = 16;
+                pdf.setFontSize(headerFontSize);
+                const textWidth = pdf.getStringUnitWidth(headerText) * headerFontSize / pdf.internal.scaleFactor;
+                const textX = (pageWidth - textWidth) / 2;
+                const textY = 15;
+                pdf.text(headerText, textX, textY);
                 const imgData = canvas.toDataURL('image/png');
                 const imgWidth = pageWidth - 20;
                 const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                const chartTopPosition = 10;
+                const chartTopPosition = textY + 10;
                 if (chartTopPosition + imgHeight > pageHeight) {
                     pdf.addPage();
                 }
                 pdf.addImage(imgData, 'PNG', 10, chartTopPosition, imgWidth, imgHeight);
-                pdf.save('chart.pdf');
+                pdf.save(`Category_Expense_Report_${endDate}.pdf`);
             });
         } else {
             console.error("Chart element not found!");
