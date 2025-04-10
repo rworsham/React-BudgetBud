@@ -14,6 +14,8 @@ import FamilyCreateForm from "../forms/FamilyCreateForm";
 import ChartDataError from "./ChartDataError";
 import FamilyHistory from "./FamilyHistory";
 import AlertHandler from "./AlertHandler";
+import dayjs from "dayjs";
+import DateRangeFilterForm from "../forms/DateRangeFilterForm";
 
 export default function FamilyOverview() {
     const theme = useTheme();
@@ -26,6 +28,8 @@ export default function FamilyOverview() {
     const [open, setOpen] = useState(false);
     const [modalType, setModalType] = useState('');
     const [successAlertOpen, setSuccessAlertOpen] = useState(false);
+    const [startDate, setStartDate] = useState(dayjs().startOf('month').format('YYYY-MM-DD'));
+    const [endDate, setEndDate] = useState(dayjs().endOf('month').format('YYYY-MM-DD'));
     const [selectedUserId, setSelectedUserId] = useState(null);
 
     const handleOpen = (type) => {
@@ -48,6 +52,11 @@ export default function FamilyOverview() {
     };
 
     useEffect(() => {
+        const dataPayload = {
+            start_date: startDate,
+            end_date: endDate,
+        };
+
         const fetchFamily = async () => {
             try {
                 const response = await api.get('/family/');
@@ -59,7 +68,7 @@ export default function FamilyOverview() {
 
         const fetchFamilyTransactionOverview = async () => {
             try {
-                const response = await api.get('/family/overview/', {
+                const response = await api.post('/family/overview/', dataPayload,{
                     params: {
                         "Transaction": true
                     }
@@ -73,7 +82,7 @@ export default function FamilyOverview() {
 
         const fetchFamilyCategoryOverview = async () => {
             try {
-                const response = await api.get('/family/overview/', {
+                const response = await api.post('/family/overview/', dataPayload, {
                     params: {
                         "Category": true
                     }
@@ -105,14 +114,25 @@ export default function FamilyOverview() {
         }
 
         fetchData();
-    }, [authTokens, successAlertOpen]);
+    }, [authTokens, startDate, endDate, successAlertOpen]);
+
+    const handleStartDateChange = (newValue) => {
+        setStartDate(newValue ? newValue.format('YYYY-MM-DD') : null);
+    };
+
+    const handleEndDateChange = (newValue) => {
+        setEndDate(newValue ? newValue.format('YYYY-MM-DD') : null);
+    };
 
     return (
         <div style={{ height: '100%', width: '75%', padding: '10px' }}>
-            <Typography variant="h4" textAlign='center' gutterBottom>
-                Family Overview
-            </Typography>
-            <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 2}}/>
+            <DateRangeFilterForm
+                startDate={startDate}
+                endDate={endDate}
+                handleStartDateChange={handleStartDateChange}
+                handleEndDateChange={handleEndDateChange}
+            />
+            <Divider sx={{borderColor: '#1DB954', marginTop: 2, marginBottom: 5}}/>
             {familyData && familyData.length > 0 ? (
                 <>
                 <Box display="flex" justifyContent="center" alignItems="center" sx={{padding: 2}}>
