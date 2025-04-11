@@ -14,8 +14,7 @@ import CategoryForm from "../forms/CategoryForm";
 import AlertHandler from "./AlertHandler";
 import dayjs from "dayjs";
 import DateRangeFilterForm from "../forms/DateRangeFilterForm";
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
+
 
 export default function CategoryOverview({ familyView }) {
     const theme = useTheme();
@@ -121,31 +120,44 @@ export default function CategoryOverview({ familyView }) {
         ...entry
     })) : [];
 
-    const downloadAsPDF = () => {
-        if (chartRef.current) {
-            html2canvas(chartRef.current).then((canvas) => {
-                const pdf = new jsPDF('landscape');
-                const pageWidth = pdf.internal.pageSize.getWidth();
-                const pageHeight = pdf.internal.pageSize.getHeight();
-                const headerText = `Category Expense ${startDate} - ${endDate}`;
-                const headerFontSize = 16;
-                pdf.setFontSize(headerFontSize);
-                const textWidth = pdf.getStringUnitWidth(headerText) * headerFontSize / pdf.internal.scaleFactor;
-                const textX = (pageWidth - textWidth) / 2;
-                const textY = 15;
-                pdf.text(headerText, textX, textY);
-                const imgData = canvas.toDataURL('image/png');
-                const imgWidth = pageWidth - 20;
-                const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                const chartTopPosition = textY + 10;
-                if (chartTopPosition + imgHeight > pageHeight) {
-                    pdf.addPage();
-                }
-                pdf.addImage(imgData, 'PNG', 10, chartTopPosition, imgWidth, imgHeight);
-                pdf.save(`Category_Expense_Report_${endDate}.pdf`);
-            });
-        } else {
+    const downloadAsPDF = async () => {
+        if (!chartRef.current) {
             console.error("Chart element not found!");
+            return;
+        }
+
+        try {
+            const jsPDF = (await import('jspdf')).default;
+            const html2canvas = (await import('html2canvas')).default;
+
+            const canvas = await html2canvas(chartRef.current);
+            const pdf = new jsPDF('landscape');
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
+
+            const headerText = `Category Expense ${startDate} - ${endDate}`;
+            const headerFontSize = 16;
+            pdf.setFontSize(headerFontSize);
+            const textWidth = pdf.getStringUnitWidth(headerText) * headerFontSize / pdf.internal.scaleFactor;
+            const textX = (pageWidth - textWidth) / 2;
+            const textY = 15;
+
+            pdf.text(headerText, textX, textY);
+
+            const imgData = canvas.toDataURL('image/png');
+            const imgWidth = pageWidth - 20;
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+            const chartTopPosition = textY + 10;
+
+            if (chartTopPosition + imgHeight > pageHeight) {
+                pdf.addPage();
+            }
+
+            pdf.addImage(imgData, 'PNG', 10, chartTopPosition, imgWidth, imgHeight);
+            pdf.save(`Category_Expense_${endDate}.pdf`);
+
+        } catch (err) {
+            setError("Something went wrong while generating the PDF. Please try again.");
         }
     };
 
