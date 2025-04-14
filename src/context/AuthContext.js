@@ -4,7 +4,7 @@ import axios from 'axios';
 export const AuthContext = createContext();
 
 export const api = axios.create({
-    baseURL: 'https://localhost:8000/api/',
+    baseURL: 'https://budgetingbud.com/api/',
 });
 
 const setupAxiosInterceptors = (authTokensRef, refreshToken) => {
@@ -70,7 +70,7 @@ export const AuthProvider = ({ children }) => {
 
     const loginUser = async (loginParams) => {
         try {
-            const response = await axios.post('https://localhost:8000/api/token/', loginParams);
+            const response = await axios.post('https://budgetingbud.com/api/token/', loginParams);
             setAuthTokens(response.data);
             authTokensRef.current = response.data;
             await getUserDetails(response.data.access);
@@ -88,7 +88,7 @@ export const AuthProvider = ({ children }) => {
         refreshingRef.current = true;
         const refresh = authTokensRef.current.refresh;
         try {
-            const response = await axios.post('https://localhost:8000/api/token/refresh/', { refresh });
+            const response = await axios.post('https://budgetingbud.com/api/token/refresh/', { refresh });
             setAuthTokens({
                 access: response.data.access,
                 refresh: authTokensRef.current.refresh,
@@ -107,7 +107,7 @@ export const AuthProvider = ({ children }) => {
 
     const getUserDetails = async (accessToken) => {
         try {
-            const response = await axios.get('https://localhost:8000/api/user/', {
+            const response = await axios.get('https://budgetingbud.com/api/user/', {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                 },
