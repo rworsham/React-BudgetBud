@@ -1,10 +1,10 @@
 import React from 'react';
+import ContactForm from "../forms/ContactForm";
 
 function Contact() {
     return (
-        <div style={{ padding: '20px' }}>
-            <h1>Contact</h1>
-            <p>Welcome to contact page</p>
+        <div>
+            <ContactForm />
         </div>
     );
 }
