@@ -10,6 +10,8 @@ import Logout from './components/Logout';
 import Contact from './components/Contact';
 import Dashboard from './components/Dashboard';
 import theme from './theme';
+import PrivacyPolicy from "./components/PrivacyPolicy";
+import TermsAndConditions from "./components/TermsAndConditions";
 
 const App = () => {
   const { authTokens, user, loading, loginUser, logout } = useContext(AuthContext);
@@ -35,6 +37,8 @@ const App = () => {
               <Route path="/login/invite/:token" element={<Login loginUser={loginUser} />} />
               <Route path="/logout" element={<Logout logout={logout} />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="/terms" element={<TermsAndConditions />} />
               <Route path="/dashboard" element={<PrivateRoute><Dashboard user={user} /></PrivateRoute>} />
               <Route path="/budget" element={<PrivateRoute></PrivateRoute>} />
               <Route path="/profile" element={<PrivateRoute></PrivateRoute>} />
