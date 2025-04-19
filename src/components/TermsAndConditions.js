@@ -1,4 +1,6 @@
 import React from 'react';
+import {Box, Typography} from "@mui/material";
+import {Link} from "react-router-dom";
 
 function TermsAndConditions() {
     return (
@@ -61,6 +63,50 @@ function TermsAndConditions() {
                 <h2>10. Contact Us</h2>
                 <p>If you have any questions about these Terms, feel free to <a href="https://budgetingbud.com/contact" target="_blank" rel="noopener noreferrer">contact us</a>.</p>
             </div>
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    textAlign: 'center',
+                    py: 4,
+                }}
+            >
+                <Typography
+                    variant="h2"
+                    sx={{
+                        fontWeight: 'bold',
+                        fontSize: '4rem',
+                        background: 'linear-gradient(45deg, #1DB954, #006400)',
+                        WebkitBackgroundClip: 'text',
+                        color: 'transparent',
+                        display: 'inline-block',
+                        mb: 2,
+                    }}
+                >
+                    BudgetBud
+                </Typography>
+
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        gap: 4,
+                        flexWrap: 'wrap',
+                    }}
+                >
+                    <Link to="/">
+                        Home
+                    </Link>
+                    <Link to="/contact">
+                        Contact
+                    </Link>
+                    <Link to="/privacy">
+                        Privacy Policy
+                    </Link>
+                </Box>
+            </Box>
         </div>
     );
 }

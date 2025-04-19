@@ -1,4 +1,6 @@
 import React from 'react';
+import {Box, Typography} from "@mui/material";
+import {Link} from "react-router-dom";
 
 function PrivacyPolicy() {
     return (
@@ -163,6 +165,50 @@ function PrivacyPolicy() {
                     <li>By visiting this page on our website: <a href="https://budgetingbud.com/contact" rel="external nofollow noopener noreferrer" target="_blank">https://budgetingbud.com/contact</a></li>
                 </ul>
             </div>
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    textAlign: 'center',
+                    py: 4,
+                }}
+            >
+                <Typography
+                    variant="h2"
+                    sx={{
+                        fontWeight: 'bold',
+                        fontSize: '4rem',
+                        background: 'linear-gradient(45deg, #1DB954, #006400)',
+                        WebkitBackgroundClip: 'text',
+                        color: 'transparent',
+                        display: 'inline-block',
+                        mb: 2,
+                    }}
+                >
+                    BudgetBud
+                </Typography>
+
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        gap: 4,
+                        flexWrap: 'wrap',
+                    }}
+                >
+                    <Link to="/">
+                        Home
+                    </Link>
+                    <Link to="/contact">
+                        Contact
+                    </Link>
+                    <Link to="/terms">
+                        Terms and Conditions
+                    </Link>
+                </Box>
+            </Box>
         </div>
     );
 }
