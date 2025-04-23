@@ -96,17 +96,30 @@ export default function FamilyOverview() {
 
         const fetchData = async () => {
             setIsLoading(true);
+
             if (!authTokens || !authTokens.access) {
                 setError('No authorization token found');
+                setIsLoading(false);
                 return;
             }
 
-            await Promise.all([
-                fetchFamily(),
-                fetchFamilyTransactionOverview(),
-                fetchFamilyCategoryOverview(),
-            ]);
-            setIsLoading(false);
+            try {
+                const family = await fetchFamily();
+
+                if (!Array.isArray(family) || family.length === 0) {
+                    setIsLoading(false);
+                    return;
+                }
+
+                await Promise.all([
+                    fetchFamilyTransactionOverview(),
+                    fetchFamilyCategoryOverview(),
+                ]);
+            } catch (err) {
+                setError('Failed to fetch account data');
+            } finally {
+                setIsLoading(false);
+            }
         };
 
         if (successAlertOpen) {
