@@ -26,12 +26,22 @@ const AccountSignUp = () => {
             <Box sx={{textAlign: 'center', padding: '20px', marginBottom: 4}}>
                 <h2>Anytime. Anywhere. Any device.</h2>
             </Box>
-            <Box sx={{ textAlign: 'center', padding: '20px', marginBottom: 4 }}>
+            <Box sx={{ display: 'flex', textAlign: 'center',gap: 2,justifyContent: 'center',  padding: '20px', marginBottom: 4 }}>
                 <Link to="/SignUp" style={{ textDecoration: 'none' }}>
                     <Button variant="contained" color="primary">
                         Create Free Account
                     </Button>
                 </Link>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    component="button"
+                    onClick={() => {
+                        window.location.href = "/BudgetBudSetup.exe";
+                    }}
+                >
+                    Download for Windows
+                </Button>
             </Box>
         </Box>
     );
