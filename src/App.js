@@ -43,6 +43,19 @@ const App = () => {
               <Route path="/budget" element={<PrivateRoute></PrivateRoute>} />
               <Route path="/profile" element={<PrivateRoute></PrivateRoute>} />
             </Routes>
+            <Box
+                component="footer"
+                sx={{
+                  textAlign: 'center',
+                  py: 2,
+                  fontSize: '0.875rem',
+                  color: 'text.secondary',
+                  borderTop: '1px solid',
+                  borderColor: 'divider'
+                }}
+            >
+              © {new Date().getFullYear()} BudgetBud. All rights reserved.
+            </Box>
           </Box>
         </Router>
       </ThemeProvider>
